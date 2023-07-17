@@ -1,38 +1,51 @@
-.App {
-  text-align: center;
+* {
+  padding: 0;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.root {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.sidebar {
+  width: 250px; 
+  background: #536dfe;
+  background: linear-gradient(to bottom, #c2daf3, #536dfe);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.right-side {
+  flex: 1; 
+  background-color: #fafafa;
+  display: flex; 
+  flex-direction: column; 
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 16px;
+  background-color: #c2daf3;
+}
+
+.connect-wallet {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-right: 50px;
+}
+
+.connect-wallet:hover {
+  background-color: rgb(190, 190, 210);
+  transition-delay: 0.1s;
+}
+
+.content {
+  height: 100%;
 }

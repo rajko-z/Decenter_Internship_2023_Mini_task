@@ -1,0 +1,44 @@
+.one-lottery {
+    width: 40px;
+    height: 80px;
+    border: 1px solid #000;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+.name {
+    text-align: center;
+}
+
+.line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.protocol,
+.token {
+    flex: 1;
+}
+
+.token-name {
+    margin-right: 8px;
+}
+
+.token-image {
+    width: 6px;
+    height: 6px;
+}
+
+.label {
+    margin-right: 8px;
+}
+
+.button {
+    margin-top: 8px;
+}
+  
