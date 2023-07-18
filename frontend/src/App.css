@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+.body {
+  font-family: Arial, sans-serif;
+}
+
 .root {
   display: flex;
   height: 100vh;
