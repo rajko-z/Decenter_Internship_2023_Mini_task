@@ -5,8 +5,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import { getTokenPrice } from './providers/OracleProvider.js'
 
 import './App.css';
-import ActiveLotteries from './components/LotteryCollection/LotteryCollection.js';
-import PreviousLotteries from './components/PreviousLotteries/PreviousLotteries';
+import LotteryCollection from './components/LotteryCollection/LotteryCollection.js';
 
 function App() {
 
@@ -73,9 +72,8 @@ function App() {
         </div>
         <div className="content">
           <Routes>
-            <Route path="/" element={<ActiveLotteries provider={provider} />} />
-            <Route path="/active-lotteries" element={<ActiveLotteries provider={provider} />} />
-            <Route path="/previous-lotteries" element={<PreviousLotteries />} />
+            <Route path="/" element={<LotteryCollection provider={provider} />} />
+            <Route path="/active-lotteries" element={<LotteryCollection provider={provider} />} />
           </Routes>
         </div>
       </div>

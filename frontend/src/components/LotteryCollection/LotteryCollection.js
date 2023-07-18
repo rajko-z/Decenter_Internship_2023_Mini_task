@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from 'react';
 // import { getActiveLotteries } from '../../providers/LotteryInfoProvider';
 import Lottery from '../Lottery/Lottery';
-import './ActiveLotteries.css';
+import './LotteryCollection.css';
 
 const ActiveLotteries = () => {
 
