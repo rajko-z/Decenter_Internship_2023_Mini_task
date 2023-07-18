@@ -42,6 +42,7 @@ const AddLottery = () => {
         }
 
         alert("Lottery added!");
+        window.location.reload(false);
     }
 
     useEffect(() => {
@@ -68,7 +69,7 @@ const AddLottery = () => {
             <div className="lottery-card">
                 <form onSubmit={onSubmitHandler}>
                     <label className='label name'>Name</label>
-                    <input className='input name' type='text' id='name' name='name' placeholder='Insert lottery name' 
+                    <input className='input name' type='text' id='name' name='name' placeholder='Insert Lottery Name' 
                         onChange={e => setName(e.target.value)} required/>
 
                     <label className='label value'>Value</label>
@@ -100,11 +101,11 @@ const AddLottery = () => {
                 <div className='expectedDiv'>
                     <div className='expected yield'>
                         <h3>Expected yield:</h3>
-                        <h3>{apy}%</h3>
+                        <h3 className='expectedValue'>{apy}%</h3>
                     </div>
                     <div className='expected prize'>
                         <h3>Expected win prize:</h3>
-                        <h3>{expectedPrize.toFixed(4)} USD</h3>
+                        <h3 className='expectedValue'>{expectedPrize.toFixed(4)} USD</h3>
                     </div>
                 </div>
             </div>

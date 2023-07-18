@@ -5,6 +5,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 
 import './App.css';
 import LotteryCollection from './components/LotteryCollection/LotteryCollection.jsx';
+import AddLottery from './components/AddLottery/AddLottery.js';
 
 function App() {
 
@@ -63,6 +64,9 @@ function App() {
             <ListItem button component={Link} to="/my-active-lotteries" className="sidebar-button">
               <ListItemText primary="My Lotteries" />
             </ListItem>
+            <ListItem button component={Link} to="/add-lottery" className="sidebar-button">
+              <ListItemText primary="Add Lottery" />
+            </ListItem>
           </List>
         </div>
       </div>
@@ -76,6 +80,7 @@ function App() {
             <Route path="/" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
             <Route path="/all-lotteries" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
             <Route path="/my-active-lotteries" key={Date.now()} element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
+            <Route path="/add-lottery" key={Date.now()} element={<AddLottery/>} />
           </Routes>
         </div>
       </div>
