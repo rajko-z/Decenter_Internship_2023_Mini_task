@@ -14,6 +14,12 @@
   background: linear-gradient(to bottom, #c2daf3, #536dfe);
 }
 
+.sidebar-title {
+  padding: 16px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .right-side {
   flex: 1; 
   background-color: #fafafa;
@@ -26,7 +32,6 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: 16px;
   background-color: #c2daf3;
 }
 
@@ -43,7 +48,7 @@
 
 .connect-wallet:hover {
   background-color: rgb(190, 190, 210);
-  transition-delay: 0.1s;
+  transition-delay: 0.05s;
 }
 
 .content {

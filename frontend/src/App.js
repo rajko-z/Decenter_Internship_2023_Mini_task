@@ -5,7 +5,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 import { getTokenPrice } from './providers/OracleProvider.js'
 
 import './App.css';
-import ActiveLotteries from './components/ActiveLotteries/ActiveLotteries';
+import ActiveLotteries from './components/LotteryCollection/LotteryCollection.js';
 import PreviousLotteries from './components/PreviousLotteries/PreviousLotteries';
 
 function App() {
@@ -54,7 +54,7 @@ function App() {
       <div className="sidebar">
         <div className="sidebar-content">
           <Typography variant="h6" className="sidebar-title">
-            Menu
+            Lottery
           </Typography>
           <List>
             <ListItem button component={Link} to="/active-lotteries" className="sidebar-button">

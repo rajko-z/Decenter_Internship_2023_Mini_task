@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from 'react';
 // import { getActiveLotteries } from '../../providers/LotteryInfoProvider';
 import Lottery from '../Lottery/Lottery';
+import './ActiveLotteries.css';
 
 const ActiveLotteries = () => {
 
@@ -28,7 +29,21 @@ const ActiveLotteries = () => {
       { lotteriesData && lotteriesData.map((lottery, index) => (
         <Lottery key={index} lottery={lottery} />
       )) }
+
+        <div className='lottery'>
+          <div className='lottery__header'>
+            <h3>Lottery Title</h3>
+          </div>
+          <div className='lottery_body'>
+            <h3>0.8 ETH</h3>
+          </div>
+          <div className='lottery_footer'>
+            <h3>End Date: 03.06.2023.</h3>
+          </div>
+        </div>
     </div>
+
+
   );
 };
 
