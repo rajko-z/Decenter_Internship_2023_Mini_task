@@ -11,9 +11,7 @@ export const getTokenPrice = async (tokenName) => {
 
     try {
         let value = await contractOracles[tokenName].methods.latestAnswer().call();
-        console.log(value)
         let convertedValue = new Decimal(value.toString()).div(10 ** 8);
-        console.log(convertedValue)
         return convertedValue.toNumber();
     } catch {
         console.error("Error fetching token price");

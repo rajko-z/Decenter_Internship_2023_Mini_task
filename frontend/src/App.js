@@ -4,7 +4,7 @@ import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
 
 import './App.css';
-import LotteryCollection from './components/LotteryCollection/LotteryCollection.js';
+import LotteryCollection from './components/LotteryCollection/LotteryCollection.jsx';
 
 function App() {
 
@@ -61,25 +61,21 @@ function App() {
               <ListItemText primary="All Lotteries" />
             </ListItem>
             <ListItem button component={Link} to="/my-active-lotteries" className="sidebar-button">
-              <ListItemText primary="My Active Lotteries" />
-            </ListItem>
-            <ListItem button component={Link} to="/my-past-lotteries" className="sidebar-button">
-              <ListItemText primary="My Past Lotteries" />
+              <ListItemText primary="My Lotteries" />
             </ListItem>
           </List>
         </div>
       </div>
       <div className="right-side">
         <div className="header">
-          { provider && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button> }
+          { provider && !wallet && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button> }
           {/* { wallet && wallet.accounts.length > 0 && <div>Wallet Accounts: { wallet.accounts[0] } </div> } */}
         </div>
         <div className="content">
           <Routes>
-            <Route path="/" element={<LotteryCollection />} />
-            <Route path="/all-lotteries" element={<LotteryCollection request="all" wallet={wallet}/>} />
-            <Route path="/my-active-lotteries" element={<LotteryCollection request="my-active" wallet={wallet}   />} />
-            <Route path="/my-past-lotteries" element={<LotteryCollection request="my-past" wallet={wallet} />} />
+            <Route path="/" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
+            <Route path="/all-lotteries" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
+            <Route path="/my-active-lotteries" key={Date.now()} element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
           </Routes>
         </div>
       </div>
