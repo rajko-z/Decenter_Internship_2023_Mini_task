@@ -20,7 +20,7 @@ const Lottery = ({onClick, lottery}) => {
             </div>
             <div className="line">
                 <div className="current-amount">{`In lottery: ${currentAmount}  `}</div>
-                <div className="current-amount-usd">{`($${currentAmountUSD})`}</div>
+                <div className="current-amount-usd">{`($${currentAmountUSD.toFixed(2)})`}</div>
             </div>
             <div className="line">
                 <div className="apy">{`APY: ${APY}%`}</div>

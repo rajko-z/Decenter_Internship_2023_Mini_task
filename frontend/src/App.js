@@ -22,7 +22,11 @@ function App() {
 
   const handleAccountsChanged = async (account) => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    setWallet(accounts[0])
+    if (accounts.length === 0) {
+      console.log('Please connect to MetaMask.');
+    } else if (accounts[0] !== wallet) {
+      setWallet(accounts[0])
+    }
   }
 
   useEffect(() => {
@@ -40,10 +44,7 @@ function App() {
       window.ethereum.removeListener('accountsChanged', handleAccountsChanged)      
     }                                                                   
   }, [])
-
-  useEffect(() => { 
-  }, [wallet])
-
+  
   if (loadingProvider) {
     return <div>Loading provider...</div>;
   }
