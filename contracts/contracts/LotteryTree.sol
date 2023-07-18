@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-import "hardhat/console.sol";
-
 contract LotteryTree {
     enum Origin { NONE, LEFT, RIGHT } 
-    int[][] public tree = [new int[](0)];
+    int[][] private tree = [new int[](0)];
+    uint[] private holes = new uint[](0);
 
     function update(uint level, uint index, int value, Origin origin) private {
         if(level >= tree.length) {
@@ -34,16 +33,66 @@ contract LotteryTree {
         update(next_level, next_index, value, next_origin);
     }
 
-    function add(int value) public {
-        update(0, tree[0].length, value, Origin.NONE);
+    // adds the entry to the first hole in the tree, or expands it
+    // returns index of the new entry
+    function add(int value) public returns (uint) {
+        require(value > 0);
+
+        uint index;
+        if(holes.length > 0) {
+            index = holes[holes.length-1];
+            holes.pop();
+        }
+        else {
+            index = tree[0].length;
+        }
+
+        update(0, index, value, Origin.NONE);
+
+        return index;
     }
 
+    // removes entry with the given index
     function remove(uint index) public {
+        require(tree.length != 0);
+        require(tree[0].length > index);
+        require(tree[0][index] != 0);
+
+        holes.push(index);
+
         int value = tree[0][index];
+
         update(0, index, -value, Origin.NONE);
     }
 
+    // returns the sum of all entries
     function sum() public view returns (int) {
-        return tree[tree.length-1][0];
+        if(tree.length != 0 && tree[0].length != 0) {
+            return tree[tree.length-1][0];
+        }
+
+        return 0;
+    }
+
+    function winner(int roll) public view returns (uint) {
+        require(roll >= 0);
+        require(roll < sum());
+
+        uint current_level = tree.length-1;
+        uint current_index = 0;
+
+        while(current_level > 0) {
+            int left_sum  = tree[current_level-1][current_index*2];
+            if(roll < left_sum) {
+                current_index = current_index * 2;
+            }
+            else {
+                current_index = current_index * 2 + 1;
+                roll -= left_sum;
+            }
+            current_level -= 1;
+        }
+
+        return current_index;
     }
 }
