@@ -22,6 +22,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     sepolia: {
+      chainId: 11155111,
       //url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
       //accounts: [SEPOLIA_SECRET_KEY],
       url: process.env.SEPOLIA_URL,
