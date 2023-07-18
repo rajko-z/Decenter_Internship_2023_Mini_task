@@ -1,29 +1,35 @@
-import { React, useState, useEffect } from 'react';
-// import { getActiveLotteries } from '../../providers/LotteryInfoProvider';
+import React, { useState, useEffect } from 'react';
+import { getActiveLotteries, getMyActiveLotteries, getMyPastLotteries } from '../../providers/LotteryInfoProvider';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.css';
 
-const ActiveLotteries = () => {
+const ActiveLotteries = (props) => {
 
+  const { request, wallet } = props;
   const [lotteriesData, setLotteriesData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      let result;
+
       try {
-        const result = null;
-        // const result = await getActiveLotteries();
+        switch(request) {
+          case 'all': result = await getActiveLotteries(); break;
+          case 'my-active': result = await getMyActiveLotteries(wallet); break;
+          case 'my-past': result = await getMyPastLotteries(wallet); break;
+          default: result = null;
+        }
+
         if (result) 
-        setLotteriesData(result);
-        
+          setLotteriesData(result);
       } catch (error) {
         console.log(error);
       }
     };
-  
-    fetchData();
-  }, []);
-  
 
+    fetchData();
+  }, [request, wallet]);
+  
   return (
     <div className="active-lotteries">
       { lotteriesData && lotteriesData.map((lottery, index) => (

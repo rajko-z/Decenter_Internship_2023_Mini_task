@@ -2,7 +2,6 @@ import { React, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { List, ListItem, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
-import { getTokenPrice } from './providers/OracleProvider.js'
 
 import './App.css';
 import LotteryCollection from './components/LotteryCollection/LotteryCollection.js';
@@ -13,30 +12,11 @@ function App() {
   const [loadingProvider, setLoadingProvider] = useState(true);
   const [wallet, setWallet] = useState(null)
 
-  useEffect(() => {
-    const getProvider = async () => {
-      const result = await detectEthereumProvider()
-      setProvider(result)
-      setLoadingProvider(false)
-    }
-    getProvider()
-  }, [])
-
-  useEffect(() => { 
-  }, [wallet])
-
-  if (loadingProvider) {
-    return <div>Loading provider...</div>;
-  }
-
   const handleConnectWallet = async () => {
     if (provider) {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
       setWallet(accounts[0])
       console.log("setWallet: ", accounts[0])
-
-      const broj = await getTokenPrice("DAI")
-      console.log("broj: ", broj)
     }
   }
 
@@ -45,7 +25,28 @@ function App() {
     setWallet(accounts[0])
   }
 
-  window.ethereum.on('accountsChanged', handleAccountsChanged);
+  useEffect(() => {
+
+    window.ethereum.on('accountsChanged', handleAccountsChanged);
+
+    const getProvider = async () => {
+      const result = await detectEthereumProvider()
+      setProvider(result)
+      setLoadingProvider(false)
+    }
+    getProvider()
+
+    return ()  => {                                                                      //unmount -> cleanup
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged)      
+    }                                                                   
+  }, [])
+
+  useEffect(() => { 
+  }, [wallet])
+
+  if (loadingProvider) {
+    return <div>Loading provider...</div>;
+  }
 
   return (
     <Router>
@@ -56,11 +57,14 @@ function App() {
             Lottery
           </Typography>
           <List>
-            <ListItem button component={Link} to="/active-lotteries" className="sidebar-button">
-              <ListItemText primary="Active Lotteries" />
+            <ListItem button component={Link} to="/all-lotteries" className="sidebar-button">
+              <ListItemText primary="All Lotteries" />
             </ListItem>
-            <ListItem button component={Link} to="/previous-lotteries" className="sidebar-button">
-              <ListItemText primary="Previous Lotteries" />
+            <ListItem button component={Link} to="/my-active-lotteries" className="sidebar-button">
+              <ListItemText primary="My Active Lotteries" />
+            </ListItem>
+            <ListItem button component={Link} to="/my-past-lotteries" className="sidebar-button">
+              <ListItemText primary="My Past Lotteries" />
             </ListItem>
           </List>
         </div>
@@ -72,8 +76,10 @@ function App() {
         </div>
         <div className="content">
           <Routes>
-            <Route path="/" element={<LotteryCollection provider={provider} />} />
-            <Route path="/active-lotteries" element={<LotteryCollection provider={provider} />} />
+            <Route path="/" element={<LotteryCollection />} />
+            <Route path="/all-lotteries" element={<LotteryCollection request="all" wallet={wallet}/>} />
+            <Route path="/my-active-lotteries" element={<LotteryCollection request="my-active" wallet={wallet}   />} />
+            <Route path="/my-past-lotteries" element={<LotteryCollection request="my-past" wallet={wallet} />} />
           </Routes>
         </div>
       </div>

@@ -6,8 +6,7 @@
 
 const providerEndpoint = "http://localhost:5000"
 
-/**
- * Fetches the active lotteries data from the specified endpoint.
+/** GET request to the backend to fetch all active lotteries.
  * @returns {Promise<Object[]|null>} - A Promise that resolves to an array of active lotteries data objects, or null if there is an error.
  */
 const getActiveLotteries = async () => {
@@ -20,7 +19,57 @@ const getActiveLotteries = async () => {
         const data = await response.json();
         return data;
     } catch {
-        console.error("Error fetching active lotteries");
+        console.error("Error fetching all active lotteries");
+        return null;
+    }
+}
+
+/** POST request to the backend to fetch the active lotteries associated with a specific user.
+ * @param {string} wallet - The wallet address of the user.
+ * @returns {Promise<Object[]|null>} - A Promise that resolves to an array of active lotteries data objects associated with the user, or null if there is an error.
+ */
+const getMyActiveLotteries = async (wallet) => {
+
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wallet: wallet })
+        };
+
+        const response = await fetch(`${providerEndpoint}/user-active-lotteries`, requestOptions)
+        if (!response.ok) 
+            throw new Error('Failed to fetch users active lotteries');
+    
+        const data = await response.json();
+        return data;
+    } catch {
+        console.error("Error fetching users active lotteries");
+        return null;
+    }
+}
+
+/** POST request to the backend to fetch the past lotteries associated with a specific user.
+ * @param {string} wallet - The wallet address of the user.
+ * @returns {Promise<Object[]|null>} - A Promise that resolves to an array of active lotteries data objects associated with the user, or null if there is an error.
+ */
+const getMyPastLotteries = async (wallet) => {
+
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ wallet: wallet })
+        };
+
+        const response = await fetch(`${providerEndpoint}/user-past-lotteries`, requestOptions)
+        if (!response.ok) 
+            throw new Error('Failed to fetch users past lotteries');
+    
+        const data = await response.json();
+        return data;
+    } catch {
+        console.error("Error fetching users past lotteries");
         return null;
     }
 }
