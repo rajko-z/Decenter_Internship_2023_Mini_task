@@ -25,7 +25,6 @@ const SelectedLottery = ({}) => {
 
 
   useEffect(() => {
-    console.log(lottery)
   }, [])
 
   if (!lottery) {
