@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
 
-import './App.css'
+import './App.scss'
 import SelectedLottery from './components/SelectedLottery/SelectedLottery'
 import LotteryCollection from './components/LotteryCollection/LotteryCollection'
 import AddLottery from './components/AddLottery/AddLottery'
