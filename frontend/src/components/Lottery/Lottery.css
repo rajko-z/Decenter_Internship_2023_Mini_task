@@ -12,34 +12,48 @@
     border: none;
     cursor: pointer;
     border-radius: 12px;
-}
 
-.one-lottery {
-    border-radius: 8px;
-    padding: 16px;
-    margin: 5px;
-    max-width: 300px;
-    display: inline-flex;           /* will wrap into next line when needed */
+
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
+    max-width: 300px;
+    padding: 16px;
+
+
+    transition: all .2s ease-in-out;
+}
+
+.button-lottery:hover {
+    background-color: #3333ff;
+    transition: all .2s ease-in-out;
 }
   
 .line {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    justify-content: center;
+    margin-top: 34px;
     width: 100%;
 }
 
-.name {
+.lotteryName {
+    font-size: 23px;
     font-weight: bold;
-    margin: 5px;
+    margin: 2px;
+    color: white;
+
+    justify-content: space-around;
+    padding: 1px 0;
+
 }
 
 .current-amount,
 .protocol,
 .end-date {
     margin-right: 5px;
+    justify-content: left;
+    align-items: left;
 }
 
 .token-name,
@@ -69,3 +83,7 @@
     background-color: rgb(190, 190, 210);
     transition-delay: 0.05s;
   }
+
+.imageLogo {
+    width: 5%;
+}

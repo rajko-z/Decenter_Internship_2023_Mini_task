@@ -11,13 +11,18 @@ const Lottery = ({onClick, lottery}) => {
 
     }, [])
 
+    const protocolImage = (protocol) => {
+        if (protocol === "Aave") {
+            return "/aave-logo.png"
+        }
+    }
+
     return (
         <button className="button-lottery" onClick={onClick}>
-            <div className="one-lottery">
-                <div className="name">{lotteryName}</div>
-                <div className="line">
-                    <div className="protocol">{protocol}</div>
-                    <div className="token-name">{tokenName}</div>
+                <div className="lotteryName">
+                    <img className="imageLogo" src={protocolImage(protocol)} alt={protocol}/>
+                    {lotteryName}
+                    <img className="imageLogo" src={protocolImage(protocol)} alt={tokenName}/>
                 </div>
                 <div className="line">
                     <div className="current-amount">{`In lottery: ${currentAmount}  `}</div>
@@ -32,7 +37,6 @@ const Lottery = ({onClick, lottery}) => {
                 <div>
                     <div className="end-date">{endDate}</div>
                 </div>
-            </div>
         </button>
     );
 }
