@@ -72,7 +72,7 @@ export const depositMoney = async (amount, wallet) => {
     }
 }
 
-export const withdrawMoney = async () => {
+export const withdrawMoney = async (wallet) => {
 
     try {
 

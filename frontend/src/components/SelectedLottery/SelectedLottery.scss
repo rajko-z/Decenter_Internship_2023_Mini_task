@@ -17,3 +17,11 @@
 .selectedLotteryName {
     font-size: 2.5em;
 }
+
+.selectedLotteryLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    justify-content: center;
+}

@@ -1,0 +1,66 @@
+@import '../../../src/HyperParameters.scss';
+
+.lotteryModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    height: 60%;
+    margin: 100px 500px;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+}
+
+.modalName {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.withdraw-modal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modalState {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: 50px;
+    margin-bottom: 150px;
+
+    color: $fontcolor_main;
+    font-size: 1.2em;
+}
+
+.modalButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    height: 50px;
+    width: 130px;
+    margin: 0px 20px;
+    padding: 0px 0px;
+
+    border: none;
+    outline: none;
+
+    color: white;
+    background-color: $cardcolor;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: $cardcolor_hover;
+        transition: all 0.2s ease-in-out;
+    }
+}
