@@ -29,6 +29,16 @@ function App() {
       setWallet(accounts[0])
     }
   }
+
+  window.onload = async (event) => {
+    const accounts = await window.ethereum.request({method: 'eth_accounts'});       
+    if (accounts.length) {
+      console.log(`You're connected to: ${accounts[0]}`);
+      setWallet(accounts[0])
+    } else {
+      console.log("Metamask is not connected");
+    }
+  }
   
   useEffect(() => {
     window.ethereum.on('accountsChanged', handleAccountsChanged);
