@@ -18,3 +18,14 @@ export const getTokenPrice = async (tokenName) => {
         return null;
     }
 }
+
+export const getUSDValue = async (amount, tokenName) => {
+
+    try {
+        const price = await getTokenPrice(tokenName);
+        return price * amount;
+    } catch {
+        console.error("Error fetching the amount in USD")
+        return null
+    }
+}

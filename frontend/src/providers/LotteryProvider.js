@@ -62,7 +62,7 @@ export const createLottery = async () => {
     }
 }
 
-export const depositMoney = async (amount, wallet) => {
+export const depositMoney = async (lotteryId, amount, wallet) => {
 
     try {
 

@@ -21,7 +21,7 @@ const AddLottery = () => {
     }
 
     async function isValueAtLeastHundredsOfDollars(value, token) {
-        // Convert Token to USD and check if it is at least 100
+        // Convert Token to USD and check if it is at least $100
         const valueInUsd = await getTokenPrice(token) * value;
         return valueInUsd >= 100;
     }

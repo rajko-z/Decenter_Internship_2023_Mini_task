@@ -21,9 +21,14 @@ const SelectedLottery = ({}) => {
     setIsDepositModalOpen(false);
   }
 
+  useEffect(() => {
+    console.log("lottery: ", lottery)
+  }, [])
+
   if (!lottery) {
     return <div> Loading selected lottery.. .</div>;
   } 
+
 
   return (
     <div className="selected-lottery">
@@ -49,7 +54,10 @@ const SelectedLottery = ({}) => {
           {wallet? 
             <>
             <button onClick={openDepositModal}>Deposit Money</button>
-            <DepositModal isOpen={isDepositModalOpen} closeModal={closeDepositModal} />
+            <DepositModal isOpen={isDepositModalOpen} 
+                          closeModal={closeDepositModal} 
+                          lottery={lottery} 
+                          wallet={wallet}/>
             </>: 
             <label className="conncet-wallet-msg"> Wallet is not connected </label>}
         </div>
