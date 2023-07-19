@@ -1,19 +1,20 @@
 import { useEffect } from 'react'
-import { getTokenPrice } from '../../providers/OracleProvider.js'
+import { useNavigate } from 'react-router-dom'
 import './Lottery.css'
 
-const Lottery = ({onClick, lottery}) => {
+const Lottery = ({lottery}) => {
 
-    const { lotteryName, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery
+    const navigate = useNavigate();
+    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery
 
     useEffect(() => {
         console.log(lottery)
-
     }, [])
 
     return (
+        <>
         <div className="one-lottery">
-            <div className="name">{lotteryName}</div>
+            <div className="name">{name}</div>
             <div className="line">
                 <div className="protocol">{protocol}</div>
                 <div className="token-name">{tokenName}</div>
@@ -31,9 +32,10 @@ const Lottery = ({onClick, lottery}) => {
             <div>
                 <div className="end-date">{endDate}</div>
             </div>
-            <button className="view-lottery"> View lottery </button>
+            <button className="view-lottery" onClick={() => navigate(`/selected-lottery/${id}`, {state:{lottery}})}> View Lottery </button>
         </div>
-    );
+        </>
+    )
 }
 
 export default Lottery;
