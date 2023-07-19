@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { getUSDValue } from '../../providers/OracleProvider'; 
 import { getUsersMoneyInLottery, withdrawMoney } from '../../providers/LotteryProvider';
+import { Backdrop } from '@mui/material';
 
 import './LotteryModal.scss';
 
@@ -38,8 +39,7 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
       <div className='modal-card'>
 
         <div className='modalState'>
-            <label className='modalLabel'> You have {amount} {tokenName}</label>
-            <label className='modalLabel'> Which equals to {amountUSD}$</label>
+            <label className='modalLabel'> You have {amount} {tokenName} / {amountUSD.toFixed(4)}$ </label>
             <label className='modalLabel'> Lottery End Date: {endDate}</label>
         </div>
 

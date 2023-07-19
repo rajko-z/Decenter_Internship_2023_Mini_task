@@ -26,8 +26,7 @@ const Lottery = ({lottery, currPage, wallet}) => {
                     <img className='imageLogo' src={protocolImage(protocol)} alt={tokenName}/> 
                 </div>
                 <div className="line">
-                    <div className="current-amount">{`In lottery: ${currentAmount}  `}</div>
-                    <div className="current-amount-usd">{`($${currentAmountUSD.toFixed(2)})`}</div>
+                    <div className="current-amount">{`TVL: ${currentAmount} ${tokenName} (${currentAmountUSD.toFixed(2)} $)`}</div>
                 </div>
                 <div className="line">
                     <div className="apy">{`APY: ${APY}%`}</div>

@@ -8,7 +8,6 @@ import './SelectedLottery.scss';
 import './SelectedLottery.scss';
 
 const SelectedLottery = ({}) => {
-
   const location = useLocation();
   const { lottery, currPage, wallet } = location.state || {}                    // Access the lottery prop from location.state
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);          // State to control the deposit modal
