@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { List, ListItem, ListItemText, Typography } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
 
 import './App.css';
@@ -15,8 +15,8 @@ function App() {
 
   const handleConnectWallet = async () => {
     if (provider) {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-      setWallet(accounts[0])
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      setWallet(accounts[0]);
       console.log("setWallet: ", accounts[0])
     }
   }
@@ -29,11 +29,10 @@ function App() {
       setWallet(accounts[0])
     }
   }
-
+  
   useEffect(() => {
-
     window.ethereum.on('accountsChanged', handleAccountsChanged);
-
+    
     const getProvider = async () => {
       const result = await detectEthereumProvider()
       setProvider(result)
@@ -42,9 +41,9 @@ function App() {
     getProvider()
 
     return ()  => {                                                                      //unmount -> cleanup
-      window.ethereum.removeListener('accountsChanged', handleAccountsChanged)      
+      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
     }                                                                   
-  }, [])
+  }, []);
   
   if (loadingProvider) {
     return <div>Loading provider...</div>;
@@ -59,22 +58,22 @@ function App() {
             Lottery
           </Typography>
           <List>
-            <ListItem button component={Link} to="/all-lotteries" className="sidebar-button">
+            <ListItemButton component={Link} to="/all-lotteries" className="sidebar-button">
               <ListItemText primary="All Lotteries" />
-            </ListItem>
-            <ListItem button component={Link} to="/my-active-lotteries" className="sidebar-button">
+            </ListItemButton>
+            <ListItemButton component={Link} to="/my-active-lotteries" className="sidebar-button">
               <ListItemText primary="My Lotteries" />
-            </ListItem>
-            <ListItem button component={Link} to="/add-lottery" className="sidebar-button">
+            </ListItemButton>
+            <ListItemButton component={Link} to="/add-lottery" className="sidebar-button">
               <ListItemText primary="Add Lottery" />
-            </ListItem>
+            </ListItemButton>
           </List>
         </div>
       </div>
       <div className="right-side">
         <div className="header">
-          { provider && !wallet && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button> }
-          {/* { wallet && wallet.accounts.length > 0 && <div>Wallet Accounts: { wallet.accounts[0] } </div> } */}
+          {provider && !wallet && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button>}
+          {}
         </div>
         <div className="content">
           <Routes>
