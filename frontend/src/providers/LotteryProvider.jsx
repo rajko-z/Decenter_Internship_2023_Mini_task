@@ -1,5 +1,5 @@
 // calls to the SC
-import { getTokenPrice } from './OracleProvider.js'
+import { getTokenPrice } from './OracleProvider'
 const backendEndpoint = "http://localhost:5000"
 
 const tokenUSDPrices = {

@@ -49,7 +49,7 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
             </div>
 
             <div className='flexRowDiv'>
-                <button className='modalButton' onClick={handleClaim}>Withdraw</button>
+                <button className='modalButton' onClick={handleClaim}>Claim</button>
                 <button className='modalButton' onClick={closeModal}>Cancel</button>
             </div>
         </div>
