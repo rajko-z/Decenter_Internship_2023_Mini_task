@@ -15,7 +15,6 @@ const SelectedLottery = ({}) => {
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
   const [isUserParticipating, setIsUserParticipating] = useState(false);
-  const [isUserWinner, setIsUserWinner] = useState(false);
   const [lotteryStatus, setLotteryStatus] = useState(false);
 
   const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery;
@@ -32,17 +31,13 @@ const SelectedLottery = ({}) => {
     const fetchData = async (id, wallet) => {
       const lotteryStatus = await checkLotteryStatus(id);
       const userAmount = await getUsersMoneyInLottery(wallet, id);
-      const winner = await getLotteryWinner(id);
       
       setLotteryStatus(lotteryStatus);
       setIsUserParticipating(userAmount > 0);
-      setIsUserWinner(winner === wallet);
-      console.log(wallet, winner, wallet===winner, isUserWinner, userAmount, isUserParticipating);
+      // console.log(wallet, winner, wallet===winner, userAmount, isUserParticipating);
     }
 
     fetchData(id, wallet)
-
-    console.log(lottery)
   }, [])
 
   if (!lottery) {
@@ -90,7 +85,7 @@ const SelectedLottery = ({}) => {
                 </>
               }
 
-              {winner && isUserWinner &&
+              {winner &&
                 <>
                 <button className='modalButton' onClick={openClaimModal}>Claim</button>
                 <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />
