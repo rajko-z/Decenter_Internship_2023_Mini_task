@@ -69,13 +69,13 @@ const AddLottery = () => {
             <div className="lottery-card">
                 <form onSubmit={onSubmitHandler}>
                     <label className='label name'>Name</label>
-                    <input className='input name' type='text' id='name' name='name' placeholder='Insert Lottery Name' 
+                    <input className='addLotteryInput' type='text' id='name' name='name' placeholder='Insert Lottery Name' 
                         onChange={e => setName(e.target.value)} required/>
 
                     <label className='label value'>Value</label>
 
                     <div className='flexRowDiv'>
-                        <input className='input value' type="number" step="any" placeholder="0.0"
+                        <input className='addLotteryInput' type="number" step="any" placeholder="0.0"
                             onChange={e => setValue(e.target.value)} required/>
                         <select className="select token" id="token" name="token" defaultValue={"DAI"} 
                             onChange={e => setToken(e.target.value)}>
@@ -92,7 +92,7 @@ const AddLottery = () => {
                     </div>
 
                     <label className='label date'>End Date</label>
-                    <input className='input date' type='date' id='date' name='date' 
+                    <input className='addLotteryInput' type='date' id='date' name='date' 
                         onChange={e => setDate(e.target.value)} required/>
 
                     <button className='submitButton'>Submit</button>

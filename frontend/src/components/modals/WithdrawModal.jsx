@@ -35,12 +35,12 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Withdraw Modal">
       <h1 className='modalName'>Withdraw Money</h1>
-      <div className='withdraw-modal-card'>
+      <div className='modal-card'>
 
         <div className='modalState'>
-            <label className='deposit-modal-lamount'> You have {amount} of {tokenName}</label>
-            <label className='deposit-modal-lamount'> Which equals to {amountUSD}$</label>
-            <label className='deposit-modal-lamount'> Lottery End Date: {endDate}</label>
+            <label className='modalLabel'> You have {amount} {tokenName}</label>
+            <label className='modalLabel'> Which equals to {amountUSD}$</label>
+            <label className='modalLabel'> Lottery End Date: {endDate}</label>
         </div>
 
         <div className='flexRowDiv'>
