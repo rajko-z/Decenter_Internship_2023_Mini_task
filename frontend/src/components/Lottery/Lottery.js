@@ -12,6 +12,7 @@ const Lottery = ({lottery}) => {
     }, [])
 
     const handleOnClick = () => {
+        return navigate(`/selected-lottery/${id}`, {state:{lottery}})
     }
 
     const protocolImage = (protocol) => {
