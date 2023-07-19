@@ -23,10 +23,10 @@ const Lottery = ({lottery}) => {
     return (
         <button className="button-lottery" onClick={handleOnClick}>
             <div className="one-lottery">
-                <div className="name">{name}</div>
-                <div className="line">
-                    <div className="protocol">{protocol}</div>
-                    <div className="token-name">{tokenName}</div>
+                <div className="name">
+                    <img className='imageLogo' src={protocolImage(protocol)} alt={protocol}/> 
+                    {name}
+                    <img className='imageLogo' src={protocolImage(protocol)} alt={tokenName}/> 
                 </div>
                 <div className="line">
                     <div className="current-amount">{`In lottery: ${currentAmount}  `}</div>
