@@ -2,21 +2,24 @@ package main
 
 import (
 	"backend/config"
-	"backend/controller"
+	"backend/listener"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
+	config.DatabaseInit()
 	e := echo.New()
 
-	lotteryRoute := e.Group("/lottery")
-	lotteryRoute.POST("", controller.CreateLottery)
-	lotteryRoute.PUT("", controller.DepositToLottery)
-	lotteryRoute.GET("", controller.GetAllActiveLotteries)
-	lotteryRoute.GET("/:address", controller.GetAllLotteriesForUser)
-	lotteryRoute.DELETE("/:address/:id", controller.WithdrawFromLottery)
+	//lotteryRoute := e.Group("/lottery")
+	//lotteryRoute.POST("", service.CreateLottery)
+	//lotteryRoute.PUT("", service.DepositToLottery)
+	//lotteryRoute.GET("", service.GetAllActiveLotteries)
+	//lotteryRoute.GET("/:address", service.GetAllLotteriesForUser)
+	//lotteryRoute.DELETE("/:address/:id", service.WithdrawFromLottery)
 
-	config.DatabaseInit()
+	go listener.ListenFundsDeposited()
+	go listener.ListenFundsWithDrawn()
+	go listener.ListenLotteryCreated()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
