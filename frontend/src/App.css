@@ -5,17 +5,22 @@
 
 .body {
   font-family: Arial, sans-serif;
+
+  background: linear-gradient(to bottom, #c2daf3, #efd0d0);
 }
 
 .root {
   display: flex;
   height: 100vh;
+
+  background: linear-gradient(to bottom, #c2daf3, #efd0d0);
 }
 
 .sidebar {
-  width: 250px; 
-  background: #536dfe;
-  background: linear-gradient(to bottom, #c2daf3, #536dfe);
+  width: 18%;
+  background: linear-gradient(to bottom, #c2daf3, #efd0d0);
+
+  border-right: 1px solid pink;
 }
 
 .sidebar-title {
@@ -26,7 +31,6 @@
 
 .right-side {
   flex: 1; 
-  background-color: #fafafa;
   display: flex; 
   flex-direction: column; 
   padding: 0;
@@ -36,7 +40,7 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  background-color: #c2daf3;
+  height: 8%;
 }
 
 .connect-wallet {
@@ -57,4 +61,12 @@
 
 .content {
   height: 100%;
+}
+
+.sidebar-content {
+  color: #dd14bf;
+}
+
+.title {
+  font-size: 24px;
 }

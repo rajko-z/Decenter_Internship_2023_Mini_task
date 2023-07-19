@@ -55,7 +55,7 @@ function App() {
       <div className="sidebar">
         <div className="sidebar-content">
           <Typography variant="h6" className="sidebar-title">
-            Lottery
+            <h1 className='title'>Sakura Lottery</h1>
           </Typography>
           <List>
             <ListItemButton component={Link} to="/all-lotteries" className="sidebar-button">
