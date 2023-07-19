@@ -2,17 +2,13 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Lottery.scss'
 
-const Lottery = ({lottery}) => {
+const Lottery = ({lottery, currPage, wallet}) => {
 
     const navigate = useNavigate();
-    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery
-
-    useEffect(() => {
-        console.log(lottery)
-    }, [])
+    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery
 
     const handleOnClick = () => {
-        return navigate(`/selected-lottery/${id}`, {state:{lottery}})
+        return navigate(`/selected-lottery/${id}`, {state:{lottery, currPage, wallet}})
     }
 
     const protocolImage = (protocol) => {

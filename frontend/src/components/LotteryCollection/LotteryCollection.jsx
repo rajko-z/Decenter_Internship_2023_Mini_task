@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
 import { getAllActiveLotteries, getMyLotteries } from '../../providers/LotteryProvider';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.scss';
@@ -35,7 +34,7 @@ const LotteryCollection = (props) => {
     <>
       <div className="active-lotteries">
         {lotteriesData && lotteriesData.map((lott, index) => (
-          <Lottery key={index} lottery={lott} />
+          <Lottery key={index} lottery={lott} currPage={props.currPage} wallet={props.wallet}/>
         )) }
       </div>
     </>

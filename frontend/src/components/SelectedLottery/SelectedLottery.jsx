@@ -1,38 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import DepositModal from '../modals/DepositModal';
+import './SelectedLottery.scss';
 
 const SelectedLottery = ({}) => {
 
   const location = useLocation();
-  const { lottery } = location.state || {}; // Access the lottery prop from location.state
+  const { lottery, currPage, wallet } = location.state || {}                    // Access the lottery prop from location.state
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);         // State to control the deposit modal
+
+  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery;
+  
+  const openDepositModal = () => {
+    setIsDepositModalOpen(true);
+  }
+
+  const closeDepositModal = () => {
+    setIsDepositModalOpen(false);
+  }
 
   if (!lottery) {
-    return <div> Loading.. .</div>;
+    return <div> Loading selected lottery.. .</div>;
   } 
-
-  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery;
-
-   
-
-    // const buttonText = () => {
-    //     let text
-    //     switch (currPage) {
-    //         case 'all': text = "Deposit"; break;
-    //         case 'my-active': text = "Withdraw"; break;
-    //         case 'my-past': text = "Claim"; break;
-    //         default: text = "Participate";
-    //     }
-    //     return text
-    // }
-
-    // const handleOnClick = () => {
-    //     switch (currPage) {
-    //         case 'all': break;
-    //         case 'my-active': break;
-    //         case 'my-past': break;
-    //         default: break;
-    //     }
-    // }
 
   return (
     <div className="selected-lottery">
@@ -53,6 +42,14 @@ const SelectedLottery = ({}) => {
         </div>
         <div>
             <div className="end-date">{endDate}</div>
+        </div>
+        <div>
+          {wallet? 
+            <>
+            <button onClick={openDepositModal}>Deposit Money</button>
+            <DepositModal isOpen={isDepositModalOpen} closeModal={closeDepositModal} />
+            </>: 
+            <label className="conncet-wallet-msg"> Wallet is not connected </label>}
         </div>
     </div>
   );

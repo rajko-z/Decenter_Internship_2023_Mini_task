@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
+import { List, ListItemButton, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
 
 import './App.scss'
@@ -72,7 +72,7 @@ function App() {
             <ListItemButton component={Link} to="/all-lotteries" className="sidebar-button">
               <ListItemText primary="All Lotteries" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/my-active-lotteries" className="sidebar-button">
+            <ListItemButton component={Link} to="/my-lotteries" className="sidebar-button">
               <ListItemText primary="My Lotteries" />
             </ListItemButton>
             <ListItemButton component={Link} to="/add-lottery" className="sidebar-button">

@@ -26,7 +26,7 @@ export const getAllActiveLotteries = async () => {
     try {
         await updateTokenPrices()
         console.log(tokenUSDPrices['DAI'])
-        const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026'}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'endDate': '27.09.2023.'} ]  
+        const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'completed': true, 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026'}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'completed': false, 'endDate': '27.09.2023.'} ]  
 
         const updatedRes = res.map((obj) => {
             const { currentAmount, tokenName } = obj;
@@ -62,7 +62,7 @@ export const createLottery = async () => {
     }
 }
 
-export const depositMoney = async () => {
+export const depositMoney = async (amount, wallet) => {
 
     try {
 
