@@ -8,10 +8,12 @@
     height: 80%;
     margin: 10px 300px;
     padding: 20px;
+
+    border: 2px solid pink;
     border-radius: 30px;
 
     color: $fontcolor_main;
-    background: $lotteryCard;
+    background-color: $bggradient1;
 }
 
 .selectedLotteryName {

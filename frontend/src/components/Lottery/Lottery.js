@@ -16,22 +16,25 @@ const Lottery = ({lottery, currPage, wallet}) => {
             return "/aave-logo.png"
         }
     }
+    const tokenImage = (tokenName) => {
+        return "/" + tokenName + ".png"
+    }
 
     return (
-        <button className="button-lottery" onClick={handleOnClick}>
+        <button className="oneLotteryButton" onClick={handleOnClick}>
             <div className="one-lottery">
-                <div className="name">
+                <div className="oneLotteryName">
                     <img className='imageLogo' src={protocolImage(protocol)} alt={protocol}/> 
                     {name}
-                    <img className='imageLogo' src={protocolImage(protocol)} alt={tokenName}/> 
+                    <img className='imageLogo' src={tokenImage(tokenName)} alt={tokenName}/> 
                 </div>
-                <div className="line">
+                <div className="oneLotteryLine">
                     <div className="current-amount">{`TVL: ${currentAmount} ${tokenName} (${currentAmountUSD.toFixed(2)} $)`}</div>
                 </div>
-                <div className="line">
+                <div className="oneLotteryLine">
                     <div className="apy">{`APY: ${APY}%`}</div>
                 </div>
-                <div className="line">
+                <div className="oneLotteryLine">
                     <div className="expected-yield">{`Expected Yield: ${expectedYield}`}</div>
                 </div>
                 <div>

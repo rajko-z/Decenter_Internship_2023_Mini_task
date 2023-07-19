@@ -1,17 +1,19 @@
 @import "../../HyperParameters.scss";
 
-.button-lottery {
+.oneLotteryButton {
     font-family: "Trueno", sans-serif;
     font-size: 18px;
     font-weight: bold;
 
-    height: 270px;
-    background-color: $cardcolor;
-    color: $fontcolor_secondary;
+    height: 300px;
+    width: 350px;
+    background-color: $bggradient1;
+    color: $fontcolor_main;
 
-    margin: 10px;
+    margin: 20px;
 
-    border: none;
+    border: 1px solid pink;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     border-radius: 12px;
 
@@ -22,16 +24,20 @@
     max-width: 300px;
     padding: 16px;
 
-
     transition: all .2s ease-in-out;
 }
 
-.button-lottery:hover {
+.oneLotteryButton:hover {
     background-color: $cardcolor_hover;
+    transform: scale(1.05);
     transition: all .2s ease-in-out;
+
+
+    color: white;
+    background-color: $cardcolor_hover;
 }
   
-.line {
+.oneLotteryLine {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,15 +45,16 @@
     width: 100%;
 }
 
-.lotteryName {
-    font-size: 23px;
+.oneLotteryName {
+    font-size: 30px;
     font-weight: bold;
     margin: 2px;
-    color: $name;
+    color: $fontcolor_main;
 
     justify-content: space-around;
-    padding: 1px 0;
 
+    justify-content: center;
+    padding: 1px 0;
 }
 
 .current-amount,
@@ -86,5 +93,8 @@
   }
 
 .imageLogo {
-    width: 5%;
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 30px;
+    height: auto;
 }
