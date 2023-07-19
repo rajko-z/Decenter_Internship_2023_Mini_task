@@ -26,7 +26,7 @@ export const getAllActiveLotteries = async () => {
     try {
         await updateTokenPrices()
         console.log(tokenUSDPrices['DAI'])
-        const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026', 'winner': ''}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'endDate': '27.09.2023.', 'winner': 'neka_osoba'} ]  
+        const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026', 'winner': null}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'endDate': '27.09.2023.', 'winner': '0x98b638822892fBAFd7F338780D50BAe8a3336C48'}]
 
         const updatedRes = res.map((obj) => {
             const { currentAmount, tokenName } = obj;
@@ -40,6 +40,10 @@ export const getAllActiveLotteries = async () => {
         console.error("Error fetching all active lotteries");
         return null;
     }
+}
+
+export const checkLotteryStatus = async (lotteryId) => {
+    return true;
 }
 
 export const getMyLotteries = async (wallet) => {
@@ -97,7 +101,7 @@ export const getUsersMoneyInLottery = async (lotteryId, wallet) => {
 }
 
 export const getLotteryWinner = async (lotteryId) => {
-    return "0x1234567891234567891234123456789123456789"
+    return "0x98b638822892fBAFd7F338780D50BAe8a3336C48".toLowerCase();
 }
 
 export const getLotteryReward = async (lotteryId) => {

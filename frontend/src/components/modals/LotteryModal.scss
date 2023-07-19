@@ -83,6 +83,14 @@
     border-bottom: 3px solid pink;
 }
 
+.modalToken {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20px;
+    height: auto;
+}
+
 // remove input arrows
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
