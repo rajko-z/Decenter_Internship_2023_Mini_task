@@ -11,10 +11,13 @@ const Lottery = ({lottery}) => {
         console.log(lottery)
     }, [])
 
+    const handleOnClick = () => {
+    }
+
     return (
-        <button className="button-lottery" onClick={onClick}>
+        <button className="button-lottery" onClick={handleOnClick}>
             <div className="one-lottery">
-                <div className="name">{lotteryName}</div>
+                <div className="name">{name}</div>
                 <div className="line">
                     <div className="protocol">{protocol}</div>
                     <div className="token-name">{tokenName}</div>
