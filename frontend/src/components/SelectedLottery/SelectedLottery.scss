@@ -1,0 +1,27 @@
+@import "../../HyperParameters.scss";
+
+.selected-lottery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 80%;
+    margin: 10px 300px;
+    padding: 20px;
+    border-radius: 30px;
+
+    color: $fontcolor_main;
+    background: $lotteryCard;
+}
+
+.selectedLotteryName {
+    font-size: 2.5em;
+}
+
+.selectedLotteryLine {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
