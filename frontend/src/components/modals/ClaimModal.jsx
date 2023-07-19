@@ -40,11 +40,11 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
     return (
         <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Claim Modal">
-        <h1 className='modalName'>Withdraw Money</h1>
+        <h1 className='modalName'>Claim Money</h1>
         <div>
             <div className='modalState'>
+                <label className='modalLabel'> You are {!isWinner && 'not'} the winner </label>
                 <label className='modalLabel'> You have deposited {amount} {tokenName}, which is {`${amountUSD.toFixed(4)}$`}</label>
-                <label className='modalLabel'> You are {!isWinner && 'not'} the winner</label>
                 <label className='modalLabel'> The reward for this lottery was {reward}, which is {`${rewardUSD.toFixed(4)}$`}</label>
             </div>
 

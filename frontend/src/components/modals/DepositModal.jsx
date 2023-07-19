@@ -42,8 +42,8 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
           <div className='flexRowDivDeposit'>
             <input className='modalInput' type="number" step="any" placeholder="0.0"
                 onChange={e => setAmount(e.target.value)} required/>
-            <label className='deposit-modal-token'> {token} </label>
-            {/*<img className='deposit-modal-token-img' src={tokenImage(token)} alt={token}></img>*/}
+            <label className='modalLabel'> {token} </label>
+            <img className='modalToken' src={tokenImage(token)} alt={token}></img>
 
           </div>
           <div>

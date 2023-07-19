@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 import DepositModal from '../modals/DepositModal';
 import WithdrawModal from '../modals/WithdrawModal';
 import ClaimModal from '../modals/ClaimModal';
-import './SelectedLottery.scss';
+import { checkLotteryStatus, getUsersMoneyInLottery, getLotteryWinner} from '../../providers/LotteryProvider';
 
 import './SelectedLottery.scss';
+
 
 const SelectedLottery = ({}) => {
   const location = useLocation();
@@ -13,6 +14,9 @@ const SelectedLottery = ({}) => {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);          // State to control the deposit modal
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
+  const [isUserParticipating, setIsUserParticipating] = useState(false);
+  const [isUserWinner, setIsUserWinner] = useState(false);
+  const [lotteryStatus, setLotteryStatus] = useState(false);
 
   const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery;
   
@@ -25,6 +29,19 @@ const SelectedLottery = ({}) => {
 
 
   useEffect(() => {
+    const fetchData = async (id, wallet) => {
+      const lotteryStatus = await checkLotteryStatus(id);
+      const userAmount = await getUsersMoneyInLottery(wallet, id);
+      const winner = await getLotteryWinner(id);
+      
+      setLotteryStatus(lotteryStatus);
+      setIsUserParticipating(userAmount > 0);
+      setIsUserWinner(winner === wallet);
+      console.log(wallet, winner, wallet===winner, isUserWinner, userAmount, isUserParticipating);
+    }
+
+    fetchData(id, wallet)
+
     console.log(lottery)
   }, [])
 
@@ -57,17 +74,28 @@ const SelectedLottery = ({}) => {
           {wallet? 
             <>
             <div className='flexRowDiv'>
-              <button className='modalButton' onClick={openDepositModal}>Deposit</button>
-              <DepositModal isOpen={isDepositModalOpen} 
-                            closeModal={closeDepositModal} 
-                            lottery={lottery} 
-                            wallet={wallet}/>
+              {lotteryStatus && !winner &&
+                <>
+                <button className='modalButton' onClick={openDepositModal}>Deposit</button>
+                <DepositModal isOpen={isDepositModalOpen} 
+                              closeModal={closeDepositModal} 
+                              lottery={lottery} 
+                              wallet={wallet}/>
+                </>
+              }
+              {isUserParticipating && !winner &&
+                <>
+                <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
+                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
+                </>
+              }
 
-              <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
-              <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
-
-              <button className='modalButton' onClick={openClaimModal}>Claim</button>
-              <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />
+              {winner && isUserWinner &&
+                <>
+                <button className='modalButton' onClick={openClaimModal}>Claim</button>
+                <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />
+                </>
+              }
 
             </div>
             </>: 

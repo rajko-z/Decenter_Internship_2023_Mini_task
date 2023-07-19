@@ -22,7 +22,6 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
   //get the amount of money user has in lottery
   useEffect(() => {
-
     const fetchData = async () => {
       const result = await getUsersMoneyInLottery(wallet);
       setAmount(result);
