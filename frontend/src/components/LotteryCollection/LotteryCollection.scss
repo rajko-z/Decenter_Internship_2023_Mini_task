@@ -1,4 +1,4 @@
-@import "../../hyperparameters.scss";
+@import "../../HyperParameters.scss";
 
 .lottery {
     display: flex;
@@ -17,8 +17,4 @@
     cursor: pointer;
     transform: scale(1.05);
     transition: transform 0.2s ease-in-out;
-}
-
-.lottery__header {
-    
 }
