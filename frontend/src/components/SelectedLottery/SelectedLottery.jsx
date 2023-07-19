@@ -13,7 +13,7 @@ const SelectedLottery = ({}) => {
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);    
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);     // State to control the deposit modal
 
-  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery;
+  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery;
   
   const openDepositModal = () => {
     setIsDepositModalOpen(true);
@@ -25,6 +25,10 @@ const SelectedLottery = ({}) => {
 
   const openWithdrawModal = () => {setIsWithdrawModalOpen(true);}
   const closeWithdrawModal = () => {setIsWithdrawModalOpen(false);}
+
+  useEffect(() => {
+    console.log(lottery)
+  }, [])
 
   if (!lottery) {
     return <div> Loading selected lottery.. .</div>;

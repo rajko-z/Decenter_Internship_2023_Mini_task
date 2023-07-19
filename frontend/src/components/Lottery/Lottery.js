@@ -5,7 +5,7 @@ import './Lottery.scss'
 const Lottery = ({lottery, currPage, wallet}) => {
 
     const navigate = useNavigate();
-    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery
+    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery
 
     const handleOnClick = () => {
         return navigate(`/selected-lottery/${id}`, {state:{lottery, currPage, wallet}})

@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { withdrawMoney } from '../../providers/LotteryProvider';
+import { getUSDValue } from '../../providers/OracleProvider'; 
+import { getUsersMoneyInLottery, withdrawMoney } from '../../providers/LotteryProvider';
 
 import './LotteryModal.scss';
 
 const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
-  const [amount, setAmount] = useState('');
-  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery;
+
+  const [amount, setAmount] = useState(0);
+  const [amountUSD, setAmountUSD] = useState(0);
+  const lotteryId = lottery.id
+  const tokenName = lottery.tokenName
+  const endDate = lottery.endDate
 
   // deposit money and close modal
   const handleWithdrawal = async () => {
@@ -14,6 +19,18 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
     closeModal();
   };
 
+  //get the amount of money user has in lottery
+  useEffect(() => {
+
+    const fetchData = async () => {
+      const result = await getUsersMoneyInLottery(wallet);
+      setAmount(result);
+      const resultUSD = await getUSDValue(result, tokenName);
+      setAmountUSD(resultUSD);
+    }
+
+    fetchData(lotteryId, wallet)
+  }, [])
 
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Withdraw Modal">
@@ -21,8 +38,8 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
       <div className='withdraw-modal-card'>
 
         <div className='modalState'>
-            <label className='deposit-modal-lamount'> You have {currentAmount} of {tokenName}</label>
-            <label className='deposit-modal-lamount'> Which equals to {currentAmountUSD}$</label>
+            <label className='deposit-modal-lamount'> You have {amount} of {tokenName}</label>
+            <label className='deposit-modal-lamount'> Which equals to {amountUSD}$</label>
             <label className='deposit-modal-lamount'> Lottery End Date: {endDate}</label>
         </div>
 
