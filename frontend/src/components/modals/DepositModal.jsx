@@ -3,6 +3,8 @@ import Modal from 'react-modal';
 import { depositMoney } from '../../providers/LotteryProvider';
 import { getUSDValue } from '../../providers/OracleProvider'; 
 
+import './LotteryModal.scss';
+
 const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
 
   const [amount, setAmount] = useState(0);
@@ -31,24 +33,28 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
   }, [amount, token])
 
   return (
-    <Modal className='deposit-modal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Deposit Modal">
+    <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Deposit Modal">
       <h1>Deposit Money</h1>
-      <div className='deposit-modal-card'>
+      <div className='modal-card'>
 
-        <label className='deposit-modal-lbl-amount'> Amount </label>
+      <div className='modalState'>
+          <label className='modalLabel'> Amount </label>
+          <div className='flexRowDivDeposit'>
+            <input className='modalInput' type="number" step="any" placeholder="0.0"
+                onChange={e => setAmount(e.target.value)} required/>
+            <label className='deposit-modal-token'> {token} </label>
+            {/*<img className='deposit-modal-token-img' src={tokenImage(token)} alt={token}></img>*/}
+
+          </div>
+          <div>
+              <h3 className='deposit-modal-usd-amount'>{`${amountUSD.toFixed(4)}$`}</h3>
+          </div>
+        </div>
+
         <div className='flexRowDiv'>
-          <input className='deposit-modal-input-amount' type="number" step="any" placeholder="0.0"
-              onChange={e => setAmount(e.target.value)} required/>
-          <label className='deposit-modal-token'> {token} </label>
-          <img className='deposit-modal-token-img' src={tokenImage(token)} alt={token}></img>
-
+          <button className='modalButton' onClick={handleDeposit}>Deposit</button>
+          <button className='modalButton' onClick={closeModal}>Cancel</button>
         </div>
-        <div>
-            <h3 className='deposit-modal-usd-amount'>{`$${amountUSD.toFixed(4)}`}</h3>
-        </div>
-
-        <button className='deposit-modal-btn-submit' onClick={handleDeposit}>Deposit</button>
-        <button className='deposit-modal-btn-close' onClick={closeModal}>Cancel</button>
       </div>
     </Modal>
   );

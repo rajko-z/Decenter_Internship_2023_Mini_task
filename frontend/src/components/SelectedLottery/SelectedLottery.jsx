@@ -54,14 +54,16 @@ const SelectedLottery = ({}) => {
         <div>
           {wallet? 
             <>
-            <button onClick={openDepositModal}>Deposit Money</button>
-            <DepositModal isOpen={isDepositModalOpen} 
-                          closeModal={closeDepositModal} 
-                          lottery={lottery} 
-                          wallet={wallet}/>
+            <div className='flexRowDiv'>
+              <button className='modalButton' onClick={openDepositModal}>Deposit</button>
+              <DepositModal isOpen={isDepositModalOpen} 
+                            closeModal={closeDepositModal} 
+                            lottery={lottery} 
+                            wallet={wallet}/>
 
-            <button onClick={openWithdrawModal}>Withdraw</button>
-            <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
+              <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
+              <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
+            </div>
             </>: 
             <label className="conncet-wallet-msg"> Wallet is not connected </label>}
         </div>
