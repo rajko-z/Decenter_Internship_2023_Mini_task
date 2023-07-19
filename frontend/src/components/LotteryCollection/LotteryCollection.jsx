@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import { getAllActiveLotteries, getMyLotteries } from '../../providers/LotteryProvider';
-import SelectedLottery from '../Lottery/SelectedLottery';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.css';
 

@@ -1,15 +1,18 @@
 import { useEffect } from 'react'
-import { getTokenPrice } from '../../providers/OracleProvider.js'
+import { useNavigate } from 'react-router-dom'
 import './Lottery.css'
 
-const Lottery = ({onClick, lottery}) => {
+const Lottery = ({lottery}) => {
 
-    const { lotteryName, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery
+    const navigate = useNavigate();
+    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, currentAmountUSD } = lottery
 
     useEffect(() => {
         console.log(lottery)
-
     }, [])
+
+    const handleOnClick = () => {
+    }
 
     const protocolImage = (protocol) => {
         if (protocol === "Aave") {
@@ -18,11 +21,12 @@ const Lottery = ({onClick, lottery}) => {
     }
 
     return (
-        <button className="button-lottery" onClick={onClick}>
-                <div className="lotteryName">
-                    <img className="imageLogo" src={protocolImage(protocol)} alt={protocol}/>
-                    {lotteryName}
-                    <img className="imageLogo" src={protocolImage(protocol)} alt={tokenName}/>
+        <button className="button-lottery" onClick={handleOnClick}>
+            <div className="one-lottery">
+                <div className="name">{name}</div>
+                <div className="line">
+                    <div className="protocol">{protocol}</div>
+                    <div className="token-name">{tokenName}</div>
                 </div>
                 <div className="line">
                     <div className="current-amount">{`In lottery: ${currentAmount}  `}</div>
@@ -37,6 +41,7 @@ const Lottery = ({onClick, lottery}) => {
                 <div>
                     <div className="end-date">{endDate}</div>
                 </div>
+            </div>
         </button>
     );
 }

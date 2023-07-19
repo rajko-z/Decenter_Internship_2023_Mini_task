@@ -3,9 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 import detectEthereumProvider from '@metamask/detect-provider'
 
-import './App.css';
-import LotteryCollection from './components/LotteryCollection/LotteryCollection.jsx';
-import AddLottery from './components/AddLottery/AddLottery.js';
+import './App.css'
+import SelectedLottery from './components/SelectedLottery/SelectedLottery'
+import LotteryCollection from './components/LotteryCollection/LotteryCollection'
+import AddLottery from './components/AddLottery/AddLottery'
 
 function App() {
 
@@ -87,10 +88,11 @@ function App() {
         </div>
         <div className="content">
           <Routes>
-            <Route path="/" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
-            <Route path="/all-lotteries" key={Date.now()} element={<LotteryCollection currPage="all" wallet={wallet}/>} />
-            <Route path="/my-active-lotteries" key={Date.now()} element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
-            <Route path="/add-lottery" key={Date.now()} element={<AddLottery/>} />
+            <Route path="/" element={<LotteryCollection currPage="all" wallet={wallet}/>} />
+            <Route path="/all-lotteries" element={<LotteryCollection currPage="all" wallet={wallet}/>} />
+            <Route path="/my-lotteries" element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
+            <Route path="/add-lottery" element={<AddLottery/>} />
+            <Route path="/selected-lottery/:lotteryId" element={<SelectedLottery/>} />
           </Routes>
         </div>
       </div>
