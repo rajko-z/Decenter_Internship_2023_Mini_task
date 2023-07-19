@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 
-import './AddLottery.css';
+import './AddLottery.scss';
 import {getTokenPrice} from '../../providers/OracleProvider.js';
 
 const AddLottery = () => {

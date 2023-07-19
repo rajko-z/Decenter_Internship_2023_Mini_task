@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { getAllActiveLotteries, getMyLotteries } from '../../providers/LotteryProvider';
 import Lottery from '../Lottery/Lottery';
-import './LotteryCollection.css';
+import './LotteryCollection.scss';
 
 const LotteryCollection = (props) => {
 

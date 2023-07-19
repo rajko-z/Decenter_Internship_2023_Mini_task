@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './Lottery.css'
+import './Lottery.scss'
 
 const Lottery = ({lottery}) => {
 
