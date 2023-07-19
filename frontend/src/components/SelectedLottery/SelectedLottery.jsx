@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import DepositModal from '../modals/DepositModal';
+import WithdrawModal from '../modals/WithdrawModal';
 import './SelectedLottery.scss';
 
 import './SelectedLottery.scss';
@@ -9,7 +10,8 @@ const SelectedLottery = ({}) => {
 
   const location = useLocation();
   const { lottery, currPage, wallet } = location.state || {}                    // Access the lottery prop from location.state
-  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);         // State to control the deposit modal
+  const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);    
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);     // State to control the deposit modal
 
   const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, completed, currentAmountUSD } = lottery;
   
@@ -21,9 +23,8 @@ const SelectedLottery = ({}) => {
     setIsDepositModalOpen(false);
   }
 
-  useEffect(() => {
-    console.log("lottery: ", lottery)
-  }, [])
+  const openWithdrawModal = () => {setIsWithdrawModalOpen(true);}
+  const closeWithdrawModal = () => {setIsWithdrawModalOpen(false);}
 
   if (!lottery) {
     return <div> Loading selected lottery.. .</div>;
@@ -58,6 +59,9 @@ const SelectedLottery = ({}) => {
                           closeModal={closeDepositModal} 
                           lottery={lottery} 
                           wallet={wallet}/>
+
+            <button onClick={openWithdrawModal}>Withdraw</button>
+            <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
             </>: 
             <label className="conncet-wallet-msg"> Wallet is not connected </label>}
         </div>
