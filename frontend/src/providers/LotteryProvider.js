@@ -95,3 +95,11 @@ export const claimMoney = async () => {
 export const getUsersMoneyInLottery = async (lotteryId, wallet) => {
        return 299;
 }
+
+export const getLotteryWinner = async (lotteryId) => {
+    return "0x1234567891234567891234123456789123456789"
+}
+
+export const getLotteryReward = async (lotteryId) => {
+    return 1000;
+}

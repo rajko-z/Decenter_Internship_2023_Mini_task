@@ -1,31 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { claimMoney } from '../../providers/LotteryProvider';
+import { getUSDValue } from '../../providers/OracleProvider'; 
+import { getLotteryWinner, getUsersMoneyInLottery, getLotteryReward, claimMoney } from '../../providers/LotteryProvider';
 
-const ClaimModal = ({ isOpen, closeModal, lottery, wallet }) => {
-
-    const [amount, setAmount] = useState(0);
-    const [amountUSD, setAmountUSD] = useState(0);
+const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
+  
+    const [isWinner, setIsWinner] = useState(false)
+    const [amount, setAmount] = useState(0)
+    const [amountUSD, setAmountUSD] = useState(0)
+    const [reward, setReward] = useState(0)
+    const [rewardUSD, setRewardUSD] = useState(0)
     const lotteryId = lottery.id
-    const token = lottery.tokenName
+    const tokenName = lottery.tokenName
 
     const handleClaim = async () => {
-        await claimMoney(lotteryId, wallet);
-        closeModal();
+        await claimMoney(lotteryId, wallet)
+        closeModal()
     }
 
     // fetch how much money the user can claim (deposit || deposit + reward)
     useEffect(() => {
+        const fetchData = async () => {
+            const winner = await getLotteryWinner(lotteryId)
+            setIsWinner(wallet === winner);
+            const deposit = await getUsersMoneyInLottery(wallet)
+            setAmount(deposit)
+            const depositUSD = await getUSDValue(deposit, tokenName)
+            setAmountUSD(depositUSD)
 
-        // const fetchData = async () => {
-        //     const result = await 
-        // }
+            //get yield amount (reward for the winner)
+            let reward = await getLotteryReward(lotteryId)
+            setReward(reward)
+            let rewardUSD = await getUSDValue(reward, tokenName)
+            setRewardUSD(rewardUSD)
+        }
 
-        // fetchData()
+        fetchData()
     }, [])
 
     return (
-        <Modal className='claim-modal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Claim Modal">
+        <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Claim Modal">
+        <h1 className='modalName'>Withdraw Money</h1>
+        <div>
+            <div className='modalState'>
+                <label className='modalLabel'> You have deposited {amount} {tokenName}, which is {`${amountUSD.toFixed(4)}$`}</label>
+                <label className='modalLabel'> You are {!isWinner && 'not'} the winner</label>
+                <label className='modalLabel'> The reward for this lottery was {reward}, which is {`${rewardUSD.toFixed(4)}$`}</label>
+            </div>
+
+            <div className='flexRowDiv'>
+                <button className='modalButton' onClick={handleClaim}>Withdraw</button>
+                <button className='modalButton' onClick={closeModal}>Cancel</button>
+            </div>
+        </div>
         </Modal>
     )
 }
+
+export default ClaimModal;
