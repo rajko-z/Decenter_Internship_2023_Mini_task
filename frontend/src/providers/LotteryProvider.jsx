@@ -97,6 +97,11 @@ export const getUsersMoneyInLottery = async (lotteryId, wallet) => {
        return 299;
 }
 
+export const getLotteryWinner = async (lotteryId) => {
+    const bane_adresa = '0x98b638822892fBAFd7F338780D50BAe8a3336C48';
+    return bane_adresa;
+}
+
 export const getLotteryReward = async (lotteryId) => {
     return 1000;
 }
