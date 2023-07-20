@@ -78,14 +78,14 @@ const SelectedLottery = ({}) => {
                               wallet={wallet}/>
                 </>
               }
-              {isUserParticipating && !winner &&
+              {((isUserParticipating && !winner) || (winner && winner !== wallet)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
                 <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
                 </>
               }
 
-              {winner &&
+              {winner && winner === wallet && 
                 <>
                 <button className='modalButton' onClick={openClaimModal}>Claim</button>
                 <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />
