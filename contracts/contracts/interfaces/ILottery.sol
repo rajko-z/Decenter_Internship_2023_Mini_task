@@ -17,6 +17,8 @@ interface ILottery {
         bool isWinner
     );
 
+    event EndedEvent(address winner, uint totalYield);
+
     function deposit(uint amount) external;
 
     function withdraw() external;
@@ -35,9 +37,11 @@ interface ILottery {
 
     function getWinner() external view returns(address);
 
+    function getCurrentYield() external view returns(uint);
+
     function getProtocolId() external view returns(uint);
 
-    function getToken() external view returns(address);
+    function getTokenAddress() external view returns(address);
 
     function isFinished() external view returns(bool);
 

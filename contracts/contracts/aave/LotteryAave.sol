@@ -105,6 +105,8 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
         token.approve(address(pool), tvl);
         pool.supply(address(token), tvl, address(this), 0);
+
+        emit EndedEvent(winner, totalYield);
     }
 
     function getName() external view returns (string memory) {return name;}
@@ -121,7 +123,11 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
     function getProtocolId() external pure returns(uint) { return 1; }
 
-    function getToken() external view returns(address) { return address(token); }
+    function getTokenAddress() external view returns(address) { return address(token); }
+
+    function getCurrentYield() external view returns(uint) {
+        return address(this).balance - tvl;
+    }
 
     function balanceOf(address _address) external view returns (uint) {
         return balances[_address];

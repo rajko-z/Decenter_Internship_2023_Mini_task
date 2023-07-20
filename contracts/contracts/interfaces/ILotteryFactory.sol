@@ -6,10 +6,13 @@ import "./ILottery.sol";
 interface ILotteryFactory {
 
     event CreatedEvent(
-        address addr,
+        address contractAddress,
+        address userAddress,
         string name,
         uint protocolId,
-        address token,
+        address tokenAddress,
+        string tokenSymbol,
+        uint tokenDecimals,
         uint tvl,
         uint endDate,
         uint minAmountToDeposit
@@ -19,13 +22,14 @@ interface ILotteryFactory {
         address contractAddress;
         string name;
         uint protocolId;
-        address token;
+        address tokenAddress;
+        string tokenSymbol;
+        uint tokenDecimals;
         uint tvl;
         uint endDate;
         uint minAmountToDeposit;
-        uint totalYield;
+        uint currentYield;
         address winner;
-        bool finished;
         uint myAmount;
     }
 

@@ -6,6 +6,7 @@ import "./interfaces/ILotteryFactory.sol";
 import "./utils/ProtocolUtils.sol";
 import "./utils/TokensUtils.sol";
 import "./aave/LotteryAave.sol";
+import "./interfaces/IERC20.sol";
 
 contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
 
@@ -33,12 +34,16 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
 
         emit CreatedEvent(
             address(newLottery),
+            msg.sender,
             _name,
             _protocolId,
             _tokenAddress,
+            IERC20(_tokenAddress).symbol(),
+            IERC20(_tokenAddress).decimals(),
             _amountToDeposit,
             newLottery.getEndDate(),
-            _minAmountToDeposit);
+            _minAmountToDeposit
+        );
     }
 
     function getUserLotteries() external view returns (LotteryData[] memory) {
@@ -51,13 +56,14 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
                         contractAddress: address(lottery),
                         name: lottery.getName(),
                         protocolId: lottery.getProtocolId(),
-                        token: lottery.getToken(),
+                        tokenAddress: lottery.getTokenAddress(),
+                        tokenSymbol: IERC20(lottery.getTokenAddress()).symbol(),
+                        tokenDecimals: IERC20(lottery.getTokenAddress()).decimals(),
                         tvl: lottery.getTvl(),
                         endDate: lottery.getEndDate(),
                         minAmountToDeposit: lottery.getMinAmountToDeposit(),
-                        totalYield: lottery.getTotalYield(),
+                        currentYield: lottery.getCurrentYield(),
                         winner: lottery.getWinner(),
-                        finished: lottery.isFinished(),
                         myAmount: lottery.balanceOf(msg.sender)
                     }
                 );
@@ -75,13 +81,14 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
                     contractAddress: address(lottery),
                     name: lottery.getName(),
                     protocolId: lottery.getProtocolId(),
-                    token: lottery.getToken(),
+                    tokenAddress: lottery.getTokenAddress(),
+                    tokenSymbol: IERC20(lottery.getTokenAddress()).symbol(),
+                    tokenDecimals: IERC20(lottery.getTokenAddress()).decimals(),
                     tvl: lottery.getTvl(),
                     endDate: lottery.getEndDate(),
                     minAmountToDeposit: lottery.getMinAmountToDeposit(),
-                    totalYield: lottery.getTotalYield(),
+                    currentYield: lottery.getCurrentYield(),
                     winner: lottery.getWinner(),
-                    finished: lottery.isFinished(),
                     myAmount: lottery.balanceOf(msg.sender)
                 }
             );
