@@ -7,10 +7,8 @@ export const getHistory = async () => {
         // const data = await response.json();
         // return data;
 
-        const res = [ {'id': 7, 'name': "name7", 'protocol': 'Aave', 'tokenName': 'DAI', 'maxTVL': 500, 'yield': 50, 'endDate': '25.5.2023.', 'winner': '0x0'}, 
-                      {'id': 8, 'name': "name8", 'protocol': 'Aave', 'tokenName': 'USDC', 'maxTVL': 500, 'yield': 20, 'endDate': '27.03.2023.', 'winner': '0x98b638822892fBAFd7F338780D50BAe8a3336C48'}]
-
-                      
+        const res = [{'address': '0xABC', 'name': 'lutrija5', 'protocolId': 1, 'tokenSymbol': 'DAI', 'lastTVL': 100, 'yield': 10, 'endDate': 1689848249, 'winner': '0xWINNER1'},
+                     {'address': '0xABC', 'name': 'lutrija6', 'protocolId': 1, 'tokenSymbol': 'USDC', 'lastTVL': 200, 'yield': 15, 'endDate': 1689848110, 'winner': '0xWINNER2'}]
     } catch {
         console.error("Error fetching history");
         return null;

@@ -19,7 +19,7 @@ export const getTokenPrice = async (tokenName) => {
     }
 }
 
-export const getUSDValue = async (amount, tokenName) => {
+export const tokenToUSD = async (amount, tokenName) => {
 
     try {
         const price = await getTokenPrice(tokenName);
@@ -28,4 +28,12 @@ export const getUSDValue = async (amount, tokenName) => {
         console.error("Error fetching the amount in USD")
         return null
     }
+}
+
+export const weiToToken = (wei, decimals) => {
+    return new Decimal(wei.toString()).div(10 ** decimals).toNumber();
+}
+
+export const tokenToWei = (token, decimals) => {
+    return new Decimal(token.toString()).mul(10 ** decimals).toNumber();
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { getUSDValue } from '../../providers/OracleProvider'; 
+import { tokenToUSD } from '../../providers/OracleProvider'; 
 import { getUsersMoneyInLottery, getLotteryReward, claimMoney } from '../../providers/LotteryProvider';
 
 const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
@@ -22,13 +22,13 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
         const fetchData = async () => {
             const deposit = await getUsersMoneyInLottery(wallet)
             setAmount(deposit)
-            const depositUSD = await getUSDValue(deposit, tokenName)
+            const depositUSD = await tokenToUSD(deposit, tokenName)
             setAmountUSD(depositUSD)
 
             //get yield amount (reward for the winner)
             let reward = await getLotteryReward(lotteryId)
             setReward(reward)
-            let rewardUSD = await getUSDValue(reward, tokenName)
+            let rewardUSD = await tokenToUSD(reward, tokenName)
             setRewardUSD(rewardUSD)
 
             setMoneyToClaim(depositUSD + rewardUSD)

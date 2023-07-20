@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { depositMoney } from '../../providers/LotteryProvider';
-import { getUSDValue } from '../../providers/OracleProvider'; 
+import { tokenToUSD } from '../../providers/OracleProvider'; 
 
 import './LotteryModal.scss';
 
@@ -26,7 +26,7 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getUSDValue(amount, token);
+      const result = await tokenToUSD(amount, token);
       setAmountUSD(result);
     }
     fetchData();

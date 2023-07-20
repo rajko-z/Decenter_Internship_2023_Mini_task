@@ -1,5 +1,7 @@
 // calls to the SC
-import { getTokenPrice } from './OracleProvider'
+import {idToProtocol } from '../constants/Tokens'
+import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
+import { protocolToId, infoToToken, tokenToInfo } from '../constants/Tokens'
 
 const tokenUSDPrices = {
     'DAI': 0,
@@ -18,18 +20,50 @@ const updateTokenPrices = async () => {
     results.forEach(({ key, price }) => {
         tokenUSDPrices[key] = price;
     });
-  };
+};
 
-export const getAllActiveLotteries = async () => {
+export const getAllLotteries = async () => {
 
     try {
-        await updateTokenPrices()
-        const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026', 'winner': null}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'endDate': '27.09.2023.', 'winner': '0x98b638822892fBAFd7F338780D50BAe8a3336C48'}]
 
+        await updateTokenPrices()
+
+        // USDC (tvl 100$, minAmount 1$, currYield 8$, myAmount 3$)
+        const res = [{'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'tvl': 100000000000000000000, 
+                      'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000000000000}]
+        
         const updatedRes = res.map((obj) => {
-            const { currentAmount, tokenName } = obj;
-            const currentAmountUSD = currentAmount * tokenUSDPrices[tokenName];
-            return { ...obj, currentAmountUSD };
+            const tokenSymbol = infoToToken[obj.tokenAddress].tokenSymbol
+            const tokenDecimals = infoToToken[obj.tokenAddress].decimals
+
+            // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
+            const { tvl, minAmountToDeposit, currentYield, myAmount } = obj
+            const newTvl = weiToToken(tvl, tokenDecimals)
+            const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
+            const newCurrentYield = weiToToken(currentYield, tokenDecimals)
+            const newMyAmount = weiToToken(myAmount, tokenDecimals)
+
+            // calculate new values expressed in USD
+            const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
+            const minAmountToDepositUSD = newMinAmountToDeposit * tokenUSDPrices[tokenSymbol]
+            const currentYieldUSD = newCurrentYield * tokenUSDPrices[tokenSymbol]
+            const myAmountUSD = newMyAmount * tokenUSDPrices[tokenSymbol]
+
+            const protocol = idToProtocol[obj.protocolId]
+
+            return {
+                ...obj,
+                tvl: newTvl,
+                minAmountToDeposit: newMinAmountToDeposit,
+                currentYield: newCurrentYield,
+                myAmount: newMyAmount,
+                protocol,
+                tokenSymbol,
+                tvlUSD,
+                minAmountToDepositUSD,
+                currentYieldUSD,
+                myAmountUSD
+            }
         });
 
         return updatedRes
@@ -39,11 +73,7 @@ export const getAllActiveLotteries = async () => {
     }
 }
 
-export const checkLotteryStatus = async (lotteryId) => {
-    return true;
-}
-
-export const getMyLotteries = async (wallet) => {
+export const getUserLotteries = async (wallet) => {
 
     try {
 
@@ -53,7 +83,30 @@ export const getMyLotteries = async (wallet) => {
     }
 }
 
-export const createLottery = async (name, protocol, token, wallet, depositAmount, endDate) => {
+export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmountToDeposit, depositAmount, durationInDays) => {
+
+    const protocolId = protocolToId[protocol]
+    const tokenAddress = tokenToInfo[tokenSymbol]
+
+    // convert token values (DAI, USDC) to wei
+    minAmountToDeposit = tokenToWei(minAmountToDeposit, tokenToInfo[tokenSymbol].decimals)
+    depositAmount = tokenToWei(depositAmount, tokenToInfo[tokenSymbol].decimals)
+
+    try {
+
+
+    } catch {
+        console.error("Error depositing money")
+        return null
+    }
+}
+
+export const deposit = async (wallet, contractAddress, amount, tokenSymbol) => {
+
+    // from: wallet
+    // sending to contract contractAddress
+    // amount is in token (USDC, DAI) -> convert to wei
+    amount = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
 
     try {
 
@@ -63,7 +116,11 @@ export const createLottery = async (name, protocol, token, wallet, depositAmount
     }
 }
 
-export const depositMoney = async (lotteryId, amount, wallet) => {
+// for withdraw and claim (logic is on solidity)
+export const withdraw = async (wallet, contractAddress) => {
+
+    // from: wallet
+    // sending to contract contractAddress
 
     try {
 
@@ -73,35 +130,9 @@ export const depositMoney = async (lotteryId, amount, wallet) => {
     }
 }
 
-export const withdrawMoney = async (lotteryId, wallet) => {
+export const getLotteryReward = async (contractAddress) => {
 
-    try {
+    // pozivamo funckiju getTotalYield()
 
-    } catch {
-        console.error("Error depositing money")
-        return null
-    }
-}
-
-export const claimMoney = async (lotteryId, wallet) => {
-
-    try {
-        
-    } catch {
-        console.error("Error depositing money")
-        return null
-    }
-}
-
-export const getUsersMoneyInLottery = async (lotteryId, wallet) => {
-       return 299;
-}
-
-export const getLotteryWinner = async (lotteryId) => {
-    const bane_adresa = '0x98b638822892fBAFd7F338780D50BAe8a3336C48';
-    return bane_adresa;
-}
-
-export const getLotteryReward = async (lotteryId) => {
     return 1000;
 }

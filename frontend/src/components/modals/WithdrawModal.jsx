@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { getUSDValue } from '../../providers/OracleProvider'; 
+import { tokenToUSD } from '../../providers/OracleProvider'; 
 import { getUsersMoneyInLottery, withdrawMoney } from '../../providers/LotteryProvider';
-import { Backdrop } from '@mui/material';
 
 import './LotteryModal.scss';
 
@@ -25,7 +24,7 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
     const fetchData = async () => {
       const result = await getUsersMoneyInLottery(wallet);
       setAmount(result);
-      const resultUSD = await getUSDValue(result, tokenName);
+      const resultUSD = await tokenToUSD(result, tokenName);
       setAmountUSD(resultUSD);
     }
 

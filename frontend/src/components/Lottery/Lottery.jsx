@@ -1,23 +1,23 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Lottery.scss'
 
 const Lottery = ({lottery, currPage, wallet}) => {
 
     const navigate = useNavigate();
-    const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery
+    const { contractAddress, name, protocol, tokenSymbol, endDate, winner,
+            tvl, tvlUSD, minAmountToDeposit, currentYield, currentYieldUSD, myAmount } = lottery
 
     const handleOnClick = () => {
-        return navigate(`/selected-lottery/${id}`, {state:{lottery, currPage, wallet}})
+        return navigate(`/selected-lottery/${contractAddress}`, {state:{lottery, currPage, wallet}})
     }
 
     const protocolImage = (protocol) => {
-        if (protocol === "Aave") {
+        if (protocol === "Aave V3") {
             return "/aave-logo.png"
         }
     }
-    const tokenImage = (tokenName) => {
-        return "/" + tokenName + ".png"
+    const tokenImage = (tokenSymbol) => {
+        return "/" + tokenSymbol + ".png"
     }
 
     return (
@@ -26,16 +26,13 @@ const Lottery = ({lottery, currPage, wallet}) => {
                 <div className="oneLotteryName">
                     <img className='imageLogo' src={protocolImage(protocol)} alt={protocol}/> 
                     {name}
-                    <img className='imageLogo' src={tokenImage(tokenName)} alt={tokenName}/> 
+                    <img className='imageLogo' src={tokenImage(tokenSymbol)} alt={tokenSymbol}/> 
                 </div>
                 <div className="oneLotteryLine">
-                    <div className="current-amount">{`TVL: ${currentAmount} ${tokenName} (${currentAmountUSD.toFixed(2)} $)`}</div>
+                    <div className="current-amount">{`TVL: ${tvl} ${tokenSymbol} (${tvlUSD.toFixed(2)} $)`}</div>
                 </div>
                 <div className="oneLotteryLine">
-                    <div className="apy">{`APY: ${APY}%`}</div>
-                </div>
-                <div className="oneLotteryLine">
-                    <div className="expected-yield">{`Expected Yield: ${expectedYield}`}</div>
+                    <div className="expected-yield">{`Current Yield: ${currentYield} ({${currentYieldUSD.toFixed(2)} $})`}</div>
                 </div>
                 <div>
                     <div className="end-date">{endDate}</div>
