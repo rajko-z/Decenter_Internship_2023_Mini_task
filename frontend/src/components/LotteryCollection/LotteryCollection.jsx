@@ -18,11 +18,10 @@ const LotteryCollection = (props) => {
           default: result = null;
         }
 
-        console.log("result: ", result)
         if(result)
           setLotteriesData(result);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

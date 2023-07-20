@@ -25,7 +25,6 @@ export const getAllActiveLotteries = async () => {
 
     try {
         await updateTokenPrices()
-        console.log(tokenUSDPrices['DAI'])
         const res = [ {'id': 1, 'name': "name1", 'protocol': 'Aave', 'tokenName': 'DAI', 'currentAmount': 600, 'expectedYield': 5, 'APY': 3, 'endDate': '07.03.2026', 'winner': null}, {'id': 2, 'name': "name2", 'protocol': 'Aave', 'tokenName': 'USDC', 'currentAmount': 400, 'expectedYield': 5, 'APY': 3, 'endDate': '27.09.2023.', 'winner': '0x98b638822892fBAFd7F338780D50BAe8a3336C48'}]
 
         const updatedRes = res.map((obj) => {
@@ -34,7 +33,6 @@ export const getAllActiveLotteries = async () => {
             return { ...obj, currentAmountUSD };
         });
 
-        console.log("updatedRes", updatedRes)
         return updatedRes
     } catch {
         console.error("Error fetching all active lotteries");
@@ -61,7 +59,7 @@ export const createLottery = async (name, protocol, token, wallet, depositAmount
     try {
 
     } catch {
-        console.log("Error depositing money")
+        console.error("Error depositing money")
         return null
     }
 }
@@ -71,7 +69,7 @@ export const depositMoney = async (lotteryId, amount, wallet) => {
     try {
 
     } catch {
-        console.log("Error depositing money")
+        console.error("Error depositing money")
         return null
     }
 }
@@ -81,7 +79,7 @@ export const withdrawMoney = async (lotteryId, wallet) => {
     try {
 
     } catch {
-        console.log("Error depositing money")
+        console.error("Error depositing money")
         return null
     }
 }
@@ -91,17 +89,13 @@ export const claimMoney = async (lotteryId, wallet) => {
     try {
         
     } catch {
-        console.log("Error depositing money")
+        console.error("Error depositing money")
         return null
     }
 }
 
 export const getUsersMoneyInLottery = async (lotteryId, wallet) => {
        return 299;
-}
-
-export const getLotteryWinner = async (lotteryId) => {
-    return "0x98b638822892fBAFd7F338780D50BAe8a3336C48".toLowerCase();
 }
 
 export const getLotteryReward = async (lotteryId) => {

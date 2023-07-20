@@ -28,8 +28,6 @@ const AddLottery = () => {
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
-
-        // console.log(name, value, token, protocol, date);
         
         if (dateDifference(new Date(), new Date(date)) < 10) {
             alert("Please input a date that is at least 10 days in the future!");
@@ -46,21 +44,17 @@ const AddLottery = () => {
     }
 
     useEffect(() => {
-        // console.log(name, value, token, protocol, date);
-        // console.log(apy);
         async function getExpectedPrice() {
             const valueInUsd = await getTokenPrice(token) * value;
             console.log(dateDifference(new Date(), new Date(date)))
             const expectedPrize = valueInUsd * (1 + (apy * dateDifference(new Date(), new Date(date)) / 365) / 100);
 
             console.log("Debug", (apy * dateDifference(new Date(), new Date(date)) / 365));
-            console.log(expectedPrize);
             setExpectedPrize(expectedPrize);
         }
 
         getExpectedPrice();
 
-        console.log(expectedPrize);
     }, [apy, date, token, value]);
 
     return (

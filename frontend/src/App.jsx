@@ -12,38 +12,10 @@ function App() {
 
   const [provider, setProvider] = useState(null)
   const [loadingProvider, setLoadingProvider] = useState(true);
+  const initialState = { accounts: [] }
   const [wallet, setWallet] = useState(null)
-
-  const handleConnectWallet = async () => {
-    if (provider) {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      setWallet(accounts[0]);
-      console.log("setWallet: ", accounts[0])
-    }
-  }
-
-  const handleAccountsChanged = async (account) => {
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
-    if (accounts.length === 0) {
-      console.log('Please connect to MetaMask.');
-    } else if (accounts[0] !== wallet) {
-      setWallet(accounts[0])
-    }
-  }
-
-  window.onload = async (event) => {
-    const accounts = await window.ethereum.request({method: 'eth_accounts'});       
-    if (accounts.length) {
-      console.log(`You're connected to: ${accounts[0]}`);
-      setWallet(accounts[0])
-    } else {
-      console.log("Metamask is not connected");
-    }
-  }
   
   useEffect(() => {
-    window.ethereum.on('accountsChanged', handleAccountsChanged);
-    
     const getProvider = async () => {
       const result = await detectEthereumProvider()
       setProvider(result)
@@ -51,10 +23,43 @@ function App() {
     }
     getProvider()
 
-    return ()  => {                                                                      //unmount -> cleanup
-      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-    }                                                                   
+    return () => {                                            
+      window.ethereum?.removeListener('accountsChanged', refreshAccounts)
+    }                                                                    
   }, []);
+
+  const updateWallet = async (accounts) => {
+    setWallet({ accounts })
+    console.log("wallet", wallet)
+  }
+
+  const handleConnectWallet = async () => {
+    if (provider) {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      updateWallet(accounts)
+    }
+  }
+
+  const refreshAccounts = async () => {    
+    const resAccounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
+    if (resAccounts.length === 0) {
+      console.log('Please connect to MetaMask.');
+    } else if (resAccounts[0] !== wallet) {
+      updateWallet(resAccounts[0])
+    }       
+    console.log("refreshAccounts", wallet)                                           
+  } 
+
+  window.onload = async (event) => {
+    const accountsRes = await window.ethereum.request({method: 'eth_accounts'});       
+    if (accountsRes.length) {
+      console.log(`You're connected to: ${accountsRes[0]}`);
+      setWallet(accountsRes[0])
+    } else {
+      setWallet(null)
+      console.log("Metamask is not connected");
+    }
+  }
   
   if (loadingProvider) {
     return <div>Loading provider...</div>;

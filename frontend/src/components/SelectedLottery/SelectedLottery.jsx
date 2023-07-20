@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import DepositModal from '../modals/DepositModal';
 import WithdrawModal from '../modals/WithdrawModal';
 import ClaimModal from '../modals/ClaimModal';
-import { checkLotteryStatus, getUsersMoneyInLottery, getLotteryWinner} from '../../providers/LotteryProvider';
+import { checkLotteryStatus, getUsersMoneyInLottery} from '../../providers/LotteryProvider';
 
 import './SelectedLottery.scss';
 
@@ -34,7 +34,6 @@ const SelectedLottery = ({}) => {
       
       setLotteryStatus(lotteryStatus);
       setIsUserParticipating(userAmount > 0);
-      // console.log(wallet, winner, wallet===winner, userAmount, isUserParticipating);
     }
 
     fetchData(id, wallet)
