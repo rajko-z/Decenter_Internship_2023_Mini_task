@@ -1,21 +1,21 @@
 package model
 
-import "time"
-
 type UserLottery struct {
-	UserAddress string `gorm:"primaryKey"`
-	LotteryID   uint   `gorm:"primaryKey"`
-	Deposit     uint
+	UserAddress    string
+	LotteryAddress string
+	Deposit        uint
 }
 
 type Lottery struct {
-	ID           uint
-	Name         string
-	Token        string
-	Protocol     string
-	TokensInPool uint
-	Decimals     uint
-	Apy          float64
-	EndTime      time.Time
-	Active       bool
+	Address       string
+	Name          string
+	ProtocolId    uint
+	TokenSymbol   string
+	TokenDecimals uint
+	TokensInPool  uint
+	MinTokens     uint
+	Yield         uint
+	EndDate       uint
+	Active        bool
+	Winner        string
 }
