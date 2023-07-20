@@ -3,10 +3,8 @@ import { useLocation } from 'react-router-dom';
 import DepositModal from '../modals/DepositModal';
 import WithdrawModal from '../modals/WithdrawModal';
 import ClaimModal from '../modals/ClaimModal';
-import { checkLotteryStatus, getUsersMoneyInLottery} from '../../providers/LotteryProvider';
 
 import './SelectedLottery.scss';
-
 
 const SelectedLottery = ({}) => {
   const location = useLocation();
@@ -15,10 +13,11 @@ const SelectedLottery = ({}) => {
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
   const [isUserParticipating, setIsUserParticipating] = useState(false);
-  const [lotteryStatus, setLotteryStatus] = useState(false);
+  const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
 
-  const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery;
+  const [ name, protocol, tokenSymbol, tvl, tvlUSD, endDate, 
+          currentYield, currentYieldUSD, myAmount, winner] = lottery
   
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}
@@ -27,43 +26,35 @@ const SelectedLottery = ({}) => {
   const openClaimModal = () => {setIsClaimModalOpen(true)}
   const closeClaimModal = () => {setIsClaimModalOpen(false)}
 
-
   useEffect(() => {
-    const fetchData = async (id, wallet) => {
-      const lotteryStatus = await checkLotteryStatus(id);
-      const userAmount = await getUsersMoneyInLottery(wallet, id);
-      
-      setLotteryStatus(lotteryStatus);
-      setIsUserParticipating(userAmount > 0);
 
-      if (winner !== null) {setIsUserWinner(wallet.toLowerCase() === winner.toLowerCase());}
-      else {setIsUserWinner(false);}
-      console.log(wallet, winner, wallet===winner, userAmount, isUserParticipating);
+    const fetchData = async () => {
+      setLotteryIsActive(winner === '0x0');
+      setIsUserParticipating(myAmount > 0);
+
+      if (winner !== '0x0')
+        setIsUserWinner(wallet.toLowerCase() === winner.toLowerCase())
     }
 
-    fetchData(id, wallet)
+    fetchData()
   }, [])
 
   if (!lottery) {
     return <div> Loading selected lottery.. .</div>;
   } 
 
-
   return (
     <div className="selected-lottery">
       <div className="selectedLotteryName"><h3>{name}</h3></div>
         <div className="selectedLotteryLine">
             <div className="protocol">Protocol: {protocol}</div>
-            <div className="token-name">Token: {tokenName}</div>
+            <div className="token-name">Token: {tokenSymbol}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="selectedLottery current-amount">{`In lottery: ${currentAmount} ${tokenName} (${currentAmountUSD.toFixed(2)}$)`}</div>
+            <div className="selectedLottery current-amount">{`In lottery: ${tvl} ${tokenSymbol} (${tvlUSD.toFixed(2)}$)`}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="apy">{`APY: ${APY}%`}</div>
-        </div>
-        <div className="selectedLotteryLine">
-            <div className="expected-yield">{`Expected Yield: ${expectedYield}`}</div>
+            <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD.toFixed(2)}$`}</div>
         </div>
         <div>
             <div className="end-date">{endDate}</div>
@@ -72,7 +63,7 @@ const SelectedLottery = ({}) => {
           {wallet? 
             <>
             <div className='flexRowDiv'>
-              {lotteryStatus && !winner &&
+              {lotteryIsAcive &&
                 <>
                 <button className='modalButton' onClick={openDepositModal}>Deposit</button>
                 <DepositModal isOpen={isDepositModalOpen} 
@@ -81,14 +72,14 @@ const SelectedLottery = ({}) => {
                               wallet={wallet}/>
                 </>
               }
-              {((isUserParticipating && !winner) || (winner && !isUserWinner)) &&
+              {((lotteryIsAcive && isUserParticipating) || (!lotteryIsAcive && !isUserWinner)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
                 <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
                 </>
               }
 
-              {winner && isUserWinner && 
+              {!lotteryIsAcive && isUserWinner && 
                 <>
                 <button className='modalButton' onClick={openClaimModal}>Claim</button>
                 <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />

@@ -101,7 +101,7 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
     }
 }
 
-export const deposit = async (wallet, contractAddress, amount, tokenSymbol) => {
+export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol) => {
 
     // from: wallet
     // sending to contract contractAddress
@@ -117,7 +117,7 @@ export const deposit = async (wallet, contractAddress, amount, tokenSymbol) => {
 }
 
 // for withdraw and claim (logic is on solidity)
-export const withdraw = async (wallet, contractAddress) => {
+export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
     // from: wallet
     // sending to contract contractAddress

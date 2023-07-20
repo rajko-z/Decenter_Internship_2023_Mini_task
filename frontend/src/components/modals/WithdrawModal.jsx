@@ -1,35 +1,21 @@
-import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { tokenToUSD } from '../../providers/OracleProvider'; 
-import { getUsersMoneyInLottery, withdrawMoney } from '../../providers/LotteryProvider';
-
+import { withdrawMoneyFromLottery } from '../../providers/LotteryProvider';
 import './LotteryModal.scss';
 
 const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
-  const [amount, setAmount] = useState(0);
-  const [amountUSD, setAmountUSD] = useState(0);
-  const lotteryId = lottery.id
-  const tokenName = lottery.tokenName
-  const endDate = lottery.endDate
+  const [contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD]  = lottery
 
   // deposit money and close modal
   const handleWithdrawal = async () => {
-    await withdrawMoney(wallet);
+    await withdrawMoneyFromLottery(wallet, contractAddress);
     closeModal();
   };
 
-  //get the amount of money user has in lottery
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getUsersMoneyInLottery(wallet);
-      setAmount(result);
-      const resultUSD = await tokenToUSD(result, tokenName);
-      setAmountUSD(resultUSD);
-    }
-
-    fetchData(lotteryId, wallet)
-  }, [])
+  const convertUnixTimestampToDate = () => {
+    const date = new Date(endDate * 1000);
+    return date.toLocaleString();
+  }
 
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Withdraw Modal">
@@ -37,9 +23,9 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
       <div className='modal-card'>
 
         <div className='modalState'>
-            <label className='modalLabel'> <h3>You have {amount} {tokenName} / {amountUSD.toFixed(4)}$ </h3></label>
+            <label className='modalLabel'> <h3>You have {myAmount} {tokenSymbol} / {myAmountUSD.toFixed(4)}$ </h3></label>
             <br></br>
-            <label className='modalLabel'> Lottery End Date: {endDate}</label>
+            <label className='modalLabel'> Lottery End Date: {convertUnixTimestampToDate}</label>
         </div>
 
         <div className='flexRowDiv'>
