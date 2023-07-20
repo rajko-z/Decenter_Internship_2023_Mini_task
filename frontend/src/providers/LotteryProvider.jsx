@@ -1,5 +1,5 @@
 // calls to the SC
-import {idToProtocol } from '../constants/Tokens'
+import { idToProtocol } from '../constants/Tokens'
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
 import { protocolToId, infoToToken, tokenToInfo } from '../constants/Tokens'
 
@@ -30,10 +30,12 @@ export const getAllLotteries = async () => {
 
         // USDC (tvl 100$, minAmount 1$, currYield 8$, myAmount 3$)
         const res = [{'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'tvl': 100000000000000000000, 
-                      'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000000000000}]
+                      'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000000000000},
+                      {'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'tvl': 100000000000000000000, 
+                      'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0x0', 'myAmount': 30000000000000000000}]
         
         const updatedRes = res.map((obj) => {
-            const tokenSymbol = infoToToken[obj.tokenAddress].tokenSymbol
+            const tokenSymbol = infoToToken[obj.tokenAddress].symbol
             const tokenDecimals = infoToToken[obj.tokenAddress].decimals
 
             // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)

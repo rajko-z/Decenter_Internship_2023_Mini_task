@@ -4,8 +4,7 @@ import './Lottery.scss'
 const Lottery = ({lottery, currPage, wallet}) => {
 
     const navigate = useNavigate();
-    const { contractAddress, name, protocol, tokenSymbol, endDate, winner,
-            tvl, tvlUSD, minAmountToDeposit, currentYield, currentYieldUSD, myAmount } = lottery
+    const { contractAddress, name, protocol, tokenSymbol, endDate, tvl, tvlUSD, currentYield, currentYieldUSD } = lottery
 
     const handleOnClick = () => {
         return navigate(`/selected-lottery/${contractAddress}`, {state:{lottery, currPage, wallet}})
@@ -20,6 +19,11 @@ const Lottery = ({lottery, currPage, wallet}) => {
         return "/" + tokenSymbol + ".png"
     }
 
+    const convertUnixTimestampToDate = () => {
+        const date = new Date(endDate * 1000);
+        return date.toLocaleString();
+    }
+
     return (
         <button className="oneLotteryButton" onClick={handleOnClick}>
             <div className="one-lottery">
@@ -32,10 +36,10 @@ const Lottery = ({lottery, currPage, wallet}) => {
                     <div className="current-amount">{`TVL: ${tvl} ${tokenSymbol} (${tvlUSD.toFixed(2)} $)`}</div>
                 </div>
                 <div className="oneLotteryLine">
-                    <div className="expected-yield">{`Current Yield: ${currentYield} ({${currentYieldUSD.toFixed(2)} $})`}</div>
+                    <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD.toFixed(2)} $)`}</div>
                 </div>
                 <div>
-                    <div className="end-date">{endDate}</div>
+                    <div className="end-date">{convertUnixTimestampToDate()}</div>
                 </div>
             </div>
         </button>

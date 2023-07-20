@@ -4,7 +4,7 @@ import './LotteryModal.scss';
 
 const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
-  const [contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD]  = lottery
+  const {contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD}   = lottery
 
   // deposit money and close modal
   const handleWithdrawal = async () => {
@@ -25,7 +25,7 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
         <div className='modalState'>
             <label className='modalLabel'> <h3>You have {myAmount} {tokenSymbol} / {myAmountUSD.toFixed(4)}$ </h3></label>
             <br></br>
-            <label className='modalLabel'> Lottery End Date: {convertUnixTimestampToDate}</label>
+            <label className='modalLabel'> Lottery End Date: {convertUnixTimestampToDate()}</label>
         </div>
 
         <div className='flexRowDiv'>
