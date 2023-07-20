@@ -17,7 +17,6 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
         uint _protocolId,
         address _tokenAddress,
         uint _minAmountToDeposit,
-        uint _amountToDeposit,
         uint _durationInDays
     )
     external
@@ -28,7 +27,7 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
 
         ILottery newLottery;
         if (_protocolId == 1) {
-            newLottery = new LotteryAave(_name, _tokenAddress, _minAmountToDeposit, _amountToDeposit, _durationInDays);
+            newLottery = new LotteryAave(_name, _tokenAddress, _minAmountToDeposit, _durationInDays);
         }
         lotteries.push(newLottery);
 
@@ -40,7 +39,6 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
             _tokenAddress,
             IERC20(_tokenAddress).symbol(),
             IERC20(_tokenAddress).decimals(),
-            _amountToDeposit,
             newLottery.getEndDate(),
             _minAmountToDeposit
         );

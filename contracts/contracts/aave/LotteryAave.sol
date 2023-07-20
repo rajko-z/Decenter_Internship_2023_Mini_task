@@ -30,7 +30,6 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         string memory _name,
         address _tokenAddress,
         uint _minAmountToDeposit,
-        uint _amountToDeposit,
         uint _durationInDays
     ) {
         address poolAddress = IPoolAddressesProvider(POOL_ADDRESS_PROVIDER_MAINNET).getPool();
@@ -38,18 +37,12 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         token = IERC20(_tokenAddress);
 
         require(_durationInDays >= minDurationInDays, "Lottery duration to short");
-        require(_amountToDeposit >= _minAmountToDeposit, "Amount lesser than min amount to deposit");
-        require(token.transferFrom(msg.sender, address(this), _amountToDeposit), "Transfer failed");
-
-        token.approve(address(pool), _amountToDeposit);
-        pool.supply(address(token), _amountToDeposit, address(this), 0);
 
         name = _name;
-        tvl = _amountToDeposit;
+        tvl = 0;
         minAmountToDeposit = _minAmountToDeposit;
         endDate = block.timestamp + _durationInDays * 1 days;
         totalDuration = _durationInDays * 1 days;
-        balances[msg.sender] += _amountToDeposit;
     }
 
     function deposit(uint amount) external {

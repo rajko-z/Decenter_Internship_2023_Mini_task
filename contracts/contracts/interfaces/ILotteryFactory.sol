@@ -13,7 +13,6 @@ interface ILotteryFactory {
         address tokenAddress,
         string tokenSymbol,
         uint tokenDecimals,
-        uint tvl,
         uint endDate,
         uint minAmountToDeposit
     );
@@ -38,7 +37,6 @@ interface ILotteryFactory {
         uint _protocolId,
         address _tokenAddress,
         uint _minAmountToDeposit,
-        uint _amountToDeposit,
         uint _durationInDays
     )
     external;
