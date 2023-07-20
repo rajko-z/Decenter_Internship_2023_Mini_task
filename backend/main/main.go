@@ -1,25 +1,34 @@
 package main
 
 import (
-	"backend/config"
+	"backend/controller"
+	"backend/db"
+	dbgorm "backend/db/gorm"
 	"backend/listener"
+	"backend/service"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	config.DatabaseInit()
+	db.DatabaseInit()
+	lRepo := dbgorm.LotteryGorm{DB: db.DB()}
+	ulRepo := dbgorm.UserLotteryGorm{DB: db.DB()}
+	lService := service.LotteryImpl{
+		ULRepo: ulRepo,
+		LRepo:  lRepo,
+	}
+	lController := controller.LotteryController{
+		LS: lService,
+	}
+	lListener := listener.Listener{
+		LS: lService,
+	}
+
 	e := echo.New()
+	lotteryRoute := e.Group("/lottery")
+	lotteryRoute.GET("", lController.GetAllFinishedLotteries)
 
-	//lotteryRoute := e.Group("/lottery")
-	//lotteryRoute.POST("", service.CreateLottery)
-	//lotteryRoute.PUT("", service.DepositToLottery)
-	//lotteryRoute.GET("", service.GetAllActiveLotteries)
-	//lotteryRoute.GET("/:address", service.GetAllLotteriesForUser)
-	//lotteryRoute.DELETE("/:address/:id", service.WithdrawFromLottery)
-
-	go listener.ListenFundsDeposited()
-	go listener.ListenFundsWithDrawn()
-	go listener.ListenLotteryCreated()
+	go lListener.ListenLotteryCreated()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
