@@ -16,7 +16,6 @@ const SelectedLottery = ({}) => {
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
 
-  console.log("Lottery: ", lottery)
   const { name, protocol, tokenSymbol, tvl, tvlUSD, endDate, currentYield, currentYieldUSD, myAmount, winner } = lottery || [];
   
   const openDepositModal = () => {setIsDepositModalOpen(true)}
@@ -25,6 +24,11 @@ const SelectedLottery = ({}) => {
   const closeWithdrawModal = () => {setIsWithdrawModalOpen(false)}
   const openClaimModal = () => {setIsClaimModalOpen(true)}
   const closeClaimModal = () => {setIsClaimModalOpen(false)}
+
+  const convertUnixTimestampToDate = () => {
+      const date = new Date(endDate * 1000);
+      return date.toLocaleString();
+  }
 
   useEffect(() => {
 
@@ -57,7 +61,7 @@ const SelectedLottery = ({}) => {
             <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD.toFixed(2)}$`}</div>
         </div>
         <div>
-            <div className="end-date">{endDate}</div>
+            <div className="end-date">End Date: {convertUnixTimestampToDate()}</div>
         </div>
         <div>
           {wallet? 

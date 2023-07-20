@@ -16,7 +16,6 @@ const Lottery = ({lottery, currPage, wallet}) => {
         }
     }
     const tokenImage = (tokenSymbol) => {
-        console.log("tokenSymbol", tokenSymbol)
         return "/" + tokenSymbol + ".png"
     }
 

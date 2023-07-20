@@ -2,6 +2,13 @@
 import { idToProtocol } from '../constants/Tokens'
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
 import { protocolToId, infoToToken, tokenToInfo } from '../constants/Tokens'
+import { contractABI } from '../constants/Oracles'
+
+import Web3 from 'web3'
+
+const web3 = new Web3(window.ethereum);
+
+// Contract.setProvider(RPC)
 
 const tokenUSDPrices = {
     'DAI': 0,
@@ -22,10 +29,8 @@ const updateTokenPrices = async () => {
     });
 };
 
-export const getAllLotteries = async () => {
-
+export const getAllLotteries = async (debug=false) => {
     try {
-
         await updateTokenPrices()
 
         // USDC (tvl 100$, minAmount 1$, currYield 8$, myAmount 3$)
@@ -76,9 +81,12 @@ export const getAllLotteries = async () => {
 }
 
 export const getUserLotteries = async (wallet) => {
-
+    
     try {
+        const contract = new web3.eth.Contract(contractABI)
+        const res = await contract.methods.getUserLotteries(wallet).call()
 
+        return res
     } catch {
         console.error("Error fetching users active lotteries");
         return null;
@@ -95,7 +103,16 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
     depositAmount = tokenToWei(depositAmount, tokenToInfo[tokenSymbol].decimals)
 
     try {
-
+        const contract = new web3.eth.Contract(contractABI)
+        const res = await contract.methods.createLottery(
+            name, 
+            protocolId, 
+            tokenAddress, 
+            minAmountToDeposit, 
+            depositAmount, 
+            durationInDays
+        ).send({from: wallet})
+        return res
 
     } catch {
         console.error("Error depositing money")
@@ -105,13 +122,16 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
 
 export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol) => {
 
+
     // from: wallet
     // sending to contract contractAddress
     // amount is in token (USDC, DAI) -> convert to wei
     amount = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
 
     try {
-
+        const contract = new web3.eth.Contract(contractABI, contractAddress)
+        const res = await contract.methods.deposit(amount).send({from: wallet})
+        return res
     } catch {
         console.error("Error depositing money")
         return null
@@ -123,9 +143,10 @@ export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
     // from: wallet
     // sending to contract contractAddress
-
     try {
-
+        const contract = new web3.eth.Contract(contractABI, contractAddress)
+        const res = await contract.methods.withdraw().send({from: wallet})
+        return res
     } catch {
         console.error("Error depositing money")
         return null
@@ -134,7 +155,8 @@ export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
 export const getLotteryReward = async (contractAddress) => {
 
-    // pozivamo funckiju getTotalYield()
-
-    return 1000;
+    // pozivamo funckiju getTotalYield() iz SC
+    const contract = new web3.eth.Contract(contractABI, contractAddress)
+    const res = await contract.methods.getTotalYield().call()
+    return res
 }

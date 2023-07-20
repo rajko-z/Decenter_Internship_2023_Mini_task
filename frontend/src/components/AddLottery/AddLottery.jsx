@@ -6,6 +6,7 @@ import {getTokenPrice} from '../../providers/OracleProvider';
 const AddLottery = () => {
     const [name, setName] = useState('');
     const [value, setValue] = useState('');
+    const [minValue, setMinValue] = useState('');
     const [token, setToken] = useState('DAI');
     const [protocol, setProtocol] = useState('aave');
     const [date, setDate] = useState(new Date());
@@ -83,6 +84,12 @@ const AddLottery = () => {
                             onChange={e => setProtocol(e.target.value)}>
                                 <option value="aave">Aave v3</option>
                         </select>
+                    </div>
+
+                    <label className='label value'>Minimum value to deposit (in {token})</label>
+                    <div className='flexRowDiv'>
+                        <input className='addLotteryInput' type="number" step="any" placeholder="0.0"
+                            onChange={e => setMinValue(e.target.value)} required/>
                     </div>
 
                     <label className='label date'>End Date</label>
