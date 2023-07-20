@@ -16,6 +16,7 @@ const Lottery = ({lottery, currPage, wallet}) => {
         }
     }
     const tokenImage = (tokenSymbol) => {
+        console.log("tokenSymbol", tokenSymbol)
         return "/" + tokenSymbol + ".png"
     }
 
@@ -36,7 +37,10 @@ const Lottery = ({lottery, currPage, wallet}) => {
                     <div className="current-amount">{`TVL: ${tvl} ${tokenSymbol} (${tvlUSD.toFixed(2)} $)`}</div>
                 </div>
                 <div className="oneLotteryLine">
-                    <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD.toFixed(2)} $)`}</div>
+                    <div className="expected-yield">{`Current Yield: ${currentYield} ${tokenSymbol}`}</div>
+                </div>
+                <div className="oneLotteryLine">
+                    <div className="expected-yield">{`In USD ${currentYieldUSD.toFixed(2)} $`}</div>
                 </div>
                 <div>
                     <div className="end-date">{convertUnixTimestampToDate()}</div>

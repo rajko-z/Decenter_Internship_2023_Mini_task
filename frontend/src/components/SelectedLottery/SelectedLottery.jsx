@@ -17,7 +17,7 @@ const SelectedLottery = ({}) => {
   const [isUserWinner, setIsUserWinner] = useState(false);
 
   console.log("Lottery: ", lottery)
-  const {name, protocol, tokenSymbol, tvl, tvlUSD, endDate, currentYield, currentYieldUSD, myAmount, winner} = lottery
+  const { name, protocol, tokenSymbol, tvl, tvlUSD, endDate, currentYield, currentYieldUSD, myAmount, winner } = lottery || [];
   
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}
