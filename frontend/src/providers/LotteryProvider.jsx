@@ -33,7 +33,7 @@ export const getAllLotteries = async () => {
                       'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000000000000}]
         
         const updatedRes = res.map((obj) => {
-            const tokenSymbol = infoToToken[obj.tokenAddress].tokenSymbol
+            const tokenSymbol = infoToToken[obj.tokenAddress].symbol
             const tokenDecimals = infoToToken[obj.tokenAddress].decimals
 
             // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
