@@ -69,7 +69,7 @@ const AddLottery = () => {
                     <label className='label value'>Value</label>
 
                     <div className='flexRowDiv'>
-                        <input className='addLotteryInput' type="number" step="any" placeholder="0.0"
+                        <input className='addLotteryInput token' type="number" step="any" placeholder="0.0"
                             onChange={e => setValue(e.target.value)} required/>
                         <select className="select token" id="token" name="token" defaultValue={"DAI"} 
                             onChange={e => setToken(e.target.value)}>
