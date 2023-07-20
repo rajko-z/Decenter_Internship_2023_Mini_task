@@ -12,7 +12,6 @@ function App() {
 
   const [provider, setProvider] = useState(null)
   const [loadingProvider, setLoadingProvider] = useState(true);
-  const initialState = { accounts: [] }
   const [wallet, setWallet] = useState(null)
   
   useEffect(() => {
@@ -80,6 +79,9 @@ function App() {
             <ListItemButton component={Link} to="/my-lotteries" className="sidebar-button">
               <ListItemText primary="My Lotteries" />
             </ListItemButton>
+            <ListItemButton component={Link} to="/history" className="sidebar-button">
+              <ListItemText primary="Past lotteries" />
+            </ListItemButton>
             <ListItemButton component={Link} to="/add-lottery" className="sidebar-button">
               <ListItemText primary="Add Lottery" />
             </ListItemButton>
@@ -96,6 +98,7 @@ function App() {
             <Route path="/" element={<LotteryCollection currPage="all" wallet={wallet}/>} />
             <Route path="/all-lotteries" element={<LotteryCollection currPage="all" wallet={wallet}/>} />
             <Route path="/my-lotteries" element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
+            <Route path="/past-lotteries" element={<LotteryCollection currPage="history" wallet={wallet}/>} />
             <Route path="/add-lottery" element={<AddLottery/>} />
             <Route path="/selected-lottery/:lotteryId" element={<SelectedLottery/>} />
           </Routes>

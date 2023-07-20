@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getHistory } from '../../providers/HistoryProvider';
 import { getAllActiveLotteries, getMyLotteries } from '../../providers/LotteryProvider';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.scss';
@@ -15,6 +16,7 @@ const LotteryCollection = (props) => {
         switch(props.currPage) {
           case 'all': result = await getAllActiveLotteries(); break;
           case 'my-lotteries': result = await getMyLotteries(props.wallet); break;
+          case 'history': result = await getHistory(); break;
           default: result = null;
         }
 
