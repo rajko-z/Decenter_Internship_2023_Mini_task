@@ -16,8 +16,10 @@ const SelectedLottery = ({}) => {
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
 
+  console.log("Lottery: ", lottery)
   const [ name, protocol, tokenSymbol, tvl, tvlUSD, endDate, 
-          currentYield, currentYieldUSD, myAmount, winner] = lottery
+          currentYield, currentYieldUSD, myAmount, winner] = lottery || []
+  console.log("Name", name)
   
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}

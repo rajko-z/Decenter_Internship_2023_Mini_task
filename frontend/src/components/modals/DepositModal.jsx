@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { depositMoney } from '../../providers/LotteryProvider';
+import { depositMoneyInLottery } from '../../providers/LotteryProvider';
 import { tokenToUSD } from '../../providers/OracleProvider'; 
 
 import './LotteryModal.scss';
@@ -9,28 +9,29 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
 
   const [amount, setAmount] = useState(0);
   const [amountUSD, setAmountUSD] = useState(0);
-  const token = lottery.tokenName
+  const tokenSymbol = lottery.tokenSymbol
+  const contractAddress = lottery.contractAddress
 
   // deposit money and close modal
   const handleDeposit = async () => {
-    await depositMoney(amount, wallet);
+    await depositMoneyInLottery(wallet, contractAddress, amount, tokenSymbol);
     closeModal();
   };
 
-  const tokenImage = (token) => {
-      if (token === 'DAI')
+  const tokenImage = (tokenSymbol) => {
+      if (tokenSymbol === 'DAI')
         return "/DAI.png"
-      else if (token === 'USDC')
+      else if (tokenSymbol === 'USDC')
         return "/USDC.png"
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await tokenToUSD(amount, token);
+      const result = await tokenToUSD(amount, tokenSymbol);
       setAmountUSD(result);
     }
     fetchData();
-  }, [amount, token])
+  }, [amount, tokenSymbol])
 
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Deposit Modal">
@@ -42,8 +43,8 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
           <div className='flexRowDivDeposit'>
             <input className='modalInput' type="number" step="any" placeholder="0.0"
                 onChange={e => setAmount(e.target.value)} required/>
-            <label className='modalLabel'> {token} </label>
-            <img className='modalToken' src={tokenImage(token)} alt={token}></img>
+            <label className='modalLabel'> {tokenSymbol} </label>
+            <img className='modalToken' src={tokenImage(tokenSymbol)} alt={tokenSymbol}></img>
 
           </div>
           <div>
