@@ -99,7 +99,7 @@ function App() {
             <Route path="/all-lotteries" element={<LotteryCollection currPage="all" wallet={wallet}/>} />
             <Route path="/my-lotteries" element={<LotteryCollection currPage="my-lotteries" wallet={wallet}   />} />
             <Route path="/past-lotteries" element={<LotteryCollection currPage="history" wallet={wallet}/>} />
-            <Route path="/add-lottery" element={<AddLottery/>} />
+            <Route path="/add-lottery" element={<AddLottery wallet={wallet}/>} />
             <Route path="/selected-lottery/:lotteryId" element={<SelectedLottery/>} />
           </Routes>
         </div>
