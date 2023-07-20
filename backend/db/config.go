@@ -1,7 +1,7 @@
 package db
 
 import (
-	"backend/model"
+	dbgorm "backend/db/gorm"
 	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -30,7 +30,7 @@ func DatabaseInit() {
 		log.Fatal("Failed to connect to database")
 	}
 
-	err = database.AutoMigrate(&model.Lottery{}, &model.UserLottery{})
+	err = database.AutoMigrate(&dbgorm.DBLottery{}, &dbgorm.DBUserLottery{})
 	if err != nil {
 		log.Fatal("Database migration failed")
 	}
