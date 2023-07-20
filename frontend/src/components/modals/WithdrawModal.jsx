@@ -4,7 +4,7 @@ import './LotteryModal.scss';
 
 const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
-  const [contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD]  = lottery
+  const { contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD }  = lottery
 
   // deposit money and close modal
   const handleWithdrawal = async () => {

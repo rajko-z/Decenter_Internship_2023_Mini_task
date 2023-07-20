@@ -8,7 +8,7 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
     const [reward, setReward] = useState(0)
     const [rewardUSD, setRewardUSD] = useState(0)
     const [moneyToClaim, setMoneyToClaim] = useState(0)
-    const [contractAddress, tokenSymbol, myAmount, myAmountUSD] = lottery
+    const { contractAddress, tokenSymbol, myAmount, myAmountUSD } = lottery
 
     const handleClaim = async () => {
         await withdrawMoneyFromLottery(wallet, contractAddress)
