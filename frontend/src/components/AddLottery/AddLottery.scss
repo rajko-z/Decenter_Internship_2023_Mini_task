@@ -37,12 +37,20 @@ h1 {
     padding: 10px;
     margin: 10px 10px 10px 10px;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 2px solid pink;
     border-radius: 5px;
     font-size: 16px;
     
     color: $fontcolor_main;
+    background-color: $bggradient1;
     transition: all .2s ease-in-out;
+}
+.addLotteryInput.token {
+    justify-content: right;
+    text-align: right;
+}
+.addLotteryInput::placeholder {
+    color: $cardcolor;
 }
 
 .select {
@@ -54,6 +62,7 @@ h1 {
     font-size: 16px;
 
     color: $fontcolor_main;
+    background-color: $bggradient1;
     text-align: right;
 }
 
