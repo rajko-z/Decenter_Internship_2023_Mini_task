@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"backend/model"
@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
 	"os"
 )
 
@@ -14,7 +15,7 @@ var database *gorm.DB
 func DatabaseInit() {
 	err := godotenv.Load()
 	if err != nil {
-		panic(err)
+		log.Fatal("Failed to load env file")
 	}
 
 	host := os.Getenv("DB_HOST")
@@ -22,16 +23,16 @@ func DatabaseInit() {
 	password := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 	port := os.Getenv("DB_PORT")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbName)
 
 	database, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		log.Fatal("Failed to connect to database")
 	}
 
 	err = database.AutoMigrate(&model.Lottery{}, &model.UserLottery{})
 	if err != nil {
-		panic(err)
+		log.Fatal("Database migration failed")
 	}
 }
 
