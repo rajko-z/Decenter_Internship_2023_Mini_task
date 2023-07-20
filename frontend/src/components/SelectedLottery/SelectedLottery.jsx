@@ -16,6 +16,7 @@ const SelectedLottery = ({}) => {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
   const [isUserParticipating, setIsUserParticipating] = useState(false);
   const [lotteryStatus, setLotteryStatus] = useState(false);
+  const [isUserWinner, setIsUserWinner] = useState(false);
 
   const { id, name, protocol, tokenName, currentAmount, expectedYield, APY, endDate, winner, currentAmountUSD } = lottery;
   
@@ -34,6 +35,10 @@ const SelectedLottery = ({}) => {
       
       setLotteryStatus(lotteryStatus);
       setIsUserParticipating(userAmount > 0);
+
+      if (winner !== null) {setIsUserWinner(wallet.toLowerCase() === winner.toLowerCase());}
+      else {setIsUserWinner(false);}
+      console.log(wallet, winner, wallet===winner, userAmount, isUserParticipating);
     }
 
     fetchData(id, wallet)
@@ -46,14 +51,13 @@ const SelectedLottery = ({}) => {
 
   return (
     <div className="selected-lottery">
-      <div className="selectedLotteryName">{name}</div>
+      <div className="selectedLotteryName"><h3>{name}</h3></div>
         <div className="selectedLotteryLine">
-            <div className="protocol">{protocol}</div>
-            <div className="token-name">{tokenName}</div>
+            <div className="protocol">Protocol: {protocol}</div>
+            <div className="token-name">Token: {tokenName}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="selectedLottery current-amount">{`In lottery: ${currentAmount}  `}</div>
-            <div className="current-amount-usd">{`($${currentAmountUSD.toFixed(2)})`}</div>
+            <div className="selectedLottery current-amount">{`In lottery: ${currentAmount} ${tokenName} (${currentAmountUSD.toFixed(2)}$)`}</div>
         </div>
         <div className="selectedLotteryLine">
             <div className="apy">{`APY: ${APY}%`}</div>
@@ -77,14 +81,14 @@ const SelectedLottery = ({}) => {
                               wallet={wallet}/>
                 </>
               }
-              {((isUserParticipating && !winner) || (winner && winner !== wallet)) &&
+              {((isUserParticipating && !winner) || (winner && !isUserWinner)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
                 <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
                 </>
               }
 
-              {winner && winner === wallet && 
+              {winner && isUserWinner && 
                 <>
                 <button className='modalButton' onClick={openClaimModal}>Claim</button>
                 <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} wallet={wallet} lottery={lottery} />

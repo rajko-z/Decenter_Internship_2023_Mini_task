@@ -4,14 +4,13 @@ import { getUSDValue } from '../../providers/OracleProvider';
 import { getUsersMoneyInLottery, getLotteryReward, claimMoney } from '../../providers/LotteryProvider';
 
 const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
-  
     const [amount, setAmount] = useState(0)
     const [amountUSD, setAmountUSD] = useState(0)
     const [reward, setReward] = useState(0)
     const [rewardUSD, setRewardUSD] = useState(0)
+    const [moneyToClaim, setMoneyToClaim] = useState(0)
     const lotteryId = lottery.id
     const tokenName = lottery.tokenName
-    const isWinner = lottery.winner === wallet
 
     const handleClaim = async () => {
         await claimMoney(lotteryId, wallet)
@@ -31,6 +30,8 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
             setReward(reward)
             let rewardUSD = await getUSDValue(reward, tokenName)
             setRewardUSD(rewardUSD)
+
+            setMoneyToClaim(depositUSD + rewardUSD)
         }
 
         fetchData()
@@ -41,9 +42,11 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
         <h1 className='modalName'>Claim Money</h1>
         <div>
             <div className='modalState'>
-                <label className='modalLabel'> You are {!isWinner && 'not'} the winner </label>
+                <label className='modalLabel'> <p style={{color: 'green'}}>Congratulations! You are the winner </p></label>
                 <label className='modalLabel'> You have deposited {amount} {tokenName}, which is {`${amountUSD.toFixed(4)}$`}</label>
-                <label className='modalLabel'> The reward for this lottery was {reward}, which is {`${rewardUSD.toFixed(4)}$`}</label>
+                <label className='modalLabel'> The reward for this lottery was {reward} {tokenName}, which is {`${rewardUSD.toFixed(4)}$`}</label>
+                <br></br>
+                <label className='modalLabel'> <h2>You can claim {`${moneyToClaim.toFixed(4)}$`}</h2></label>
             </div>
 
             <div className='flexRowDiv'>

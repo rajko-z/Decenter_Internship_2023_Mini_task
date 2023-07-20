@@ -81,6 +81,11 @@
     border: none;
     outline: none;
     border-bottom: 3px solid pink;
+
+    color: $fontcolor_main;
+}
+.modalInput::placeholder {
+    color: $fontcolor_main;
 }
 
 .modalToken {
