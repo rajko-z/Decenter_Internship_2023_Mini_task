@@ -3,10 +3,10 @@ pragma solidity ^0.8.9;
 
 contract LotteryTree {
     enum Origin { NONE, LEFT, RIGHT } 
-    int[][] private tree = [new int[](0)];
+    int[][] private tree = [new int[](1)];
     uint[] private holes = new uint[](0);
 
-    function update(uint level, uint index, int value, Origin origin) private {
+    function treeUpdate(uint level, uint index, int value, Origin origin) private {
         if(level >= tree.length) {
             tree.push(new int[](0));
         }
@@ -30,12 +30,12 @@ contract LotteryTree {
         uint next_index    = index / 2;
         Origin next_origin = (index%2==0 ? Origin.LEFT : Origin.RIGHT);
 
-        update(next_level, next_index, value, next_origin);
+        treeUpdate(next_level, next_index, value, next_origin);
     }
 
     // adds the entry to the first hole in the tree, or expands it
     // returns index of the new entry
-    function add(int value) public returns (uint) {
+    function treeAdd(int value) public returns (uint) {
         require(value > 0);
 
         uint index;
@@ -47,14 +47,14 @@ contract LotteryTree {
             index = tree[0].length;
         }
 
-        update(0, index, value, Origin.NONE);
+        treeUpdate(0, index, value, Origin.NONE);
 
         return index;
     }
 
     // removes entry with the given index
-    function remove(uint index) public {
-        require(tree.length != 0);
+    function treeRemove(uint index) public {
+        require(index > 0);
         require(tree[0].length > index);
         require(tree[0][index] != 0);
 
@@ -62,21 +62,17 @@ contract LotteryTree {
 
         int value = tree[0][index];
 
-        update(0, index, -value, Origin.NONE);
+        treeUpdate(0, index, -value, Origin.NONE);
     }
 
     // returns the sum of all entries
-    function sum() public view returns (int) {
-        if(tree.length != 0 && tree[0].length != 0) {
-            return tree[tree.length-1][0];
-        }
-
-        return 0;
+    function treeSum() public view returns (int) {
+        return tree[tree.length-1][0];
     }
 
-    function winner(int roll) public view returns (uint) {
+    function treeGetWinnerIndex(int roll) public view returns (uint) {
         require(roll >= 0);
-        require(roll < sum());
+        require(roll < treeSum());
 
         uint current_level = tree.length-1;
         uint current_index = 0;

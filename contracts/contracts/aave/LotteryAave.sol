@@ -6,8 +6,9 @@ import "../interfaces/IPoolAddressesProvider.sol";
 import "../interfaces/IERC20.sol";
 import "../interfaces/IPool.sol";
 import "./AaveV3Addresses.sol";
+import "../LotteryTree.sol";
 
-contract LotteryAave is ILottery, AaveV3Addresses {
+contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
     uint public constant minDurationInDays = 10;
     uint public constant freezeTimeInDaysBeforeWinnerReveal = 3;
@@ -16,9 +17,12 @@ contract LotteryAave is ILottery, AaveV3Addresses {
     uint private tvl;
     uint private totalYield;
     uint private endDate;
+    uint private totalDuration;
     uint private minAmountToDeposit;
     address private winner;
     mapping(address => uint) private balances;
+    mapping(address => uint) private addressToIndex;
+    mapping(uint => address) private indextoAddress;
     IERC20 private token;
     IPool private pool;
 
@@ -44,6 +48,7 @@ contract LotteryAave is ILottery, AaveV3Addresses {
         tvl = _amountToDeposit;
         minAmountToDeposit = _minAmountToDeposit;
         endDate = block.timestamp + _durationInDays * 1 days;
+        totalDuration = _durationInDays * 1 days;
         balances[msg.sender] += _amountToDeposit;
     }
 
@@ -59,6 +64,11 @@ contract LotteryAave is ILottery, AaveV3Addresses {
         tvl += amount;
         balances[msg.sender] += amount;
 
+        uint value = amount * (endDate - block.timestamp) / totalDuration;
+        uint index = treeAdd(int(value));
+        addressToIndex[msg.sender] = index;
+        indextoAddress[index] = msg.sender;
+
         emit DepositEvent(msg.sender, amount, tvl, balances[msg.sender]);
     }
 
@@ -66,7 +76,7 @@ contract LotteryAave is ILottery, AaveV3Addresses {
         uint balance = balances[msg.sender];
         require(balance > 0, "No funds to withdraw");
 
-        bool isWinner = winner == msg.sender;
+        bool isWinner = (winner == msg.sender);
         if (isWinner) {
             require(token.transfer(winner, totalYield), "Transfer of yield failed");
         }
@@ -75,13 +85,20 @@ contract LotteryAave is ILottery, AaveV3Addresses {
         balances[msg.sender] = 0;
         tvl -= balance;
 
+        uint index = addressToIndex[msg.sender];
+        addressToIndex[msg.sender] = 0;
+        indextoAddress[index] = address(0);
+        treeRemove(index);
+
         emit WithdrawEvent(msg.sender, balance, tvl, isWinner);
     }
 
     function end() external {
         require(block.timestamp >= endDate, "End date not reached");
 
-        winner = _chooseWinner();
+        int roll = getRandomNumber();
+        uint winnerIndex = treeGetWinnerIndex(roll);
+        winner = indextoAddress[winnerIndex];
 
         pool.withdraw(address(token), type(uint256).max, address(this));
         totalYield = address(this).balance - tvl;
@@ -114,8 +131,10 @@ contract LotteryAave is ILottery, AaveV3Addresses {
         return winner != address(0);
     }
 
-    function _chooseWinner() private returns (address) {
+    function getRandomNumber() private view returns (int) {
         // mock for now
-        return address(0);
+        int lotterySum = treeSum();
+        int rnd = int(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, uint(42)))));
+        return rnd % lotterySum;
     }
 }

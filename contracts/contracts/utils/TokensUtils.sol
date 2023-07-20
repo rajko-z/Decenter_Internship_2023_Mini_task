@@ -10,9 +10,9 @@ contract TokensUtils {
     address internal constant USDC_MAINNET_ADDRESS = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
     address internal constant WETH_MAINNET_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
 
-    address internal constant DAI_SEPOLIA_ADDRESS = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
-    address internal constant USDC_SEPOLIA_ADDRESS = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48;
-    address internal constant WETH_SEPOLIA_ADDRESS = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address internal constant DAI_SEPOLIA_ADDRESS = 0x53844F9577C2334e541Aec7Df7174ECe5dF1fCf0;
+    address internal constant USDC_SEPOLIA_ADDRESS = 0x8267cF9254734C6Eb452a7bb9AAF97B392258b21;
+    address internal constant WETH_SEPOLIA_ADDRESS = 0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9;
 
     uint internal constant DAI_MIN_VALUE_TO_DEPOSIT = 100;
     uint internal constant USDC_MIN_VALUE_TO_DEPOSIT = 100;

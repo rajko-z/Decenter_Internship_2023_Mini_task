@@ -31,14 +31,13 @@ contract LotteryFactory is ILotteryFactory, ProtocolUtils, TokensUtils {
         }
         lotteries.push(newLottery);
 
-        uint endDate = block.timestamp + _durationInDays * 1 days;
         emit CreatedEvent(
             address(newLottery),
             _name,
             _protocolId,
             _tokenAddress,
             _amountToDeposit,
-            endDate,
+            newLottery.getEndDate(),
             _minAmountToDeposit);
     }
 
