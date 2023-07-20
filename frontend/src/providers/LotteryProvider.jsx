@@ -56,7 +56,7 @@ export const getMyLotteries = async (wallet) => {
     }
 }
 
-export const createLottery = async () => {
+export const createLottery = async (name, protocol, token, wallet, depositAmount, endDate) => {
 
     try {
 
@@ -86,7 +86,7 @@ export const withdrawMoney = async (lotteryId, wallet) => {
     }
 }
 
-export const claimMoney = async () => {
+export const claimMoney = async (lotteryId, wallet) => {
 
     try {
         
