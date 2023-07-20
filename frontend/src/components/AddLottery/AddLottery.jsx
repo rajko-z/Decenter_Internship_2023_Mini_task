@@ -12,7 +12,7 @@ const AddLottery = (wallet) => {
     const [protocol, setProtocol] = useState('Aave V3');
     const [date, setDate] = useState(new Date());
 
-    const [apy, setAPY] = useState(3.4);
+    const [apy, setAPY] = useState(0);
     const [expectedPrize, setExpectedPrize] = useState(0);
 
     function dateDifference(date1, date2) {
@@ -42,7 +42,7 @@ const AddLottery = (wallet) => {
             return;
         }
 
-        await createLottery(wallet, name, protocol, token, 0, depositAmount, daysBetween);
+        await createLottery(wallet, name, protocol, token, minDepositAmount, depositAmount, daysBetween);
         alert("Lottery added!");
         window.location.reload(false);
     }
@@ -54,10 +54,10 @@ const AddLottery = (wallet) => {
             console.log(dateDifference(new Date(), new Date(date)))
             const expectedPrize = valueInUsd * (1 + (apy * dateDifference(new Date(), new Date(date)) / 365) / 100);
 
-            console.log("Debug", (apy * dateDifference(new Date(), new Date(date)) / 365));
+            // console.log("Debug", (apy * dateDifference(new Date(), new Date(date)) / 365));
             setExpectedPrize(expectedPrize);
 
-            const resultAPY = await fetchAPY(protocol, token);
+            const resultAPY = await fetchAPY(protocol, token) / 10**25;
             setAPY(resultAPY);
         }
 
@@ -109,7 +109,7 @@ const AddLottery = (wallet) => {
                 <div className='expectedDiv'>
                     <div className='expected yield'>
                         <h3>Expected yield:</h3>
-                        <h3 className='expectedValue'>{apy}%</h3>
+                        <h3 className='expectedValue'>{apy.toFixed(2)}%</h3>
                     </div>
                     <div className='expected prize'>
                         <h3>Expected win prize:</h3>
