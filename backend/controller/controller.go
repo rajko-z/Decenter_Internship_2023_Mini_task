@@ -22,5 +22,5 @@ func (lotCon LotteryController) ManuallyEndLottery(context echo.Context) error {
 	lotteryAddress := context.Param("address")
 	go lotCon.Lis.ListenWinnerChosen(lotteryAddress)
 	transactions.TransactEndLottery(lotteryAddress)
-	return context.JSON(http.StatusOK, "Lottery lotteryAddress: "+lotteryAddress+" ended")
+	return context.JSON(http.StatusOK, "End lottery transaction sent to "+lotteryAddress)
 }

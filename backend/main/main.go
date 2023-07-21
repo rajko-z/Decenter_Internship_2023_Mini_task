@@ -21,6 +21,7 @@ func main() {
 
 	lotteryRoute := e.Group("/lotteries")
 	lotteryRoute.GET("/history", lController.GetAllFinishedLotteries)
+	lotteryRoute.POST("/end/:address", lController.ManuallyEndLottery)
 
 	go lListener.ListenLotteryCreated()
 
