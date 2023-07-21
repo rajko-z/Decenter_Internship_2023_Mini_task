@@ -1,82 +1,82 @@
 const {
     time,
     loadFixture,
-  } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-  const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
-  const { expect } = require("chai");
+} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const { expect } = require("chai");
 
 describe("LotteryTree", function() {
     async function deploy() {
-        const lottery_tree = await ethers.deployContract("LotteryTree");
-        return lottery_tree;
+        const lotteryTree = await ethers.deployContract("LotteryTree");
+        return lotteryTree;
     }
 
-    it("Should add and remove entries", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        await lottery_tree.add(500);
-        await lottery_tree.add(600);
-        await lottery_tree.add(1200);
-        await lottery_tree.add(800);
-        expect(await lottery_tree.sum() == 3100);
-        await lottery_tree.remove(2);
-        expect(await lottery_tree.sum() == 1900);
-        await lottery_tree.add(100);
-        expect(await lottery_tree.sum() == 2000);
+    it("Should treeAdd and treeRemove entries", async function () {
+        const lotteryTree = await loadFixture(deploy);
+        await lotteryTree.treeAdd(500);
+        await lotteryTree.treeAdd(600);
+        await lotteryTree.treeAdd(1200);
+        await lotteryTree.treeAdd(800);
+        expect(await lotteryTree.treeSum() == 3100);
+        await lotteryTree.treeRemove(2);
+        expect(await lotteryTree.treeSum() == 1900);
+        await lotteryTree.treeAdd(100);
+        expect(await lotteryTree.treeSum() == 2000);
     });
 
-    it("Sum should work in an empty tree", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        expect(await lottery_tree.sum() == 0);
+    it("treeSum should work in an empty tree", async function () {
+        const lotteryTree = await loadFixture(deploy);
+        expect(await lotteryTree.treeSum() == 0);
     });
 
-    it("Should properly handle bad remove calls", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        await expect(lottery_tree.remove(2)).to.be.reverted;
-        await lottery_tree.add(100);
-        await expect(lottery_tree.remove(1)).not.to.be.reverted;
-        await expect(lottery_tree.remove(1)).to.be.reverted;
+    it("Should properly handle bad treeRemove calls", async function () {
+        const lotteryTree = await loadFixture(deploy);
+        await expect(lotteryTree.treeRemove(2)).to.be.reverted;
+        await lotteryTree.treeAdd(100);
+        await expect(lotteryTree.treeRemove(1)).not.to.be.reverted;
+        await expect(lotteryTree.treeRemove(1)).to.be.reverted;
     });
 
-    it("Should properly choose the getWinnerIndex for given roll", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        await lottery_tree.add(500);
-        await lottery_tree.add(600);
-        await lottery_tree.add(1200);
-        await lottery_tree.add(800);
-        expect(await lottery_tree.getWinnerIndex(250)  == 0);
-        expect(await lottery_tree.getWinnerIndex(510)  == 1);
-        expect(await lottery_tree.getWinnerIndex(1300) == 2);
-        expect(await lottery_tree.getWinnerIndex(3000) == 3);
-        expect(await lottery_tree.getWinnerIndex(499)  == 0);
-        expect(await lottery_tree.getWinnerIndex(500)  == 1);
-        expect(await lottery_tree.getWinnerIndex(501)  == 1);
-        expect(await lottery_tree.getWinnerIndex(1099) == 1);
-        expect(await lottery_tree.getWinnerIndex(1100) == 2);
-        expect(await lottery_tree.getWinnerIndex(0)    == 0);
-        expect(await lottery_tree.getWinnerIndex(3099) == 3);
+    it("Should properly choose the treeGetWinnerIndex for given roll", async function () {
+        const lotteryTree = await loadFixture(deploy);
+        await lotteryTree.treeAdd(500);
+        await lotteryTree.treeAdd(600);
+        await lotteryTree.treeAdd(1200);
+        await lotteryTree.treeAdd(800);
+        expect(await lotteryTree.treeGetWinnerIndex(250)  == 0);
+        expect(await lotteryTree.treeGetWinnerIndex(510)  == 1);
+        expect(await lotteryTree.treeGetWinnerIndex(1300) == 2);
+        expect(await lotteryTree.treeGetWinnerIndex(3000) == 3);
+        expect(await lotteryTree.treeGetWinnerIndex(499)  == 0);
+        expect(await lotteryTree.treeGetWinnerIndex(500)  == 1);
+        expect(await lotteryTree.treeGetWinnerIndex(501)  == 1);
+        expect(await lotteryTree.treeGetWinnerIndex(1099) == 1);
+        expect(await lotteryTree.treeGetWinnerIndex(1100) == 2);
+        expect(await lotteryTree.treeGetWinnerIndex(0)    == 0);
+        expect(await lotteryTree.treeGetWinnerIndex(3099) == 3);
     });
 
-    it("Should properly choose the getWinnerIndex in edge cases", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        await expect(lottery_tree.getWinnerIndex(0)).to.be.reverted;
-        await lottery_tree.add(500);
-        await lottery_tree.add(600);
-        await lottery_tree.add(1200);
-        await lottery_tree.add(800);
-        await expect(lottery_tree.getWinnerIndex(3100)).to.be.reverted;
+    it("Should properly choose the treeGetWinnerIndex in edge cases", async function () {
+        const lotteryTree = await loadFixture(deploy);
+        await expect(lotteryTree.treeGetWinnerIndex(0)).to.be.reverted;
+        await lotteryTree.treeAdd(500);
+        await lotteryTree.treeAdd(600);
+        await lotteryTree.treeAdd(1200);
+        await lotteryTree.treeAdd(800);
+        await expect(lotteryTree.treeGetWinnerIndex(3100)).to.be.reverted;
     });
 
     it("Should reuse empty spaces left after withdrawing", async function () {
-        const lottery_tree = await loadFixture(deploy);
-        expect(await lottery_tree.add(500)  == 1);
-        expect(await lottery_tree.add(600)  == 2);
-        expect(await lottery_tree.add(1200) == 3);
-        expect(await lottery_tree.add(800)  == 4);
-        await lottery_tree.remove(3);
-        await lottery_tree.remove(1);
-        expect(await lottery_tree.add(400)  == 1);
-        expect(await lottery_tree.add(700)  == 3);
-        expect(await lottery_tree.sum() == 2500);
+        const lotteryTree = await loadFixture(deploy);
+        expect(await lotteryTree.treeAdd(500)  == 1);
+        expect(await lotteryTree.treeAdd(600)  == 2);
+        expect(await lotteryTree.treeAdd(1200) == 3);
+        expect(await lotteryTree.treeAdd(800)  == 4);
+        await lotteryTree.treeRemove(3);
+        await lotteryTree.treeRemove(1);
+        expect(await lotteryTree.treeAdd(400)  == 1);
+        expect(await lotteryTree.treeAdd(700)  == 3);
+        expect(await lotteryTree.treeSum() == 2500);
     });
 
 })
