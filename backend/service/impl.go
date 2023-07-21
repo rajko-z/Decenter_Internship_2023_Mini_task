@@ -11,16 +11,14 @@ type LotteryImpl struct {
 	LRepo  db.LotteryRepo
 }
 
-func (li LotteryImpl) CreateLottery(lotteryAddress string, name string, protocolId uint, tokenSymbol string, tokenAddress string, tokenDecimals uint, endDate uint, minAmountToDeposit uint) {
+func (li LotteryImpl) CreateLottery(lotteryAddress string, name string, protocolId uint, tokenAddress string, endDate uint, minAmountToDeposit uint) {
 	err := li.LRepo.CreateLottery(model.Lottery{
-		Address:       lotteryAddress,
-		Name:          name,
-		ProtocolId:    protocolId,
-		TokenSymbol:   tokenSymbol,
-		TokenAddress:  tokenAddress,
-		TokenDecimals: tokenDecimals,
-		MinTokens:     minAmountToDeposit,
-		EndDate:       endDate,
+		Address:      lotteryAddress,
+		Name:         name,
+		ProtocolId:   protocolId,
+		TokenAddress: tokenAddress,
+		MinTokens:    minAmountToDeposit,
+		EndDate:      endDate,
 	})
 
 	if err != nil {

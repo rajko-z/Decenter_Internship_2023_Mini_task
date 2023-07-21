@@ -177,9 +177,7 @@ func (l Listener) ListenLotteryCreated() {
 				event.ContractAddress.Hex(),
 				event.Name,
 				uint(event.ProtocolId.Uint64()),
-				event.TokenSymbol,
 				event.TokenAddress.Hex(),
-				uint(event.TokenDecimals.Uint64()),
 				uint(event.EndDate.Uint64()),
 				uint(event.MinAmountToDeposit.Uint64()))
 
