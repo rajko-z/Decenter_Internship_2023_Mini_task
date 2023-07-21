@@ -17,7 +17,7 @@ const ArchivedLottery = ({ archivedLottery }) => {
         }
     }
     const tokenImage = (tokenSymbol) => {
-        return "/" + tokenSymbol + ".png"
+        return "/" + tokenSymbol + ".png";
     }
 
     const convertUnixTimestampToDate = () => {
@@ -33,10 +33,10 @@ const ArchivedLottery = ({ archivedLottery }) => {
                 <img className='imageLogo' src={tokenImage(tokenSymbol)} alt={tokenSymbol}/> 
             </div>
             <div className="oneLotteryLine">
-                <div className="last-tvl">{`Last TVL: ${lastTVL} ${tokenSymbol} (${lastTVLUSD.toFixed(2)} $)`}</div>
+                <div className="last-tvl">{`Last TVL: ${lastTVL} ${tokenSymbol} (${lastTVLUSD?.toFixed(2)} $)`}</div>
             </div>
             <div className="oneLotteryLine">
-                <div className="yield">{`Yield: ${achievedYield} ${tokenSymbol} (${yieldUSD.toFixed(2)} $)`}</div>
+                <div className="yield">{`Yield: ${achievedYield} ${tokenSymbol} (${yieldUSD?.toFixed(2)} $)`}</div>
             </div>
             <div className="oneLotteryLine">
                 <div className="winner">{`Winner: ${winner}`}</div>
