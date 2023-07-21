@@ -5,7 +5,6 @@ import (
 	"backend/service"
 	"backend/transactions"
 	"context"
-	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -51,8 +50,11 @@ func (l Listener) ListenFundsWithDrawn(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			fmt.Println("Withdraw")
-			l.LS.WithdrawFromLottery(address, event.User.Hex(), uint(event.UpdatedTvl.Uint64()))
+			log.Println("Withdraw")
+			l.LS.WithdrawFromLottery(
+				address,
+				event.User.Hex(),
+				uint(event.UpdatedTvl.Uint64()))
 		}
 	}
 }
@@ -90,8 +92,12 @@ func (l Listener) ListenFundsDeposited(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			fmt.Println("Deposit")
-			l.LS.DepositToLottery(address, event.User.Hex(), uint(event.UpdatedUserBalance.Uint64()), uint(event.UpdatedTvl.Uint64()))
+			log.Println("Deposit")
+			l.LS.DepositToLottery(
+				address,
+				event.User.Hex(),
+				uint(event.UpdatedUserBalance.Uint64()),
+				uint(event.UpdatedTvl.Uint64()))
 		}
 	}
 }
@@ -129,8 +135,9 @@ func (l Listener) ListenWinnerChosen(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			fmt.Println("EndLottery")
+			log.Println("EndLottery")
 			l.LS.EndLottery(address, event.Winner.Hex(), uint(event.TotalYield.Uint64()))
+			return
 		}
 	}
 }
@@ -169,8 +176,16 @@ func (l Listener) ListenLotteryCreated() {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			fmt.Println("CreateLottery")
-			l.LS.CreateLottery(event.ContractAddress.Hex(), event.Name, uint(event.ProtocolId.Uint64()), event.TokenSymbol, uint(event.TokenDecimals.Uint64()), uint(event.EndDate.Uint64()), uint(event.MinAmountToDeposit.Uint64()))
+			log.Println("CreateLottery")
+			l.LS.CreateLottery(
+				event.ContractAddress.Hex(),
+				event.Name,
+				uint(event.ProtocolId.Uint64()),
+				event.TokenSymbol,
+				event.TokenAddress.Hex(),
+				uint(event.TokenDecimals.Uint64()),
+				uint(event.EndDate.Uint64()),
+				uint(event.MinAmountToDeposit.Uint64()))
 
 			go l.ListenFundsDeposited(event.ContractAddress.Hex())
 			go l.ListenFundsWithDrawn(event.ContractAddress.Hex())
@@ -181,7 +196,7 @@ func (l Listener) ListenLotteryCreated() {
 			timer := time.NewTimer(delay)
 			go func() {
 				<-timer.C
-				fmt.Println("Before end lottery call")
+				log.Println("Before end lottery call")
 				go l.ListenWinnerChosen(event.ContractAddress.Hex())
 				transactions.TransactEndLottery(event.ContractAddress.Hex())
 			}()

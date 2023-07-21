@@ -18,6 +18,7 @@ type DBLottery struct {
 	Name          string
 	ProtocolId    uint
 	TokenSymbol   string
+	TokenAddress  string
 	TokenDecimals uint
 	TokensInPool  uint
 	MinTokens     uint
@@ -93,6 +94,7 @@ func (lg LotteryGorm) CreateLottery(lottery model.Lottery) error {
 		Name:          lottery.Name,
 		ProtocolId:    lottery.ProtocolId,
 		TokenSymbol:   lottery.TokenSymbol,
+		TokenAddress:  lottery.TokenAddress,
 		TokenDecimals: lottery.TokenDecimals,
 		TokensInPool:  lottery.TokensInPool,
 		MinTokens:     lottery.MinTokens,
@@ -106,7 +108,7 @@ func (lg LotteryGorm) CreateLottery(lottery model.Lottery) error {
 
 func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 	var lotteries []DBLottery
-	err := lg.DB.Find(&lotteries, "active = ", false).Error
+	err := lg.DB.Find(&lotteries, "active = ?", false).Error
 	if err != nil {
 		return nil, err
 	}
@@ -125,5 +127,10 @@ func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 			Winner:        lottery.Winner,
 		})
 	}
+
+	if result == nil {
+		result = []model.Lottery{}
+	}
+
 	return result, nil
 }
