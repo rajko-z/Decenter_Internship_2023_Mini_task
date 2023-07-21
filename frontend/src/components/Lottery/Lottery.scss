@@ -1,0 +1,99 @@
+@import "../../HyperParameters.scss";
+
+.oneLotteryButton {
+    font-family: "Trueno", sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+
+    height: 300px;
+    width: 350px;
+    background-color: $bggradient1;
+    color: $fontcolor_main;
+
+    margin: 20px;
+
+    border: 1px solid pink;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border-radius: 12px;
+
+
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 300px;
+    padding: 16px;
+
+    transition: all .2s ease-in-out;
+}
+
+.oneLotteryButton:hover {
+    background-color: $cardcolor_hover;
+    transform: scale(1.05);
+    transition: all .2s ease-in-out;
+
+
+    color: white;
+    background-color: $cardcolor_hover;
+}
+  
+.oneLotteryLine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 34px;
+    width: 100%;
+}
+
+.oneLotteryName {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 2px;
+
+    justify-content: space-around;
+
+    justify-content: center;
+    padding: 1px 0;
+}
+
+.current-amount,
+.protocol,
+.end-date {
+    margin-right: 5px;
+    justify-content: left;
+    align-items: left;
+}
+
+.token-name,
+.current-amount-usd {
+    margin-left: auto;
+}
+
+.name, .protocol,
+.token-name, .current-amount,
+.apy, .expected-yield,
+.end-date {
+    font-family: "Trueno", sans-serif;
+    font-size: 18px;
+}
+
+.view-lottery {
+    padding: 8px 16px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.view-lottery:hover {
+    background-color: rgb(190, 190, 210);
+    transition-delay: 0.05s;
+  }
+
+.imageLogo {
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 30px;
+    height: auto;
+}
