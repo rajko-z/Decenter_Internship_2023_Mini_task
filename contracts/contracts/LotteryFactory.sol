@@ -61,7 +61,7 @@ contract LotteryFactory is ILotteryFactory {
 
         ILottery newLottery;
         if (_protocolId == 1) {
-            newLottery = new LotteryAave(_name, _tokenAddress, tokenToAtoken[_tokenAddress], _minAmountToDeposit, _durationInDays);
+            newLottery = new LotteryAave(_name, _tokenAddress, tokenToAtoken[_tokenAddress], _minAmountToDeposit, _durationInDays, owner);
         }
         lotteries.push(newLottery);
 

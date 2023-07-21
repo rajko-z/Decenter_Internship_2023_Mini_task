@@ -23,6 +23,8 @@ interface ILottery {
 
     function withdraw() external;
 
+    // function withdrawOwner() external;
+
     function end() external;
 
     function getName() external view returns(string memory);

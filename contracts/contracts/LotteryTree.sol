@@ -37,7 +37,7 @@ contract LotteryTree {
 
     // adds the entry to the first hole in the tree, or expands it
     // returns index of the new entry
-    function treeAdd(int value) public returns (uint) {
+    function treeInsert(int value) public returns (uint) {
         // console.log("Add", uint(value));
         require(value > 0);
 
@@ -53,6 +53,16 @@ contract LotteryTree {
         treeUpdate(0, index, value, Origin.NONE);
 
         return index;
+    }
+
+    // increase existing entry
+    function treeAdd(int value, uint index) public {
+        require(value > 0);
+        require(index > 0);
+        require(tree[0].length > index);
+        require(tree[0][index] != 0);
+
+        treeUpdate(0, index, value, Origin.NONE);
     }
 
     // removes entry with the given index
