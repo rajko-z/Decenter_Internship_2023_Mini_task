@@ -12,7 +12,7 @@ function App() {
 
   const [provider, setProvider] = useState(null)
   const [loadingProvider, setLoadingProvider] = useState(true);
-  const [wallet, setWallet] = useState(null)
+  const [wallet, setWallet] = useState('0x0')
   
   useEffect(() => {
     const getProvider = async () => {
@@ -35,7 +35,7 @@ function App() {
   const handleConnectWallet = async () => {
     if (provider) {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      updateWallet(accounts)
+      updateWallet(toString(accounts[0]))
     }
   }
 
