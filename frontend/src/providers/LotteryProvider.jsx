@@ -4,6 +4,9 @@ import { protocolToId, idToProtocol, infoToToken, tokenToInfo } from '../constan
 import { contractABI, contractAddress } from '../constants/LotteryContract'
 
 import Web3 from 'web3'
+import LotteryFactoryContract from "../ethereum/LotteryFactoryContract";
+import LotteryContract from "../ethereum/LotteryContract";
+import lotteryFactoryContract from "../ethereum/LotteryFactoryContract";
 
 const web3 = new Web3(window.ethereum);
 
@@ -86,9 +89,14 @@ export const getAllLotteries = async (debug=false) => {
 export const getUserLotteries = async (wallet) => {
     
     try {
-        const contract = new web3.eth.Contract(contractABI, contractAddress)
-        const res = await contract.methods.getUserLotteries(wallet).call()
+        //const contract = new web3.eth.Contract(contractABI, contractAddress)
 
+        const res = await lotteryFactoryContract.methods
+            .getLotteries(true)
+            .call({
+                from: wallet
+            });
+        console.log("All lotteries: " + res);
         return res
     } catch {
         console.error("Error fetching users active lotteries");
