@@ -120,6 +120,7 @@ func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 			Name:          lottery.Name,
 			ProtocolId:    lottery.ProtocolId,
 			TokenSymbol:   lottery.TokenSymbol,
+			TokenAddress:  lottery.TokenAddress,
 			TokenDecimals: lottery.TokenDecimals,
 			TokensInPool:  lottery.TokensInPool,
 			Yield:         lottery.Yield,
