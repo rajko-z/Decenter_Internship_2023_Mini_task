@@ -31,15 +31,17 @@ func initialize() (controller.LotteryController, listener.Listener) {
 	db.DatabaseInit()
 	lRepo := dbgorm.LotteryGorm{DB: db.DB()}
 	ulRepo := dbgorm.UserLotteryGorm{DB: db.DB()}
-	lService := service.LotteryImpl{
+	serv := service.LotteryImpl{
 		ULRepo: ulRepo,
 		LRepo:  lRepo,
 	}
-	lController := controller.LotteryController{
-		LS: lService,
+	lis := listener.Listener{
+		LotServ: serv,
 	}
-	lListener := listener.Listener{
-		LS: lService,
+	ctrl := controller.LotteryController{
+		LotServ: serv,
+		Lis:     lis,
 	}
-	return lController, lListener
+
+	return ctrl, lis
 }

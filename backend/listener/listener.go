@@ -15,10 +15,10 @@ import (
 )
 
 type Listener struct {
-	LS service.LotteryService
+	LotServ service.LotteryService
 }
 
-func (l Listener) ListenFundsWithDrawn(address string) {
+func (lis Listener) ListenFundsWithDrawn(address string) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func (l Listener) ListenFundsWithDrawn(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			l.LS.WithdrawFromLottery(
+			lis.LotServ.WithdrawFromLottery(
 				address,
 				event.User.Hex(),
 				uint(event.UpdatedTvl.Uint64()))
@@ -58,7 +58,7 @@ func (l Listener) ListenFundsWithDrawn(address string) {
 	}
 }
 
-func (l Listener) ListenFundsDeposited(address string) {
+func (lis Listener) ListenFundsDeposited(address string) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
@@ -91,7 +91,7 @@ func (l Listener) ListenFundsDeposited(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			l.LS.DepositToLottery(
+			lis.LotServ.DepositToLottery(
 				address,
 				event.User.Hex(),
 				uint(event.UpdatedUserBalance.Uint64()),
@@ -100,7 +100,7 @@ func (l Listener) ListenFundsDeposited(address string) {
 	}
 }
 
-func (l Listener) ListenWinnerChosen(address string) {
+func (lis Listener) ListenWinnerChosen(address string) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
@@ -133,13 +133,13 @@ func (l Listener) ListenWinnerChosen(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			l.LS.EndLottery(address, event.Winner.Hex(), uint(event.TotalYield.Uint64()))
+			lis.LotServ.EndLottery(address, event.Winner.Hex(), uint(event.TotalYield.Uint64()))
 			return
 		}
 	}
 }
 
-func (l Listener) ListenLotteryCreated() {
+func (lis Listener) ListenLotteryCreated() {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
@@ -173,7 +173,7 @@ func (l Listener) ListenLotteryCreated() {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			l.LS.CreateLottery(
+			lis.LotServ.CreateLottery(
 				event.ContractAddress.Hex(),
 				event.Name,
 				uint(event.ProtocolId.Uint64()),
@@ -181,8 +181,8 @@ func (l Listener) ListenLotteryCreated() {
 				uint(event.EndDate.Uint64()),
 				uint(event.MinAmountToDeposit.Uint64()))
 
-			go l.ListenFundsDeposited(event.ContractAddress.Hex())
-			go l.ListenFundsWithDrawn(event.ContractAddress.Hex())
+			go lis.ListenFundsDeposited(event.ContractAddress.Hex())
+			go lis.ListenFundsWithDrawn(event.ContractAddress.Hex())
 
 			executionTime := time.Unix(event.EndDate.Int64(), 0)
 			delay := executionTime.Sub(time.Now())
@@ -190,7 +190,7 @@ func (l Listener) ListenLotteryCreated() {
 			timer := time.NewTimer(delay)
 			go func() {
 				<-timer.C
-				go l.ListenWinnerChosen(event.ContractAddress.Hex())
+				go lis.ListenWinnerChosen(event.ContractAddress.Hex())
 				transactions.TransactEndLottery(event.ContractAddress.Hex())
 			}()
 		}
