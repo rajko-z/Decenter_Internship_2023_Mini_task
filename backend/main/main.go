@@ -11,22 +11,9 @@ import (
 )
 
 func main() {
-	db.DatabaseInit()
-	lRepo := dbgorm.LotteryGorm{DB: db.DB()}
-	ulRepo := dbgorm.UserLotteryGorm{DB: db.DB()}
-	lService := service.LotteryImpl{
-		ULRepo: ulRepo,
-		LRepo:  lRepo,
-	}
-	lController := controller.LotteryController{
-		LS: lService,
-	}
-	lListener := listener.Listener{
-		LS: lService,
-	}
+	lController, lListener := initialize()
 
 	e := echo.New()
-
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
@@ -38,4 +25,23 @@ func main() {
 	go lListener.ListenLotteryCreated()
 
 	e.Logger.Fatal(e.Start(":8080"))
+}
+
+func initialize() (controller.LotteryController, listener.Listener) {
+	db.DatabaseInit()
+	lRepo := dbgorm.LotteryGorm{DB: db.DB()}
+	ulRepo := dbgorm.UserLotteryGorm{DB: db.DB()}
+	serv := service.LotteryImpl{
+		ULRepo: ulRepo,
+		LRepo:  lRepo,
+	}
+	lis := listener.Listener{
+		LotServ: serv,
+	}
+	ctrl := controller.LotteryController{
+		LotServ: serv,
+		Lis:     lis,
+	}
+
+	return ctrl, lis
 }

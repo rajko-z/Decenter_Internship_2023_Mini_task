@@ -14,18 +14,16 @@ type DBUserLottery struct {
 
 type DBLottery struct {
 	gorm.Model
-	Address       string `gorm:"primaryKey"`
-	Name          string
-	ProtocolId    uint
-	TokenSymbol   string
-	TokenAddress  string
-	TokenDecimals uint
-	TokensInPool  uint
-	MinTokens     uint
-	Yield         uint
-	EndDate       uint
-	Active        bool
-	Winner        string
+	Address      string `gorm:"primaryKey"`
+	Name         string
+	ProtocolId   uint
+	TokenAddress string
+	TokensInPool uint
+	MinTokens    uint
+	Yield        uint
+	EndDate      uint
+	Active       bool
+	Winner       string
 }
 
 type UserLotteryGorm struct {
@@ -82,26 +80,26 @@ func (lg LotteryGorm) EndLottery(lotteryAddress string, winnerAddress string, to
 	var lottery DBLottery
 	err := lg.DB.Model(&lottery).
 		Where("address = ?", lotteryAddress).
-		Update("winner", winnerAddress).
-		Update("active", false).
-		Update("yield", totalYield).Error
+		Updates(DBLottery{
+			Active: false,
+			Winner: winnerAddress,
+			Yield:  totalYield,
+		}).Error
 	return err
 }
 
 func (lg LotteryGorm) CreateLottery(lottery model.Lottery) error {
 	err := lg.DB.Create(&DBLottery{
-		Address:       lottery.Address,
-		Name:          lottery.Name,
-		ProtocolId:    lottery.ProtocolId,
-		TokenSymbol:   lottery.TokenSymbol,
-		TokenAddress:  lottery.TokenAddress,
-		TokenDecimals: lottery.TokenDecimals,
-		TokensInPool:  lottery.TokensInPool,
-		MinTokens:     lottery.MinTokens,
-		Yield:         lottery.Yield,
-		EndDate:       lottery.EndDate,
-		Active:        true,
-		Winner:        "",
+		Address:      lottery.Address,
+		Name:         lottery.Name,
+		ProtocolId:   lottery.ProtocolId,
+		TokenAddress: lottery.TokenAddress,
+		TokensInPool: lottery.TokensInPool,
+		MinTokens:    lottery.MinTokens,
+		Yield:        lottery.Yield,
+		EndDate:      lottery.EndDate,
+		Active:       true,
+		Winner:       "",
 	}).Error
 	return err
 }
@@ -116,16 +114,14 @@ func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 	var result []model.Lottery
 	for _, lottery := range lotteries {
 		result = append(result, model.Lottery{
-			Address:       lottery.Address,
-			Name:          lottery.Name,
-			ProtocolId:    lottery.ProtocolId,
-			TokenSymbol:   lottery.TokenSymbol,
-			TokenAddress:  lottery.TokenAddress,
-			TokenDecimals: lottery.TokenDecimals,
-			TokensInPool:  lottery.TokensInPool,
-			Yield:         lottery.Yield,
-			EndDate:       lottery.EndDate,
-			Winner:        lottery.Winner,
+			Address:      lottery.Address,
+			Name:         lottery.Name,
+			ProtocolId:   lottery.ProtocolId,
+			TokenAddress: lottery.TokenAddress,
+			TokensInPool: lottery.TokensInPool,
+			Yield:        lottery.Yield,
+			EndDate:      lottery.EndDate,
+			Winner:       lottery.Winner,
 		})
 	}
 
