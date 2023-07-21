@@ -8,6 +8,8 @@ import "../interfaces/IPool.sol";
 import "./AaveV3Addresses.sol";
 import "../LotteryTree.sol";
 
+// import "hardhat/console.sol";
+
 contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
     uint public constant minDurationInDays = 10;
@@ -91,12 +93,16 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
     function end() external {
         require(block.timestamp >= endDate, "End date not reached");
 
-        int roll = getRandomNumber();
+        uint roll = getRandomNumber();
         uint winnerIndex = treeGetWinnerIndex(roll);
         winner = indextoAddress[winnerIndex];
 
         pool.withdraw(address(token), type(uint256).max, address(this));
-        totalYield = address(this).balance - tvl;
+        totalYield = token.balanceOf(address(this)) - tvl;
+
+        // console.log("Total yield", totalYield);
+        // console.log("balance of", token.balanceOf(address(this)));
+        // console.log("TVL", tvl);
 
         token.approve(address(pool), tvl);
         pool.supply(address(token), tvl, address(this), 0);
@@ -132,10 +138,10 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         return winner != address(0);
     }
 
-    function getRandomNumber() private view returns (int) {
+    function getRandomNumber() private view returns (uint) {
         // mock for now
-        int lotterySum = treeSum();
-        int rnd = int(uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, uint(42)))));
+        uint lotterySum = treeSum();
+        uint rnd = uint(keccak256(abi.encodePacked(block.timestamp, msg.sender, uint(42))));
         return rnd % lotterySum;
     }
 }
