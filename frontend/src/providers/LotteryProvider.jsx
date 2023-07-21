@@ -9,7 +9,8 @@ const web3 = new Web3(window.ethereum);
 
 export const tokenUSDPrices = {
     'DAI': 0,
-    'USDC': 0
+    'USDC': 0,
+    'wETH': 0,
 }
 
 // Get Oracle prices for the supported tokens
