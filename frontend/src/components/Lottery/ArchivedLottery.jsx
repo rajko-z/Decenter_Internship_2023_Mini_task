@@ -4,7 +4,7 @@ import "./Lottery.scss"
 const ArchivedLottery = ({ archivedLottery }) => {
 
     const { contractAddress, protocol, tokenSymbol, lastTVL, lastTVLUSD, yieldUSD, endDate, winner } = archivedLottery
-    const achievedYield = archivedLottery.yield.toFixed(2)
+    const achievedYield = archivedLottery.yield?.toFixed(2)
 
     useEffect(() => {
         console.log("ola")
