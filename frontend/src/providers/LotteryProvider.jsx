@@ -141,7 +141,7 @@ export const depositMoneyInLottery = async (wallet, contractAddress, amount, tok
 export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
     try {
-
+        console.log("GAS")
         const contract = LotteryContract(contractAddress);
         await contract.methods.withdraw().send({from: wallet})
 
