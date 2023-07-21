@@ -52,7 +52,10 @@ func (l Listener) ListenFundsWithDrawn(address string) {
 			log.Fatal(err)
 		case event := <-eventsChannel:
 			fmt.Println("Withdraw")
-			l.LS.WithdrawFromLottery(address, event.User.Hex(), uint(event.UpdatedTvl.Uint64()))
+			l.LS.WithdrawFromLottery(
+				address,
+				event.User.Hex(),
+				uint(event.UpdatedTvl.Uint64()))
 		}
 	}
 }
@@ -91,7 +94,11 @@ func (l Listener) ListenFundsDeposited(address string) {
 			log.Fatal(err)
 		case event := <-eventsChannel:
 			fmt.Println("Deposit")
-			l.LS.DepositToLottery(address, event.User.Hex(), uint(event.UpdatedUserBalance.Uint64()), uint(event.UpdatedTvl.Uint64()))
+			l.LS.DepositToLottery(
+				address,
+				event.User.Hex(),
+				uint(event.UpdatedUserBalance.Uint64()),
+				uint(event.UpdatedTvl.Uint64()))
 		}
 	}
 }
@@ -170,7 +177,15 @@ func (l Listener) ListenLotteryCreated() {
 			log.Fatal(err)
 		case event := <-eventsChannel:
 			fmt.Println("CreateLottery")
-			l.LS.CreateLottery(event.ContractAddress.Hex(), event.Name, uint(event.ProtocolId.Uint64()), event.TokenSymbol, uint(event.TokenDecimals.Uint64()), uint(event.EndDate.Uint64()), uint(event.MinAmountToDeposit.Uint64()))
+			l.LS.CreateLottery(
+				event.ContractAddress.Hex(),
+				event.Name,
+				uint(event.ProtocolId.Uint64()),
+				event.TokenSymbol,
+				event.TokenAddress.Hex(),
+				uint(event.TokenDecimals.Uint64()),
+				uint(event.EndDate.Uint64()),
+				uint(event.MinAmountToDeposit.Uint64()))
 
 			go l.ListenFundsDeposited(event.ContractAddress.Hex())
 			go l.ListenFundsWithDrawn(event.ContractAddress.Hex())
