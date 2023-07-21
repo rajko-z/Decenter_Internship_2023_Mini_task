@@ -59,12 +59,20 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         token.approve(address(pool), amount);
         pool.supply(address(token), amount, address(this), 0);
         tvl += amount;
+
+        bool alreadyMember = (balances[msg.sender] != 0);
         balances[msg.sender] += amount;
 
         uint value = amount * (endDate - block.timestamp) / totalDuration;
-        uint index = treeAdd(int(value));
-        addressToIndex[msg.sender] = index;
-        indextoAddress[index] = msg.sender;
+
+        if(alreadyMember) {
+            treeAdd(int(value), addressToIndex[msg.sender]);
+        }
+        else {
+            uint index = treeInsert(int(value));
+            addressToIndex[msg.sender] = index;
+            indextoAddress[index] = msg.sender;
+        }
 
         emit DepositEvent(msg.sender, amount, tvl, balances[msg.sender]);
     }
