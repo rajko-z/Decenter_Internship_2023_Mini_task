@@ -24,22 +24,24 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
     mapping(address => uint) private addressToIndex;
     mapping(uint => address) private indextoAddress;
     IERC20 private token;
+    IERC20 private aToken;
     IPool private pool;
 
     constructor(
         string memory _name,
         address _tokenAddress,
+        address _aTokenAddress,
         uint _minAmountToDeposit,
         uint _durationInDays
     ) {
         address poolAddress = IPoolAddressesProvider(POOL_ADDRESS_PROVIDER_MAINNET).getPool();
         pool = IPool(poolAddress);
         token = IERC20(_tokenAddress);
+        aToken = IERC20(_aTokenAddress);
 
         require(_durationInDays >= minDurationInDays, "Lottery duration to short");
 
         name = _name;
-        tvl = 0;
         minAmountToDeposit = _minAmountToDeposit;
         endDate = block.timestamp + _durationInDays * 1 days;
         totalDuration = _durationInDays * 1 days;
@@ -119,7 +121,7 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
     function getTokenAddress() external view returns(address) { return address(token); }
 
     function getCurrentYield() external view returns(uint) {
-        return address(this).balance - tvl;
+        return aToken.balanceOf(address(this)) - tvl;
     }
 
     function balanceOf(address _address) external view returns (uint) {
