@@ -45,37 +45,7 @@ export const getAllLotteries = async () => {
         //               'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0x0', 'myAmount': 30000000000000000000}]
         
         const updatedRes = res.map((obj) => {
-            const tokenSymbol = infoToToken[obj.tokenAddress].symbol
-            const tokenDecimals = infoToToken[obj.tokenAddress].decimals
-
-            // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
-            const { tvl, minAmountToDeposit, currentYield, myAmount } = obj
-            const newTvl = weiToToken(tvl, tokenDecimals)
-            const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
-            const newCurrentYield = weiToToken(currentYield, tokenDecimals)
-            const newMyAmount = weiToToken(myAmount, tokenDecimals)
-
-            // calculate new values expressed in USD
-            const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
-            const minAmountToDepositUSD = newMinAmountToDeposit * tokenUSDPrices[tokenSymbol]
-            const currentYieldUSD = newCurrentYield * tokenUSDPrices[tokenSymbol]
-            const myAmountUSD = newMyAmount * tokenUSDPrices[tokenSymbol]
-
-            const protocol = idToProtocol[obj.protocolId]
-
-            return {
-                ...obj,
-                tvl: newTvl,
-                minAmountToDeposit: newMinAmountToDeposit,
-                currentYield: newCurrentYield,
-                myAmount: newMyAmount,
-                protocol,
-                tokenSymbol,
-                tvlUSD,
-                minAmountToDepositUSD,
-                currentYieldUSD,
-                myAmountUSD
-            }
+            return(expandLottery(obj))
         });
 
         return updatedRes
@@ -89,42 +59,16 @@ export const getUserLotteries = async (wallet) => {
     
     try {
 
-        const res = await lotteryFactoryContract.methods.getLotteries(true).call({from: wallet});
+        await updateTokenPrices()
+        console.log(await lotteryFactoryContract.methods)
+        const res = await lotteryFactoryContract.methods.getLotteries(true).call({from: wallet}).catch((error) => {     
+            console.log("error user lotteries", error)
+        });
         
         console.log("User Lotteries", res)
 
         const updatedRes = res.map((obj) => {
-            const tokenSymbol = infoToToken[obj.tokenAddress].symbol
-            const tokenDecimals = infoToToken[obj.tokenAddress].decimals
-
-            // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
-            const { tvl, minAmountToDeposit, currentYield, myAmount } = obj
-            const newTvl = weiToToken(tvl, tokenDecimals)
-            const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
-            const newCurrentYield = weiToToken(currentYield, tokenDecimals)
-            const newMyAmount = weiToToken(myAmount, tokenDecimals)
-
-            // calculate new values expressed in USD
-            const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
-            const minAmountToDepositUSD = newMinAmountToDeposit * tokenUSDPrices[tokenSymbol]
-            const currentYieldUSD = newCurrentYield * tokenUSDPrices[tokenSymbol]
-            const myAmountUSD = newMyAmount * tokenUSDPrices[tokenSymbol]
-
-            const protocol = idToProtocol[obj.protocolId]
-
-            return {
-                ...obj,
-                tvl: newTvl,
-                minAmountToDeposit: newMinAmountToDeposit,
-                currentYield: newCurrentYield,
-                myAmount: newMyAmount,
-                protocol,
-                tokenSymbol,
-                tvlUSD,
-                minAmountToDepositUSD,
-                currentYieldUSD,
-                myAmountUSD
-            }
+            return(expandLottery(obj))
         });
 
         return updatedRes
@@ -221,4 +165,43 @@ const handleApprove = async (contractAddress, wallet) => {
     const ERC20Contract = new web3.eth.Contract(ERC20Info.ABI, ERC20Info.address)
     const hasAllowance = await ERC20Contract.methods.allowance(contractAddress, wallet).call()
     return hasAllowance
+}
+
+const expandLottery = (obj) => {
+
+    if (!obj || !obj.tokenAddress || !obj.protocolId) {
+        return obj; // Return the object as-is if it's not valid
+    }
+
+    const tokenSymbol = infoToToken[obj.tokenAddress].symbol
+    const tokenDecimals = infoToToken[obj.tokenAddress].decimals
+
+    // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
+    const { tvl, minAmountToDeposit, currentYield, myAmount } = obj
+    const newTvl = weiToToken(tvl, tokenDecimals)
+    const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
+    const newCurrentYield = weiToToken(currentYield, tokenDecimals)
+    const newMyAmount = weiToToken(myAmount, tokenDecimals)
+
+    // calculate new values expressed in USD
+    const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
+    const minAmountToDepositUSD = newMinAmountToDeposit * tokenUSDPrices[tokenSymbol]
+    const currentYieldUSD = newCurrentYield * tokenUSDPrices[tokenSymbol]
+    const myAmountUSD = newMyAmount * tokenUSDPrices[tokenSymbol]
+
+    const protocol = idToProtocol[obj.protocolId]
+
+    return {
+        ...obj,
+        tvl: newTvl,
+        minAmountToDeposit: newMinAmountToDeposit,
+        currentYield: newCurrentYield,
+        myAmount: newMyAmount,
+        protocol,
+        tokenSymbol,
+        tvlUSD,
+        minAmountToDepositUSD,
+        currentYieldUSD,
+        myAmountUSD
+    }
 }
