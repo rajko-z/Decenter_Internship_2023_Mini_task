@@ -8,8 +8,6 @@ import "../interfaces/IPool.sol";
 import "./AaveV3Addresses.sol";
 import "../LotteryTree.sol";
 
-// import "hardhat/console.sol";
-
 contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
     uint public constant minDurationInDays = 10;
@@ -21,6 +19,7 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
     uint private endDate;
     uint private totalDuration;
     uint private minAmountToDeposit;
+    address private factoryOwner;
     address private winner;
     mapping(address => uint) private balances;
     mapping(address => uint) private addressToIndex;
@@ -34,7 +33,8 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         address _tokenAddress,
         address _aTokenAddress,
         uint _minAmountToDeposit,
-        uint _durationInDays
+        uint _durationInDays,
+        address _factoryOwner
     ) {
         address poolAddress = IPoolAddressesProvider(POOL_ADDRESS_PROVIDER_MAINNET).getPool();
         pool = IPool(poolAddress);
@@ -47,6 +47,7 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         minAmountToDeposit = _minAmountToDeposit;
         endDate = block.timestamp + _durationInDays * 1 days;
         totalDuration = _durationInDays * 1 days;
+        factoryOwner = _factoryOwner;
     }
 
     function deposit(uint amount) external {
@@ -98,8 +99,23 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         emit WithdrawEvent(msg.sender, balance, tvl, isWinner);
     }
 
+    // function withdrawOwner() external {
+    //     require(msg.sender == factoryOwner);
+    //     require(msg.sender == winner);
+    //     require(tvl == 0);
+
+    //     pool.withdraw(address(token), aToken.balanceOf(address(this)), msg.sender);
+    // }
+
     function end() external {
         require(block.timestamp >= endDate, "End date not reached");
+
+        // everyone left the lottery, the factory wner may withdraw leftover yield
+        if(treeSum() == 0) {
+            winner = factoryOwner;
+            emit EndedEvent(winner, totalYield);
+            return;
+        }
 
         uint roll = getRandomNumber();
         uint winnerIndex = treeGetWinnerIndex(roll);
@@ -107,10 +123,6 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
 
         pool.withdraw(address(token), type(uint256).max, address(this));
         totalYield = token.balanceOf(address(this)) - tvl;
-
-        // console.log("Total yield", totalYield);
-        // console.log("balance of", token.balanceOf(address(this)));
-        // console.log("TVL", tvl);
 
         token.approve(address(pool), tvl);
         pool.supply(address(token), tvl, address(this), 0);

@@ -54,7 +54,8 @@ describe("LotteryAave", function() {
             tokenAddress, 
             aWETH_MAINNET_ADDRESS,
             minAmountToDeposit, 
-            durationInDays
+            durationInDays,
+            signer
         );
 
         expect(anyAddress(lotteryAave.target));
@@ -79,7 +80,8 @@ describe("LotteryAave", function() {
             tokenAddress, 
             aWETH_MAINNET_ADDRESS,
             minAmountToDeposit, 
-            durationInDays
+            durationInDays,
+            signer
         );
 
         var before_deposit = await iWeth.balanceOf(signer);
@@ -110,7 +112,8 @@ describe("LotteryAave", function() {
             tokenAddress, 
             aWETH_MAINNET_ADDRESS,
             minAmountToDeposit, 
-            durationInDays
+            durationInDays,
+            signer
         );
 
         await approveToLottery(signer, lotteryAave, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
@@ -148,7 +151,8 @@ describe("LotteryAave", function() {
             tokenAddress, 
             aWETH_MAINNET_ADDRESS,
             minAmountToDeposit, 
-            durationInDays
+            durationInDays,
+            signer
         );
 
         await approveToLottery(user1, lotteryAave, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
@@ -195,5 +199,49 @@ describe("LotteryAave", function() {
         }
     });
 
+    it("Handle everyone withdrawing", async function () {
+    
+        const [user1, user2, user3] = await hre.ethers.getSigners();
+        await sendWethTokensToUser(user1);
+        await sendWethTokensToUser(user2);
+        await sendWethTokensToUser(user3);
 
+        const signer = user1;
+
+        const lotteryName = "AAVE-TEST";
+        const tokenAddress = WETH_MAINNET_ADDRESS;
+        const minAmountToDeposit = hre.ethers.parseEther("0.001");
+        const durationInDays = 30;
+
+        const LotteryAave = await hre.ethers.getContractFactory("LotteryAave");
+        const lotteryAave = await LotteryAave.deploy(
+            lotteryName, 
+            tokenAddress, 
+            aWETH_MAINNET_ADDRESS,
+            minAmountToDeposit, 
+            durationInDays,
+            signer
+        );
+
+        await approveToLottery(user1, lotteryAave, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
+        await lotteryAave.connect(user1).deposit(hre.ethers.parseEther("1"));
+        await approveToLottery(user2, lotteryAave, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
+        await lotteryAave.connect(user2).deposit(hre.ethers.parseEther("1"));
+        await approveToLottery(user3, lotteryAave, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
+        await lotteryAave.connect(user3).deposit(hre.ethers.parseEther("1"));
+
+        await time.increase(3600 * 24 * 20);
+
+        await lotteryAave.connect(user1).withdraw();
+        await lotteryAave.connect(user2).withdraw();
+        await lotteryAave.connect(user3).withdraw();
+
+        await time.increase(3600 * 24 * 10);
+
+        await lotteryAave.connect(user1).end();
+        
+        // await lotteryAave.connect(user1).withdrawOwner();
+
+        // expect(await lotteryAave.getCurrentYield()).to.equals(hre.ethers.parseEther("0"));
+    });
 })
