@@ -32,8 +32,8 @@ func main() {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
-	lotteryRoute := e.Group("/lottery")
-	lotteryRoute.GET("", lController.GetAllFinishedLotteries)
+	lotteryRoute := e.Group("/lotteries")
+	lotteryRoute.GET("/history", lController.GetAllFinishedLotteries)
 
 	go lListener.ListenLotteryCreated()
 
