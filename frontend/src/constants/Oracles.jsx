@@ -28,5 +28,5 @@ const ethMainnetOracles = {
 export const contractOracles = {
     'DAI' : new web3.eth.Contract(ethMainnetOracles['DAI']['ABI'], ethMainnetOracles['DAI']['1']['contract']),
     'USDC' : new web3.eth.Contract(ethMainnetOracles['USDC']['ABI'], ethMainnetOracles['USDC']['1']['contract']),
-    'wETH' : new web3.eth.Contract(ethMainnetOracles['ETH']['ABI'], ethMainnetOracles['ETH']['1']['contract']),
+    'wETH' : new web3.eth.Contract(ethMainnetOracles['wETH']['ABI'], ethMainnetOracles['wETH']['1']['contract']),
 }
