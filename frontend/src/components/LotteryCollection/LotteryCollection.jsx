@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getHistory } from '../../providers/HistoryProvider';
 import { getAllLotteries, getUserLotteries } from '../../providers/LotteryProvider';
+import ArchivedLottery from '../Lottery/ArchivedLottery';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.scss';
 
@@ -34,9 +35,17 @@ const LotteryCollection = (props) => {
   return (
     <>
       <div className="active-lotteries">
-        {lotteriesData && lotteriesData.map((lott, index) => (
-          <Lottery key={index} lottery={lott} currPage={props.currPage} wallet={props.wallet}/>
-        )) }
+      {props.currPage === 'history' ? (
+        // Render archived lotteries map if currPage is 'history'
+        lotteriesData && lotteriesData.map((lott, index) => (
+          <ArchivedLottery key={index} archivedLottery={lott} />
+        ))
+      ) : (
+        // Render regular lotteries map for other pages
+        lotteriesData && lotteriesData.map((lott, index) => (
+          <Lottery key={index} lottery={lott} wallet={props.wallet} />
+        ))
+      )}
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 // calls to the SC
-import { idToProtocol } from '../constants/Tokens'
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
-import { protocolToId, infoToToken, tokenToInfo } from '../constants/Tokens'
+import { protocolToId, idToProtocol, infoToToken, tokenToInfo } from '../constants/Tokens'
 import { contractABI } from '../constants/Oracles'
 
 import Web3 from 'web3'
@@ -10,13 +9,13 @@ const web3 = new Web3(window.ethereum);
 
 // Contract.setProvider(RPC)
 
-const tokenUSDPrices = {
+export const tokenUSDPrices = {
     'DAI': 0,
     'USDC': 0
 }
 
 // Get Oracle prices for the supported tokens
-const updateTokenPrices = async () => {
+export const updateTokenPrices = async () => {
     const keys = Object.keys(tokenUSDPrices);
     const promises = keys.map(async (key) => {
       const price = await getTokenPrice(key);
