@@ -22,9 +22,13 @@ func (li LotteryImpl) CreateLottery(lotteryAddress string, name string, protocol
 		MinTokens:     minAmountToDeposit,
 		EndDate:       endDate,
 	})
+
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
+
+	log.Println("Lottery created at address: " + lotteryAddress)
 }
 
 func (li LotteryImpl) DepositToLottery(lotteryAddress string, userAddress string, updatedUserBalance uint, updatedTokens uint) {
@@ -39,13 +43,17 @@ func (li LotteryImpl) DepositToLottery(lotteryAddress string, userAddress string
 		err := li.ULRepo.UpdateEntry(userAddress, lotteryAddress, updatedUserBalance)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 	} else {
 		err := li.ULRepo.CreateEntry(userAddress, lotteryAddress, updatedUserBalance)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 	}
+
+	log.Println("User " + userAddress + " deposited to lottery " + lotteryAddress)
 }
 
 func (li LotteryImpl) WithdrawFromLottery(lotteryAddress string, userAddress string, updatedTokens uint) {
@@ -57,11 +65,20 @@ func (li LotteryImpl) WithdrawFromLottery(lotteryAddress string, userAddress str
 	err = li.LRepo.UpdateFunds(lotteryAddress, updatedTokens)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
+
+	log.Println("User " + userAddress + " withdrew from lottery " + lotteryAddress)
 }
 
 func (li LotteryImpl) EndLottery(lotteryAddress string, winnerAddress string, totalYield uint) {
-	li.EndLottery(lotteryAddress, winnerAddress, totalYield)
+	err := li.LRepo.EndLottery(lotteryAddress, winnerAddress, totalYield)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	log.Println("Lottery " + lotteryAddress + " ended")
 }
 
 func (li LotteryImpl) GetAllEndedLotteries() []model.Lottery {

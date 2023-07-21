@@ -50,7 +50,6 @@ func (l Listener) ListenFundsWithDrawn(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			log.Println("Withdraw")
 			l.LS.WithdrawFromLottery(
 				address,
 				event.User.Hex(),
@@ -92,7 +91,6 @@ func (l Listener) ListenFundsDeposited(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			log.Println("Deposit")
 			l.LS.DepositToLottery(
 				address,
 				event.User.Hex(),
@@ -135,7 +133,6 @@ func (l Listener) ListenWinnerChosen(address string) {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			log.Println("EndLottery")
 			l.LS.EndLottery(address, event.Winner.Hex(), uint(event.TotalYield.Uint64()))
 			return
 		}
@@ -176,7 +173,6 @@ func (l Listener) ListenLotteryCreated() {
 		case err := <-subscription.Err():
 			log.Fatal(err)
 		case event := <-eventsChannel:
-			log.Println("CreateLottery")
 			l.LS.CreateLottery(
 				event.ContractAddress.Hex(),
 				event.Name,
@@ -196,7 +192,6 @@ func (l Listener) ListenLotteryCreated() {
 			timer := time.NewTimer(delay)
 			go func() {
 				<-timer.C
-				log.Println("Before end lottery call")
 				go l.ListenWinnerChosen(event.ContractAddress.Hex())
 				transactions.TransactEndLottery(event.ContractAddress.Hex())
 			}()
