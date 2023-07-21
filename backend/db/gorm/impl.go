@@ -108,7 +108,7 @@ func (lg LotteryGorm) CreateLottery(lottery model.Lottery) error {
 
 func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 	var lotteries []DBLottery
-	err := lg.DB.Find(&lotteries, "active = ", false).Error
+	err := lg.DB.Find(&lotteries, "active = ?", false).Error
 	if err != nil {
 		return nil, err
 	}
@@ -127,5 +127,10 @@ func (lg LotteryGorm) FindAllEnded() ([]model.Lottery, error) {
 			Winner:        lottery.Winner,
 		})
 	}
+
+	if result == nil {
+		result = []model.Lottery{}
+	}
+
 	return result, nil
 }
