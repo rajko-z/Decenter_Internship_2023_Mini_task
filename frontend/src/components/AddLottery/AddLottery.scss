@@ -1,0 +1,134 @@
+@import "../../HyperParameters.scss";
+
+.add-lottery {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80%;
+    margin: 10px auto;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: $fontcolor_main;
+}
+
+.lottery-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin: 30px auto;
+    width: 100%;
+    max-width: 700px;
+    height: 65%;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: $bggradient1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.addLotteryInput {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 10px 10px 10px;
+    border: none;
+    border-bottom: 2px solid pink;
+    border-radius: 5px;
+    font-size: 16px;
+    
+    color: $fontcolor_main;
+    background-color: $bggradient1;
+    transition: all .2s ease-in-out;
+}
+.addLotteryInput.token {
+    justify-content: right;
+    text-align: right;
+}
+.addLotteryInput::placeholder {
+    color: $cardcolor;
+}
+
+.select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+
+    color: $fontcolor_main;
+    background-color: $bggradient1;
+    text-align: right;
+}
+
+.label {
+    font-size: 20px;
+    font-weight: bold;
+    color: $fontcolor_main;
+}
+
+.flexRowDiv {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+textarea:focus, .addLotteryInput:focus{
+    outline: none;
+    font-size: 1.2em;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out
+}
+
+select:focus {
+    outline: none;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+
+    color: $fontcolor_main;
+    background-color: #fff;
+    cursor: pointer;
+
+    transition: all .2s ease-in-out;
+}
+
+.submitButton:hover {
+    background-color: #fff2ff;
+    transition: all .2s ease-in-out;
+}
+
+.expected {
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+
+h3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $fontcolor_main;
+}
+
+.expectedValue {
+    margin-top: 1px;
+    font-size: 1.3em;
+}
