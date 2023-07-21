@@ -11,11 +11,4 @@ interface IERC677 is IERC20 {
     )
     external
     returns (bool success);
-
-    event Transfer(
-        address indexed from,
-        address indexed to,
-        uint value,
-        bytes data
-    );
 }
