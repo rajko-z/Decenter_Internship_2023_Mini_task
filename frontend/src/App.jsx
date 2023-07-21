@@ -12,7 +12,7 @@ function App() {
 
   const [provider, setProvider] = useState(null)
   const [loadingProvider, setLoadingProvider] = useState(true);
-  const [wallet, setWallet] = useState('0x0')
+  const [wallet, setWallet] = useState("0x0")
   
   useEffect(() => {
     const getProvider = async () => {
@@ -27,15 +27,10 @@ function App() {
     }                                                                    
   }, []);
 
-  const updateWallet = async (accounts) => {
-    setWallet({ accounts })
-    console.log("wallet", wallet)
-  }
-
   const handleConnectWallet = async () => {
     if (provider) {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      updateWallet(toString(accounts[0]))
+      setWallet(accounts[0])
     }
   }
 
@@ -44,7 +39,7 @@ function App() {
     if (resAccounts.length === 0) {
       console.log('Please connect to MetaMask.');
     } else if (resAccounts[0] !== wallet) {
-      updateWallet(resAccounts[0])
+      setWallet(resAccounts[0])
     }       
     console.log("refreshAccounts", wallet)                                           
   } 
