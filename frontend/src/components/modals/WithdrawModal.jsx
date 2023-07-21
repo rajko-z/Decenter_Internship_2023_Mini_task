@@ -23,7 +23,7 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
       <div className='modal-card'>
 
         <div className='modalState'>
-            <label className='modalLabel'> <h3>You have {myAmount} {tokenSymbol} / {myAmountUSD.toFixed(4)}$ </h3></label>
+            <label className='modalLabel'> <h3>You have {myAmount} {tokenSymbol} / {myAmountUSD?.toFixed(2)}$ </h3></label>
             <br></br>
             <label className='modalLabel'> Lottery End Date: {convertUnixTimestampToDate()}</label>
         </div>
