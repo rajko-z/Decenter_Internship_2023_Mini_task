@@ -16,13 +16,17 @@ const ethMainnetOracles = {
         '1' : {
             'contract': '0x8fffffd4afb6115b954bd326cbe7b4ba576818f6'
         }
+    },
+    'wETH' : {
+        'ABI': [{"inputs":[],"name":"latestAnswer","outputs":[{"internalType":"int256","name":"","type":"int256"}],"stateMutability":"view","type":"function"}],
+        '1' : {
+            'contract': '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419'
+        }
     }
 }
 
 export const contractOracles = {
     'DAI' : new web3.eth.Contract(ethMainnetOracles['DAI']['ABI'], ethMainnetOracles['DAI']['1']['contract']),
-    'USDC' : new web3.eth.Contract(ethMainnetOracles['USDC']['ABI'], ethMainnetOracles['USDC']['1']['contract'])
+    'USDC' : new web3.eth.Contract(ethMainnetOracles['USDC']['ABI'], ethMainnetOracles['USDC']['1']['contract']),
+    'wETH' : new web3.eth.Contract(ethMainnetOracles['ETH']['ABI'], ethMainnetOracles['ETH']['1']['contract']),
 }
-
-export const contractABI = [
-]

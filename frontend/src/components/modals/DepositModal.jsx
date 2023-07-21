@@ -48,7 +48,7 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
 
           </div>
           <div>
-              <h3 className='deposit-modal-usd-amount'>{`${amountUSD.toFixed(4)}$`}</h3>
+              <h3 className='deposit-modal-usd-amount'>{`${amountUSD?.toFixed(4)}$`}</h3>
           </div>
         </div>
 

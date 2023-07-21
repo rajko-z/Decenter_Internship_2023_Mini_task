@@ -109,11 +109,11 @@ const AddLottery = (wallet) => {
                 <div className='expectedDiv'>
                     <div className='expected yield'>
                         <h3>Expected yield:</h3>
-                        <h3 className='expectedValue'>{apy.toFixed(2)}%</h3>
+                        <h3 className='expectedValue'>{apy?.toFixed(2)}%</h3>
                     </div>
                     <div className='expected prize'>
                         <h3>Expected win prize:</h3>
-                        <h3 className='expectedValue'>{expectedPrize.toFixed(4)} USD</h3>
+                        <h3 className='expectedValue'>{expectedPrize?.toFixed(4)} USD</h3>
                     </div>
                 </div>
             </div>

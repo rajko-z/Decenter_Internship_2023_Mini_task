@@ -55,10 +55,10 @@ const SelectedLottery = ({}) => {
             <div className="token-name">Token: {tokenSymbol}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="selectedLottery current-amount">{`In lottery: ${tvl} ${tokenSymbol} (${tvlUSD.toFixed(2)}$)`}</div>
+            <div className="selectedLottery current-amount">{`In lottery: ${tvl} ${tokenSymbol} (${tvlUSD?.toFixed(2)}$)`}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD.toFixed(2)}$)`}</div>
+            <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD?.toFixed(2)}$)`}</div>
         </div>
         <div>
             <div className="end-date">End Date: {convertUnixTimestampToDate()}</div>
