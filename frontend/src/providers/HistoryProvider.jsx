@@ -7,11 +7,11 @@ const backendEndpoint = "http://localhost:8080/lotteries/history"
 export const getHistory = async () => {
 
     try {
-        const response = await fetch(`${backendEndpoint}`);
-        const res = await response.json();
+        // const response = await fetch(`${backendEndpoint}`);
+        // const res = await response.json();
 
-        // const res = [{'contractAddress': '0xABC', 'name': 'lutrija5', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'lastTVL': 100000000000000000000, 'yield': 0, 'endDate': 1689848249, 'winner': '0xWINNER1'},
-        //              {'contractAddress': '0xABC', 'name': 'lutrija6', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'lastTVL': 200000000, 'yield': 0, 'endDate': 1689848110, 'winner': '0xWINNER2'}]
+        const res = [{'contractAddress': '0xABC', 'name': 'lutrija5', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'lastTVL': 100000000000000000000, 'yield': 0, 'endDate': 1689848249, 'winner': '0xWINNER1'},
+                      {'contractAddress': '0xABC', 'name': 'lutrija6', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'lastTVL': 200000000, 'yield': 0, 'endDate': 1689848110, 'winner': '0xWINNER2'}]
         
         await updateTokenPrices()
 
