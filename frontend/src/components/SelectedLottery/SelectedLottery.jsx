@@ -16,6 +16,8 @@ const SelectedLottery = ({}) => {
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
 
+  const [isWithdraw, setIsWithdraw] = useState(true);                          // State to control the withdraw modal
+
   const { name, protocol, tokenSymbol, tvl, tvlUSD, endDate, currentYield, currentYieldUSD, myAmount, winner } = lottery || [];
   
   const openDepositModal = () => {setIsDepositModalOpen(true)}
@@ -80,7 +82,7 @@ const SelectedLottery = ({}) => {
               {((lotteryIsAcive && isUserParticipating) || (!lotteryIsAcive && !isUserWinner)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
-                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} />
+                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} setIsWithdraw={setIsWithdraw}/>
                 </>
               }
 

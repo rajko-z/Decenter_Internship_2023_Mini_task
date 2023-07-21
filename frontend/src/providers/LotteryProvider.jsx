@@ -98,20 +98,48 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
     }
 }
 
-export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol) => {
-
+export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol, minAmountToDeposit) => {
+    if (amount < minAmountToDeposit) {
+        alert("You need to output more than: " + minAmountToDeposit + " " + tokenSymbol)
+        return null
+    }
     // amount is in token (USDC, DAI) -> convert to wei
     const amountWei = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
 
     try {
-
-        // allow contract to transfer money from wallet
-        // TO-DO: check user balance + show if tx is reverted/passed
-        // TO_DO: UI - check if amount is over minDepositAmount
-
-        await handleApprove(contractAddress, wallet, tokenSymbol, amountWei)
-        const contract = LotteryContract(contractAddress);
-        await contract.methods.deposit(amountWei.toString()).send({from: wallet})
+        // Check User Balance
+        const myBalance = await web3.eth.getBalance(wallet)
+        if (myBalance < amount) {
+            alert("Insufficient funds")
+            return null
+        }
+        
+        // TO-DO: show if tx is reverted/passed
+        
+        // Allow contract to transfer money from wallet
+        let hasApproval = await checkAllowance(contractAddress, wallet)
+        console.log(contractAddress, wallet, hasApproval)
+        
+        if (!+hasApproval){
+            const tokenContract = new web3.eth.Contract(ERC20Info.ABI, tokenToInfo[tokenSymbol].address)
+            console.log("tokenContract:", tokenContract, tokenToInfo[tokenSymbol].address)
+            console.log("DALOJE", contractAddress, amount.toString())
+            await tokenContract.methods.approve(contractAddress, amount.toString()).send({from: wallet}).catch((error) => {    
+                console.log(error)})
+            
+            hasApproval = true;
+        }
+        console.log("hasApproval:", hasApproval)
+        if(+hasApproval){
+            const contract = LotteryContract(contractAddress);
+            await contract.methods.deposit(amount.toString()).send({from: wallet})
+            
+            alert("Transaction approved")
+            return true
+        } else {
+            alert("Transaction not approved")
+            return null
+        }
 
     } catch (error) {
         console.log(error)
@@ -124,14 +152,13 @@ export const depositMoneyInLottery = async (wallet, contractAddress, amount, tok
 export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
     try {
-        console.log("GAS")
         const contract = LotteryContract(contractAddress);
         await contract.methods.withdraw().send({from: wallet})
-
+        return true
     } catch (error) {
         alert(error)
         console.log("Error withdrawing money", error)
-        return null
+        return false
     }
 }
 
@@ -143,7 +170,7 @@ export const getLotteryReward = async (contractAddress, tokenSymbol) => {
     return weiToToken(res, tokenToInfo[tokenSymbol].decimals)
 }
 
-const handleApprove = async (contractAddress, wallet, amount, tokenSymbol) => {
+const handleApprove = async (contractAddress, wallet) => {
 
     const ERC20Contract = new web3.eth.Contract(ERC20Info.ABI, ERC20Info.address)
     const hasAllowance = await ERC20Contract.methods.allowance(contractAddress, wallet).call()
