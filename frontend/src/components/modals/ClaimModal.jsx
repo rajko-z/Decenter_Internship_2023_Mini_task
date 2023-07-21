@@ -19,7 +19,7 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
     useEffect(() => {
         const fetchData = async () => {
             //get yield amount (reward for the winner)
-            let reward = await getLotteryReward(contractAddress)
+            let reward = await getLotteryReward(contractAddress, tokenSymbol)
             setReward(reward)
             let rewardUSD = await tokenToUSD(reward, tokenSymbol)
             setRewardUSD(rewardUSD)

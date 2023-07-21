@@ -1,12 +1,13 @@
 // calls to the SC
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
-import { protocolToId, idToProtocol, infoToToken, tokenToInfo } from '../constants/Tokens'
+import { protocolToId, idToProtocol, infoToToken, tokenToInfo, ERC20Info } from '../constants/Tokens'
 import { contractABI, contractAddress } from '../constants/LotteryContract'
 
 import Web3 from 'web3'
 import LotteryFactoryContract from "../ethereum/LotteryFactoryContract";
 import LotteryContract from "../ethereum/LotteryContract";
 import lotteryFactoryContract from "../ethereum/LotteryFactoryContract";
+import lotteryContract from '../ethereum/LotteryContract';
 
 const web3 = new Web3(window.ethereum);
 
@@ -30,18 +31,18 @@ export const updateTokenPrices = async () => {
     });
 };
 
-export const getAllLotteries = async (debug=false) => {
+export const getAllLotteries = async () => {
     try {
+
         await updateTokenPrices()
+        const res = await lotteryFactoryContract.methods.getLotteries(false).call({});
 
-        // const contract = new web3.eth.Contract(contractABI, contractAddress)
-        // const res = await contract.methods.getAllLotteries().call()
+        console.log("All Lotteries", res)
 
-        // USDC (tvl 100$, minAmount 1$, currYield 8$, myAmount 3$)
-        const res = [{'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'tvl': 10000000000, 
-                      'endDate': 1689849999, 'minAmountToDeposit': 10000000000, 'currentYield': 80000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000},
-                      {'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'tvl': 100000000000000000000, 
-                      'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0x0', 'myAmount': 30000000000000000000}]
+        // const res = [{'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'tvl': 10000000000, 
+        //               'endDate': 1689849999, 'minAmountToDeposit': 10000000000, 'currentYield': 80000000000, 'winner': '0xWINNER1', 'myAmount': 30000000000},
+        //               {'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'tvl': 100000000000000000000, 
+        //               'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0x0', 'myAmount': 30000000000000000000}]
         
         const updatedRes = res.map((obj) => {
             const tokenSymbol = infoToToken[obj.tokenAddress].symbol
@@ -53,8 +54,6 @@ export const getAllLotteries = async (debug=false) => {
             const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
             const newCurrentYield = weiToToken(currentYield, tokenDecimals)
             const newMyAmount = weiToToken(myAmount, tokenDecimals)
-
-            console.log("GAS", tokenSymbol, myAmount, newMyAmount, tokenDecimals)
 
             // calculate new values expressed in USD
             const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
@@ -89,15 +88,46 @@ export const getAllLotteries = async (debug=false) => {
 export const getUserLotteries = async (wallet) => {
     
     try {
-        //const contract = new web3.eth.Contract(contractABI, contractAddress)
 
-        const res = await lotteryFactoryContract.methods
-            .getLotteries(true)
-            .call({
-                from: wallet
-            });
-        console.log("All lotteries: " + res);
-        return res
+        const res = await lotteryFactoryContract.methods.getLotteries(true).call({from: wallet});
+        
+        console.log("User Lotteries", res)
+
+        const updatedRes = res.map((obj) => {
+            const tokenSymbol = infoToToken[obj.tokenAddress].symbol
+            const tokenDecimals = infoToToken[obj.tokenAddress].decimals
+
+            // calculate new values expressed in token values like USDC, DAI (wei -> ERC20)
+            const { tvl, minAmountToDeposit, currentYield, myAmount } = obj
+            const newTvl = weiToToken(tvl, tokenDecimals)
+            const newMinAmountToDeposit = weiToToken(minAmountToDeposit, tokenDecimals)
+            const newCurrentYield = weiToToken(currentYield, tokenDecimals)
+            const newMyAmount = weiToToken(myAmount, tokenDecimals)
+
+            // calculate new values expressed in USD
+            const tvlUSD = newTvl * tokenUSDPrices[tokenSymbol]
+            const minAmountToDepositUSD = newMinAmountToDeposit * tokenUSDPrices[tokenSymbol]
+            const currentYieldUSD = newCurrentYield * tokenUSDPrices[tokenSymbol]
+            const myAmountUSD = newMyAmount * tokenUSDPrices[tokenSymbol]
+
+            const protocol = idToProtocol[obj.protocolId]
+
+            return {
+                ...obj,
+                tvl: newTvl,
+                minAmountToDeposit: newMinAmountToDeposit,
+                currentYield: newCurrentYield,
+                myAmount: newMyAmount,
+                protocol,
+                tokenSymbol,
+                tvlUSD,
+                minAmountToDepositUSD,
+                currentYieldUSD,
+                myAmountUSD
+            }
+        });
+
+        return updatedRes
     } catch {
         console.error("Error fetching users active lotteries");
         return null;
@@ -133,17 +163,32 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
 
 export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol) => {
 
-    // from: wallet
-    // sending to contract contractAddress
     // amount is in token (USDC, DAI) -> convert to wei
     amount = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
 
     try {
-        const contract = new web3.eth.Contract(contractABI, contractAddress)
-        const res = await contract.methods.deposit(amount).send({from: wallet})
-        return res
-    } catch {
-        console.error("Error depositing money")
+
+        // allow contract to transfer money from wallet
+        // TO-DO: check user balance + show if tx is reverted/passed
+        // TO_DO: UI - check if amount is over minDepositAmount
+
+        let hasApproval = await handleApprove(contractAddress, wallet)
+        if(!hasApproval){
+            const tokenContract = new web3.eth.Contract(ERC20Info.ABI, tokenToInfo[tokenSymbol].address)
+            await tokenContract.methods.approve(contractAddress, amount.toString()).send({from: wallet}).catch((error) => {    
+                console.log(error)})
+            hasApproval = true;
+        }
+
+        if(hasApproval){
+            const contract = LotteryContract(contractAddress);
+            await contract.methods.deposit(amount.toString()).send({from: wallet})
+        } else
+            alert("Transaction not approved")
+
+    } catch (error) {
+        console.log(error)
+        console.log("Error depositing money")
         return null
     }
 }
@@ -151,22 +196,29 @@ export const depositMoneyInLottery = async (wallet, contractAddress, amount, tok
 // for withdraw and claim (logic is on solidity)
 export const withdrawMoneyFromLottery = async (wallet, contractAddress) => {
 
-    // from: wallet
-    // sending to contract contractAddress
     try {
-        const contract = new web3.eth.Contract(contractABI, contractAddress)
-        const res = await contract.methods.withdraw().send({from: wallet})
-        return res
-    } catch {
-        console.error("Error depositing money")
+
+        const contract = LotteryContract(contractAddress);
+        await contract.methods.withdraw().send({from: wallet})
+
+    } catch (error) {
+        alert(error)
+        console.log("Error withdrawing money", error)
         return null
     }
 }
 
-export const getLotteryReward = async (contractAddress) => {
+export const getLotteryReward = async (contractAddress, tokenSymbol) => {
 
-    // pozivamo funckiju getTotalYield() iz SC
-    const contract = new web3.eth.Contract(contractABI, contractAddress)
-    const res = await contract.methods.getTotalYield().call()
-    return res
+    const contract = LotteryContract(contractAddress);
+    const res = await contract.methods.getTotalYield().call()           // returns in wei
+
+    return weiToToken(res, tokenToInfo[tokenSymbol].decimals)
+}
+
+const handleApprove = async (contractAddress, wallet) => {
+
+    const ERC20Contract = new web3.eth.Contract(ERC20Info.ABI, ERC20Info.address)
+    const hasAllowance = await ERC20Contract.methods.allowance(contractAddress, wallet).call()
+    return hasAllowance
 }

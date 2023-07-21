@@ -33,7 +33,7 @@ const SelectedLottery = ({}) => {
   useEffect(() => {
 
     const fetchData = async () => {
-      setLotteryIsActive(winner === '0x0');
+      setLotteryIsActive(winner.startsWith('0x0000000000000000000000000000000000000000'));
       setIsUserParticipating(myAmount > 0);
 
       if (wallet !== null && winner !== '0x0'){
