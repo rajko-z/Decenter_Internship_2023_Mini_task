@@ -3,7 +3,7 @@ import "./Lottery.scss"
 
 const ArchivedLottery = ({ archivedLottery }) => {
 
-    const { contractAddress, protocol, tokenSymbol, lastTVL, lastTVLUSD, yieldUSD, endDate, winner } = archivedLottery
+    const { contractAddress, name, protocol, tokenSymbol, lastTVL, lastTVLUSD, yieldUSD, endDate, winner } = archivedLottery
     const achievedYield = archivedLottery.yield?.toFixed(2)
 
     const protocolImage = (protocol) => {
@@ -25,7 +25,7 @@ const ArchivedLottery = ({ archivedLottery }) => {
             <div className="one-lottery">
                 <div className="oneLotteryName">
                     <img className='imageLogo' src={protocolImage(protocol)} alt={protocol}/> 
-                    {contractAddress}
+                    {name}
                     <img className='imageLogo' src={tokenImage(tokenSymbol)} alt={tokenSymbol}/> 
                 </div>
                 <div className="oneLotteryLine">
