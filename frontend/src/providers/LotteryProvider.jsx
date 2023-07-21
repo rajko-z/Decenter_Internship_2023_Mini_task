@@ -1,13 +1,11 @@
 // calls to the SC
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
 import { protocolToId, idToProtocol, infoToToken, tokenToInfo } from '../constants/Tokens'
-import { contractABI } from '../constants/Oracles'
+import { contractABI, contractAddress } from '../constants/LotteryContract'
 
 import Web3 from 'web3'
 
 const web3 = new Web3(window.ethereum);
-
-// Contract.setProvider(RPC)
 
 export const tokenUSDPrices = {
     'DAI': 0,
@@ -32,8 +30,8 @@ export const getAllLotteries = async (debug=false) => {
     try {
         await updateTokenPrices()
 
-        // const contract = new web3.eth.Contract(contractABI)
-        // const res = await contract.methods.getUserLotteries(wallet).call()
+        // const contract = new web3.eth.Contract(contractABI, contractAddress)
+        // const res = await contract.methods.getAllLotteries().call()
 
         // USDC (tvl 100$, minAmount 1$, currYield 8$, myAmount 3$)
         const res = [{'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 'tvl': 10000000000, 
@@ -87,7 +85,7 @@ export const getAllLotteries = async (debug=false) => {
 export const getUserLotteries = async (wallet) => {
     
     try {
-        const contract = new web3.eth.Contract(contractABI)
+        const contract = new web3.eth.Contract(contractABI, contractAddress)
         const res = await contract.methods.getUserLotteries(wallet).call()
 
         return res
@@ -107,7 +105,7 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
     depositAmount = tokenToWei(depositAmount, tokenToInfo[tokenSymbol].decimals)
 
     try {
-        const contract = new web3.eth.Contract(contractABI)
+        const contract = new web3.eth.Contract(contractABI, contractAddress)
         const res = await contract.methods.createLottery(
             name, 
             protocolId, 
@@ -125,7 +123,6 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
 }
 
 export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol) => {
-
 
     // from: wallet
     // sending to contract contractAddress
