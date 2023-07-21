@@ -31,6 +31,7 @@ function App() {
     if (provider) {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       setWallet(accounts[0])
+      console.log(accounts[0])
     }
   }
 
@@ -49,6 +50,7 @@ function App() {
     if (accountsRes.length) {
       console.log(`You're connected to: ${accountsRes[0]}`);
       setWallet(accountsRes[0])
+      console.log(accountsRes[0])
     } else {
       setWallet(null)
       console.log("Metamask is not connected");

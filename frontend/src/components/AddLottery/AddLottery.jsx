@@ -4,7 +4,7 @@ import { createLottery } from '../../providers/LotteryProvider';
 import { fetchAPY } from '../../providers/APYInfoProvider';
 import './AddLottery.scss';
 
-const AddLottery = (wallet) => {
+const AddLottery = ({wallet}) => {
     const [name, setName] = useState('');
     const [depositAmount, setDepositAmount] = useState(0);
     const [minDepositAmount, setMinDepositAmount] = useState(0);
@@ -22,12 +22,6 @@ const AddLottery = (wallet) => {
         return differenceInDays;
     }
 
-    // Convert Token to USD and check if it is at least $200
-    async function isValueAtLeastHundredsOfDollars(value, token) {
-        const valueInUsd = await getTokenPrice(token) * value;
-        return valueInUsd >= 200;
-    }
-
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         
@@ -36,15 +30,8 @@ const AddLottery = (wallet) => {
             alert("Please input a date that is at least 10 days in the future!");
             return;
         }
-        
-        if (!await isValueAtLeastHundredsOfDollars(depositAmount, token)) {
-            alert("Please input a value that is at least 100 dollars!");
-            return;
-        }
 
         await createLottery(wallet, name, protocol, token, minDepositAmount, depositAmount, daysBetween);
-        alert("Lottery added!");
-        window.location.reload(false);
     }
 
     useEffect(() => {
