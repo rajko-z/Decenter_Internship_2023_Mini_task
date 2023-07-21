@@ -80,9 +80,11 @@ func (lg LotteryGorm) EndLottery(lotteryAddress string, winnerAddress string, to
 	var lottery DBLottery
 	err := lg.DB.Model(&lottery).
 		Where("address = ?", lotteryAddress).
-		Update("winner", winnerAddress).
-		Update("active", false).
-		Update("yield", totalYield).Error
+		Updates(DBLottery{
+			Active: false,
+			Winner: winnerAddress,
+			Yield:  totalYield,
+		}).Error
 	return err
 }
 

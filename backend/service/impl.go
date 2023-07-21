@@ -20,7 +20,6 @@ func (li LotteryImpl) CreateLottery(lotteryAddress string, name string, protocol
 		MinTokens:    minAmountToDeposit,
 		EndDate:      endDate,
 	})
-
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -35,7 +34,12 @@ func (li LotteryImpl) DepositToLottery(lotteryAddress string, userAddress string
 		log.Fatal(err)
 		return
 	}
-	exists, _ := li.ULRepo.Exists(userAddress, lotteryAddress)
+
+	exists, err := li.ULRepo.Exists(userAddress, lotteryAddress)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
 
 	if exists {
 		err := li.ULRepo.UpdateEntry(userAddress, lotteryAddress, updatedUserBalance)
@@ -60,6 +64,7 @@ func (li LotteryImpl) WithdrawFromLottery(lotteryAddress string, userAddress str
 		log.Fatal(err)
 		return
 	}
+
 	err = li.LRepo.UpdateFunds(lotteryAddress, updatedTokens)
 	if err != nil {
 		log.Fatal(err)
