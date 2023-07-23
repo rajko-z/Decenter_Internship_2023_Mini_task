@@ -2,18 +2,16 @@ const hre = require("hardhat");
 const fs = require('fs');
 const {resolve, join} = require("path");
 
-async function main() {
-    const LotteryFactory = await hre.ethers.getContractFactory("LotteryFactory");
-    const lotteryFactory = await LotteryFactory.deploy();
-    await lotteryFactory.waitForDeployment();
-
-    const addressContract = await lotteryFactory.getAddress();
-    console.log("LotteryFactory address:" + addressContract);
-}
-
 async function deployLotteryFactory() {
-    const LotteryFactory = await hre.ethers.getContractFactory("LotteryFactory");
-    const lotteryFactory = await LotteryFactory.deploy();
+    const [owner, addr1, addr2] = await hre.ethers.getSigners();
+
+    const AaveLotteryMain = await hre.ethers.getContractFactory("LotteryAave", owner);
+    const aaveLotteryMain = await AaveLotteryMain.deploy();
+    await aaveLotteryMain.waitForDeployment();
+    const aaveLotteryMainAddress = await aaveLotteryMain.getAddress();
+
+    const LotteryFactory = await hre.ethers.getContractFactory("LotteryFactory", owner);
+    const lotteryFactory = await LotteryFactory.deploy(aaveLotteryMainAddress);
     await lotteryFactory.waitForDeployment();
 
     const addressContract = await lotteryFactory.getAddress();
@@ -50,8 +48,3 @@ export const LotteryFactoryContract = new web3.eth.Contract(
 }
 
 module.exports = { deployLotteryFactory };
-
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});

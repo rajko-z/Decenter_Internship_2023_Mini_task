@@ -30,9 +30,14 @@ async function getSymbolAndDecimalsOfERC20Token(tokenAddress) {
     return {symbol, decimals};
 }
 
+function anyAddress(address) {
+    return address.startsWith("0x");
+}
+
 module.exports = {
     sendWethTokensToUser,
     approveToContract,
     sendERCTokensToUser,
-    getSymbolAndDecimalsOfERC20Token
+    getSymbolAndDecimalsOfERC20Token,
+    anyAddress
 }
