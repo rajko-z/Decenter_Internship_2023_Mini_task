@@ -7,7 +7,7 @@ const Lottery = ({lottery, currPage, wallet}) => {
     const { contractAddress, name, protocol, tokenSymbol, endDate, tvl, tvlUSD, currentYield, currentYieldUSD } = lottery
 
     const handleOnClick = () => {
-        return navigate(`/selected-lottery/${contractAddress}`, {state:{lottery, currPage, wallet}})
+        return navigate(`/selected-lottery/${contractAddress}`, {state:{lottery, wallet}})
     }
 
     const protocolImage = (protocol) => {

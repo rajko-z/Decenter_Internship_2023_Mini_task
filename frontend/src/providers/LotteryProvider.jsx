@@ -64,12 +64,31 @@ export const getUserLotteries = async (wallet) => {
 
         const updatedRes = res.map((obj) => {
             return(expandLottery(obj))
-        });
+        })
 
         return updatedRes
     } catch {
         console.error("Error fetching users active lotteries");
-        return null;
+        return null
+    }
+}
+
+export const getLotteryByAddress = async (contractAddress) => {
+
+    try {
+
+        console.log("OLAAA")
+        console.log(contractAddress)
+        const res = await LotteryFactoryContract.methods.getLotteryByAddress(contractAddress).call().catch((error) => {
+            console.log("error fetching lottery by address", error)
+        })
+
+        console.log("res", res)
+        return expandLottery(res)
+
+    } catch (error) {
+        console.log("Error fetching lottery by address", error)
+        return null
     }
 }
 
@@ -165,8 +184,9 @@ const handleApprove = async (contractAddress, wallet, tokenSymbol, amountWei) =>
 
 const expandLottery = (obj) => {
 
+    // Return the object as-is if it's not valid
     if (!obj || !obj.tokenAddress || !obj.protocolId) {
-        return obj; // Return the object as-is if it's not valid
+        return obj; 
     }
 
     const tokenSymbol = infoToToken[obj.tokenAddress].symbol

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getLotteryByAddress } from '../../providers/LotteryProvider';
 import DepositModal from '../modals/DepositModal';
 import WithdrawModal from '../modals/WithdrawModal';
 import ClaimModal from '../modals/ClaimModal';
@@ -8,7 +9,7 @@ import './SelectedLottery.scss';
 
 const SelectedLottery = ({}) => {
   const location = useLocation();
-  const { lottery, currPage, wallet } = location.state || {}                    // Access the lottery prop from location.state
+  const { lottery, wallet } = location.state || {}                    // Access the lottery prop from location.state
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);          // State to control the deposit modal
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
@@ -16,10 +17,18 @@ const SelectedLottery = ({}) => {
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
 
-  const [isWithdraw, setIsWithdraw] = useState(false);                          // State to control the withdraw modal
+  // lottery data from the blockchain
+  const [name, setName] = useState('');
+  const [protocol, setProtocol] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tvl, setTvl] = useState(0);
+  const [tvlUSD, setTvlUSD] = useState(0);
+  const [endDate, setEndDate] = useState(0);
+  const [currentYield, setCurrentYield] = useState(0);
+  const [currentYieldUSD, setCurrentYieldUSD] = useState(0);
+  const [myAmount, setMyAmount] = useState(0);
+  const [winner, setWinner] = useState('');
 
-  const { name, protocol, tokenSymbol, tvl, tvlUSD, endDate, currentYield, currentYieldUSD, myAmount, winner } = lottery || [];
-  
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}
   const openWithdrawModal = () => {setIsWithdrawModalOpen(true)}
@@ -35,15 +44,25 @@ const SelectedLottery = ({}) => {
   useEffect(() => {
 
     const fetchData = async () => {
-      setLotteryIsActive(winner.startsWith('0x0000000000000000000000000000000000000000'));
-      console.log('isMyAmount greater than 0 ', myAmount > 0.0)
-      setIsUserParticipating(myAmount > 0.0)
 
-      setIsWithdraw(isUserParticipating)
-      console.log('is User participating', isUserParticipating)
-
-      if (wallet !== null && winner !== '0x0'){
-        setIsUserWinner(wallet.toLowerCase() === winner.toLowerCase())
+      const result = await getLotteryByAddress(lottery.contractAddress)
+      console.log("result", result)
+      setName(result.name)
+      setProtocol(result.protocol)
+      setTokenSymbol(result.tokenSymbol)
+      setTvl(result.tvl)
+      setTvlUSD(result.tvlUSD)
+      setEndDate(result.endDate)
+      setCurrentYield(result.currentYield)
+      setCurrentYieldUSD(result.currentYieldUSD)
+      setMyAmount(result.myAmount)
+      setWinner(result.winner)
+  
+      setLotteryIsActive(result.winner.startsWith('0x0000000000000000000000000000000000000000'));
+      setIsUserParticipating(result.myAmount > 0.0)
+  
+      if (result.winner !== null && result.winner !== '0x0'){
+        setIsUserWinner(wallet.toLowerCase() === result.winner.toLowerCase())
       }
     }
 
@@ -83,10 +102,10 @@ const SelectedLottery = ({}) => {
                               wallet={wallet}/>
                 </>
               }
-              {((lotteryIsAcive && isUserParticipating) || (!lotteryIsAcive && !isUserWinner)) && !isWithdraw &&
+              {((lotteryIsAcive && isUserParticipating) || (!lotteryIsAcive && !isUserWinner)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
-                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} setIsWithdraw={setIsWithdraw}/>
+                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery}/>
                 </>
               }
 
