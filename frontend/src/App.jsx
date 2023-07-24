@@ -12,14 +12,28 @@ function App() {
 
   const [provider, setProvider] = useState(null)
   const [loadingProvider, setLoadingProvider] = useState(true);
-  const [wallet, setWallet] = useState("0x0")
+  const [wallet, setWallet] = useState("0x0000000000000000000000000000000000000000")
   
   useEffect(() => {
+
     const getProvider = async () => {
       const result = await detectEthereumProvider()
       setProvider(result)
       setLoadingProvider(false)
+
+      if(!result) return
+
+      const accountsRes = await window.ethereum.request({method: 'eth_accounts'});       
+      if (accountsRes.length) {
+        console.log(`You're connected to: ${accountsRes[0]}`);
+        setWallet(accountsRes[0])
+        console.log(accountsRes[0])
+      } else {
+        setWallet(null)
+        console.log("Metamask is not connected");
+      }
     }
+
     getProvider()
 
     return () => {                                            
@@ -44,18 +58,6 @@ function App() {
     }       
     console.log("refreshAccounts", wallet)                                           
   } 
-
-  window.onload = async (event) => {
-    const accountsRes = await window.ethereum.request({method: 'eth_accounts'});       
-    if (accountsRes.length) {
-      console.log(`You're connected to: ${accountsRes[0]}`);
-      setWallet(accountsRes[0])
-      console.log(accountsRes[0])
-    } else {
-      setWallet(null)
-      console.log("Metamask is not connected");
-    }
-  }
   
   if (loadingProvider) {
     return <div>Loading provider...</div>;
@@ -87,7 +89,8 @@ function App() {
       </div>
       <div className="right-side">
         <div className="header">
-          {provider && !wallet && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button>}
+          {provider && wallet === "0x0000000000000000000000000000000000000000" 
+            && <button onClick={handleConnectWallet} className="connect-wallet"> Connect MetaMask </button>}
           {}
         </div>
         <div className="content">

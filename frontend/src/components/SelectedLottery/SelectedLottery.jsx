@@ -62,7 +62,7 @@ const SelectedLottery = ({}) => {
       setLotteryIsActive(result.winner.startsWith('0x0000000000000000000000000000000000000000'));
       setIsUserParticipating(result.myAmount > 0.0)
   
-      if (result.winner !== null && result.winner !== '0x0'){
+      if (!result.winner && !result.winner.startsWith('0x0000000000000000000000000000000000000000')){
         setIsUserWinner(wallet.toLowerCase() === result.winner.toLowerCase())
       }
 
