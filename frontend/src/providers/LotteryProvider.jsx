@@ -100,7 +100,7 @@ export const createLottery = async (wallet, name, protocol, tokenSymbol, minAmou
 export const depositMoneyInLottery = async (wallet, contractAddress, amount, tokenSymbol, minAmountToDeposit) => {
     if (amount < minAmountToDeposit) {
         alert("You need to output more than: " + minAmountToDeposit + " " + tokenSymbol)
-        return null
+        return false
     }
     // amount is in token (USDC, DAI) -> convert to wei
     const amountWei = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
@@ -110,18 +110,20 @@ export const depositMoneyInLottery = async (wallet, contractAddress, amount, tok
         const myBalance = await web3.eth.getBalance(wallet)
         if (myBalance < amount) {
             alert("Insufficient funds")
-            return null
+            return false
         }
         
         handleApprove(contractAddress, wallet, tokenSymbol, amountWei)
 
         const contract = LotteryContract(contractAddress);
         await contract.methods.deposit(amountWei.toString()).send({from: wallet})
+
+        return true
             
     } catch (error) {
         console.log(error)
         console.log("Error depositing money")
-        return null
+        return false
     }
 }
 

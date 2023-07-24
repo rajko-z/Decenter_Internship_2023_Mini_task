@@ -36,7 +36,11 @@ const SelectedLottery = ({}) => {
 
     const fetchData = async () => {
       setLotteryIsActive(winner.startsWith('0x0000000000000000000000000000000000000000'));
-      setIsUserParticipating(myAmount > 0);
+      console.log('isMyAmount greater than 0 ', myAmount > 0.0)
+      setIsUserParticipating(myAmount > 0.0)
+
+      setIsWithdraw(isUserParticipating)
+      console.log('is User participating', isUserParticipating)
 
       if (wallet !== null && winner !== '0x0'){
         setIsUserWinner(wallet.toLowerCase() === winner.toLowerCase())
