@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract LotteryTree {
+contract TreeTesting {
     enum Origin { NONE, LEFT, RIGHT } 
     int[][] internal tree = [new int[](1)];
     uint[] internal holes = new uint[](0);
 
-    function treeUpdate(uint level, uint index, int value, Origin origin) private {
+    event ReturnIndex(uint index);
+
+    function treeUpdate(uint level, uint index, int value, Origin origin) public {
         if(level >= tree.length) {
             tree.push(new int[](0));
         }
@@ -35,7 +37,7 @@ contract LotteryTree {
 
     // adds the entry to the first hole in the tree, or expands it
     // returns index of the new entry
-    function treeInsert(int value) internal returns (uint) {
+    function treeInsert(int value) public returns (uint) {
         require(value > 0);
 
         uint index;
@@ -49,11 +51,13 @@ contract LotteryTree {
 
         treeUpdate(0, index, value, Origin.NONE);
 
+        emit ReturnIndex(index);
+
         return index;
     }
 
     // increase existing entry
-    function treeAdd(int value, uint index) internal {
+    function treeAdd(int value, uint index) public {
         require(value > 0);
         require(index > 0);
         require(tree[0].length > index);
@@ -63,7 +67,7 @@ contract LotteryTree {
     }
 
     // removes entry with the given index
-    function treeRemove(uint index) internal {
+    function treeRemove(uint index) public {
         require(index > 0);
         require(tree[0].length > index);
         require(tree[0][index] != 0);
