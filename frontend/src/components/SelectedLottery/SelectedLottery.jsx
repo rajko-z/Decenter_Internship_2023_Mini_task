@@ -10,13 +10,14 @@ import './SelectedLottery.scss';
 
 const SelectedLottery = ({}) => {
   const location = useLocation();
-  const { lottery } = location.state || {}                    // Access the lottery prop from location.state
+
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);          // State to control the deposit modal
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
   const [isUserParticipating, setIsUserParticipating] = useState(false);
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
+  const [lottery, setLottery] = useState(null);
 
   // lottery data from the blockchain
   const [name, setName] = useState('');
@@ -44,7 +45,7 @@ const SelectedLottery = ({}) => {
   useEffect(() => {
 
     const fetchData = async () => {
-      const result = await getLotteryByAddress(lottery.contractAddress)
+      const result = await getLotteryByAddress(location.state.contractAddress)
       setName(result.name)
       setProtocol(result.protocol)
       setTokenSymbol(result.tokenSymbol)
@@ -64,6 +65,7 @@ const SelectedLottery = ({}) => {
 
       const expPrize = await getExpectedPrice(result.protocol, result.tokenSymbol, result.tvlUSD, result.currentYieldUSD, result.endDate)
       setExpectedPrize(expPrize)
+      setLottery(result)
     }
 
     fetchData()

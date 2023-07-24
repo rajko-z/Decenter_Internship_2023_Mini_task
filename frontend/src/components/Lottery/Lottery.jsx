@@ -1,13 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import './Lottery.scss'
 
-const Lottery = ({lottery}) => {
+const Lottery = ({contractAddress, name, protocol, tokenSymbol, endDate, tvl, tvlUSD, currentYield, currentYieldUSD}) => {
 
     const navigate = useNavigate();
-    const { contractAddress, name, protocol, tokenSymbol, endDate, tvl, tvlUSD, currentYield, currentYieldUSD } = lottery
+    //const {  } = lottery
 
     const handleOnClick = () => {
-        return navigate(`/selected-lottery/${contractAddress}`, {state:{lottery}})
+        console.log("ola", contractAddress)
+        return navigate(`/selected-lottery/${contractAddress}`, {state:{contractAddress}})
     }
 
     const protocolImage = (protocol) => {

@@ -43,7 +43,16 @@ const LotteryCollection = ({currPage}) => {
       ) : (
         // Render regular lotteries map for other pages
         lotteriesData && lotteriesData.map((lott, index) => (
-          <Lottery key={index} lottery={lott} />
+          <Lottery key={index} 
+          contractAddress={lott.contractAddress} 
+          name={lott.name} 
+          protocol={lott.protocol} 
+          tokenSymbol={lott.tokenSymbol} 
+          endDate={lott.endDate} 
+          tvl={lott.tvl} 
+          tvlUSD={lott.tvlUSD} 
+          currentYield={lott.currentYield} 
+          currentYieldUSD={lott.currentYieldUSD} />
         ))
       )}
       </div>
