@@ -11,7 +11,7 @@ async function sendUSDCTokens(toAddress) {
         "0x51eDF02152EBfb338e03E30d65C15fBf06cc9ECC",
         USDC_MAINNET_ADDRESS,
         toAddress,
-        "10000000000000"
+        "10000000000"
     );
 }
 
@@ -70,32 +70,34 @@ async function main() {
 
     await showBalances(owner, addr1);
 
-    const minAmountToDeposit = hre.ethers.parseEther("0.00001");
-    const amountToDeposit = hre.ethers.parseEther("0.00001");
+    const minAmountForDepositWeth = hre.ethers.parseEther("0.01");    
+    const minAmountForDepositDai = hre.ethers.parseEther("10");
+    const amountToDepositWeth = hre.ethers.parseEther("0.01");
+    const amountToDepositDai = hre.ethers.parseEther("10");
 
-    const lottery1 = await lotteryFactory.connect(owner).createLottery("test1", 1, WETH_MAINNET_ADDRESS, minAmountToDeposit, 15);
+    const lottery1 = await lotteryFactory.connect(owner).createLottery("test1", 1, WETH_MAINNET_ADDRESS, minAmountForDepositWeth, 15);
     const receipt1 = await lottery1.wait();
     const event1 = new hre.ethers.Interface(lotteryFactoryABI).parseLog(receipt1.logs[0]);
     const lotteryAddress1 = event1.args[0];
     const lottery1Contract = await hre.ethers.getContractAt("LotteryAave", lotteryAddress1, owner);
 
     await approveToContract(owner, lotteryAddress1, WETH_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
-    const deposit1 = await lottery1Contract.connect(owner).deposit(amountToDeposit);
+    const deposit1 = await lottery1Contract.connect(owner).deposit(amountToDepositWeth);
     await deposit1.wait();
 
 
-    const lottery2 = await lotteryFactory.connect(owner).createLottery("test2", 1, DAI_MAINNET_ADDRESS, minAmountToDeposit, 20);
+    const lottery2 = await lotteryFactory.connect(owner).createLottery("test2", 1, DAI_MAINNET_ADDRESS, minAmountForDepositDai, 20);
     const receipt2 = await lottery2.wait();
     const event2 = new hre.ethers.Interface(lotteryFactoryABI).parseLog(receipt2.logs[0]);
     const lotteryAddress2 = event2.args[0];
     const lottery2Contract = await hre.ethers.getContractAt("LotteryAave", lotteryAddress2);
 
     await approveToContract(owner, lotteryAddress2, DAI_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
-    const deposit2 = await lottery2Contract.connect(owner).deposit(amountToDeposit);
+    const deposit2 = await lottery2Contract.connect(owner).deposit(amountToDepositDai);
     await deposit2.wait();
 
     await approveToContract(addr1, lotteryAddress2, DAI_MAINNET_ADDRESS, hre.ethers.parseEther("10"));
-    const deposit3 = await lottery2Contract.connect(addr1).deposit(amountToDeposit);
+    const deposit3 = await lottery2Contract.connect(addr1).deposit(amountToDepositDai);
     await deposit3.wait();
 
     const lotteriesOwner = await lotteryFactory.connect(owner).getLotteries(true);
