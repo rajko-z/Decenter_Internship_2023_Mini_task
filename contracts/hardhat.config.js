@@ -1,5 +1,15 @@
 require("@nomicfoundation/hardhat-toolbox");
+const {task} = require("hardhat/config");
+const {time} = require("@nomicfoundation/hardhat-network-helpers");
 require('dotenv').config({path:__dirname+'/.env'})
+
+task("speedTime", "Speed time with X days")
+    .addParam("days", "Number of days to speed")
+    .setAction(async (taskArgs) => {
+      const numberOfDays = taskArgs.days;
+      const DAY = 3600 * 24;
+      await time.increase(DAY * numberOfDays);
+    });
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
