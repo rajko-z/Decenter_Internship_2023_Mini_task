@@ -29,6 +29,7 @@ const SelectedLottery = ({}) => {
   const [currentYield, setCurrentYield] = useState(0);
   const [currentYieldUSD, setCurrentYieldUSD] = useState(0);
   const [expectedPrize, setExpectedPrize] = useState(0);
+  const [myAmount, setMyAmount] = useState(0)
 
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}
@@ -55,12 +56,15 @@ const SelectedLottery = ({}) => {
       setEndDate(result.endDate)
       setCurrentYield(result.currentYield)
       setCurrentYieldUSD(result.currentYieldUSD)
+      setMyAmount(result.myAmount)
 
       setLotteryIsActive(result.winner.startsWith('0x0000000000000000000000000000000000000000'));
       setIsUserParticipating(result.myAmount > 0.0)
+
       
-      if (!result.winner && !result.winner.startsWith('0x0000000000000000000000000000000000000000' &&
-        window.ethereum.selectedAddress)){
+      
+      // console.log('result.winner', result.winner, window.ethereum.selectedAddress)
+      if (result.winner.toLowerCase() === window.ethereum.selectedAddress.toLowerCase()){
         setIsUserWinner(window.ethereum.selectedAddress.toLowerCase() === result.winner.toLowerCase())
       }
 
@@ -114,7 +118,7 @@ const SelectedLottery = ({}) => {
                 </>
               }
 
-              {!lotteryIsAcive && isUserWinner && 
+              {!lotteryIsAcive && isUserWinner && myAmount > 0.0 &&
                 <>
                 <button className='modalButton' onClick={openClaimModal}>Claim</button>
                 <ClaimModal isOpen={isClaimModalOpen} closeModal={closeClaimModal} lottery={lottery} />

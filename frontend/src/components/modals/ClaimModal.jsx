@@ -49,7 +49,7 @@ const ClaimModal = ({ isOpen, closeModal, lottery }) => {
                 <div className='modalState'>
                     <label className='modalLabel'> <p style={{color: 'green'}}>Congratulations! You are the winner </p></label>
                     <label className='modalLabel'> You have deposited {myAmount} {tokenSymbol}, which is {`${myAmountUSD?.toFixed(4)}$`}</label>
-                    <label className='modalLabel'> The reward for this lottery was {reward} {tokenSymbol}, which is {`${rewardUSD?.toFixed(4)}$`}</label>
+                    <label className='modalLabel'> The reward for this lottery was {reward?.toFixed(5)} {tokenSymbol}, which is {`${rewardUSD?.toFixed(4)}$`}</label>
                     <br></br>
                     <label className='modalLabel'> <h2>You can claim {`${moneyToClaim?.toFixed(4)}$`}</h2></label>
                 </div>

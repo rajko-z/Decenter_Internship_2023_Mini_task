@@ -40,11 +40,11 @@ export const getAllLotteries = async () => {
         //               {'contractAddress': '0xaddr1', 'name': 'lottery1', 'protocolId': 1, 'tokenAddress': '0x6B175474E89094C44Da98b954EedeAC495271d0F', 'tvl': 100000000000000000000, 
         //               'endDate': 1689849999, 'minAmountToDeposit': 1000000000000000000, 'currentYield': 80000000000000000000, 'winner': '0x0', 'myAmount': 30000000000000000000}]
         
-        const updatedRes = res.map((obj) => {
+        const filteredLotteries = res.filter((obj) => obj.winner.startsWith("0x0000000000000000000000000000000000000000"));
+        const expandedLotteries = filteredLotteries.map((obj) => {
             return(expandLottery(obj))
         });
-
-        return updatedRes
+        return expandedLotteries
     } catch {
         console.error("Error fetching all active lotteries");
         return null;
@@ -165,7 +165,7 @@ const handleApprove = async (contractAddress, wallet, tokenSymbol, amountWei) =>
 
     if (allowedFor < amountWei){
         const tokenContract = new web3.eth.Contract(ERC20Info.ABI, tokenToInfo[tokenSymbol].address)
-        await tokenContract.methods.approve(contractAddress, amountWei.toString()).send({from: wallet}).catch((error) => {   
+        await tokenContract.methods.approve(contractAddress, amountWei.toString()).send({from: window.ethereum.selectedAddress}).catch((error) => {   
             alert("Error approving contract to transfer money") 
             console.log(error)
         })

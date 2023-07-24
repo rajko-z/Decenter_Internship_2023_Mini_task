@@ -35,5 +35,5 @@ export const weiToToken = (wei, decimals) => {
 }
 
 export const tokenToWei = (token, decimals) => {
-    return new Decimal(token.toString()).mul(10 ** decimals).toNumber();
+    return toString(new Decimal(token.toString()).mul(10 ** decimals).toNumber());
 }
