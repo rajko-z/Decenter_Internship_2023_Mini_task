@@ -1,9 +1,10 @@
+const hre = require("hardhat");
 const { expect } = require("chai");
-const { hre } = require("hardhat");
 const { time, loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
 const { networkConfig } = require("../harhat-config-helper");
 const { anyUint } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { sendWethTokensToUser, getSymbolAndDecimalsOfERC20Token, sendERCTokensToUser, approveToContract, anyAddress} = require("../scripts/utils");
+
 
 describe("LotteryFactory tests", function () {
 
