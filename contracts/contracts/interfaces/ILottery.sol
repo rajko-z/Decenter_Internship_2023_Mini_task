@@ -19,11 +19,21 @@ interface ILottery {
 
     event EndedEvent(address winner, uint totalYield);
 
+    function init(
+        string memory _name,
+        address _tokenAddress,
+        address _aTokenAddress,
+        uint _minAmountToDeposit,
+        uint _durationInDays,
+        address _admin
+    )
+    external;
+
     function deposit(uint amount) external;
 
     function withdraw() external;
 
-    // function withdrawOwner() external;
+    function withdrawAdmin() external;
 
     function end() external;
 

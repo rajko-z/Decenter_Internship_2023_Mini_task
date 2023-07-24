@@ -1,6 +1,6 @@
 const hre = require("hardhat");
 
-const { networkConfig } = require("../../../harhat-config-helper");
+const { networkConfig } = require("../../harhat-config-helper");
 
 async function sendLinkTokenToContract(contractAddress) {
 
