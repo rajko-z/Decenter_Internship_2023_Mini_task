@@ -3,7 +3,6 @@ const { time, loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-
 const { expect } = require("chai");
 const { networkConfig } = require("../harhat-config-helper");
 const {sendWethTokensToUser, approveToContract} = require("../scripts/utils");
-const {min} = require("hardhat/internal/util/bigint");
 
 describe("LotteryAave tests", function() {
 
