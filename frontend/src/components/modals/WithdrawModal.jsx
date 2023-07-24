@@ -3,7 +3,7 @@ import { withdrawMoneyFromLottery } from '../../providers/LotteryProvider';
 import React, { useState } from 'react';
 import './LotteryModal.scss';
 
-const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
+const WithdrawModal = ({ isOpen, closeModal, wallet, lottery, setIsUserParticipating}) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const { contractAddress, tokenSymbol, endDate, myAmount, myAmountUSD }  = lottery
@@ -11,7 +11,9 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery }) => {
   // deposit money and close modal
   const handleWithdrawal = async () => {
     setIsLoading(true)
-    await withdrawMoneyFromLottery(wallet, contractAddress)
+    const res = await withdrawMoneyFromLottery(wallet, contractAddress)
+
+    setIsUserParticipating(!res)
     setIsLoading(false)
     closeModal()
   };

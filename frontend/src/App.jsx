@@ -29,7 +29,7 @@ function App() {
         setWallet(accountsRes[0])
         console.log(accountsRes[0])
       } else {
-        setWallet(null)
+        setWallet('0x0000000000000000000000000000000000000000')
         console.log("Metamask is not connected");
       }
     }

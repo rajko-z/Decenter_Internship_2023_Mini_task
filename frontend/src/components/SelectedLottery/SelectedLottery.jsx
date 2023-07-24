@@ -109,7 +109,7 @@ const SelectedLottery = ({}) => {
               {((lotteryIsAcive && isUserParticipating) || (!lotteryIsAcive && !isUserWinner)) &&
                 <>
                 <button className='modalButton' onClick={openWithdrawModal}>Withdraw</button>
-                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery}/>
+                <WithdrawModal isOpen={isWithdrawModalOpen} closeModal={closeWithdrawModal} wallet={wallet} lottery={lottery} setIsUserParticipating={setIsUserParticipating}/>
                 </>
               }
 
