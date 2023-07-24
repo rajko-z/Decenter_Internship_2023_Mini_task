@@ -32,15 +32,15 @@ func (lis Listener) ListenFundsWithDrawn(address string) {
 		log.Fatal(err)
 	}
 
-	lotteries, err := contracts.NewLotteries(contractAddress, client)
+	lotteries, err := contracts.NewLotteryAave(contractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ctx := context.Background()
 	opts := &bind.WatchOpts{Context: ctx}
-	eventsChannel := make(chan *contracts.LotteriesFundsWithdrawn)
-	subscription, err := lotteries.WatchFundsWithdrawn(opts, eventsChannel)
+	eventsChannel := make(chan *contracts.LotteryAaveWithdrawEvent)
+	subscription, err := lotteries.WatchWithdrawEvent(opts, eventsChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -73,15 +73,15 @@ func (lis Listener) ListenFundsDeposited(address string) {
 		log.Fatal(err)
 	}
 
-	lotteries, err := contracts.NewLotteries(contractAddress, client)
+	lotteries, err := contracts.NewLotteryAave(contractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ctx := context.Background()
 	opts := &bind.WatchOpts{Context: ctx}
-	eventsChannel := make(chan *contracts.LotteriesFundsDeposited)
-	subscription, err := lotteries.WatchFundsDeposited(opts, eventsChannel)
+	eventsChannel := make(chan *contracts.LotteryAaveDepositEvent)
+	subscription, err := lotteries.WatchDepositEvent(opts, eventsChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -115,15 +115,15 @@ func (lis Listener) ListenWinnerChosen(address string) {
 		log.Fatal(err)
 	}
 
-	lotteries, err := contracts.NewLotteries(contractAddress, client)
+	lotteries, err := contracts.NewLotteryAave(contractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ctx := context.Background()
 	opts := &bind.WatchOpts{Context: ctx}
-	eventsChannel := make(chan *contracts.LotteriesWinnerChosen)
-	subscription, err := lotteries.WatchWinnerChosen(opts, eventsChannel)
+	eventsChannel := make(chan *contracts.LotteryAaveEndedEvent)
+	subscription, err := lotteries.WatchEndedEvent(opts, eventsChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -146,24 +146,24 @@ func (lis Listener) ListenLotteryCreated() {
 	}
 
 	RPC := os.Getenv("RPC")
-	ContractAddress := os.Getenv("CONTRACT_ADDRESS")
+	LotteryFactoryAddress := os.Getenv("LOTTERY_FACTORY_ADDRESS")
 
-	contractAddress := common.HexToAddress(ContractAddress)
+	lotteryFactoryAddress := common.HexToAddress(LotteryFactoryAddress)
 
 	client, err := ethclient.Dial(RPC)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	lotteries, err := contracts.NewLotteries(contractAddress, client)
+	lotteries, err := contracts.NewLotteryFactory(lotteryFactoryAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	ctx := context.Background()
 	opts := &bind.WatchOpts{Context: ctx}
-	eventsChannel := make(chan *contracts.LotteriesLotteryCreated)
-	subscription, err := lotteries.WatchLotteryCreated(opts, eventsChannel)
+	eventsChannel := make(chan *contracts.LotteryFactoryCreatedEvent)
+	subscription, err := lotteries.WatchCreatedEvent(opts, eventsChannel)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -180,6 +180,8 @@ func (lis Listener) ListenLotteryCreated() {
 				event.TokenAddress.Hex(),
 				uint(event.EndDate.Uint64()),
 				uint(event.MinAmountToDeposit.Uint64()))
+
+			log.Println("Lottery created: ", event.ContractAddress.Hex())
 
 			go lis.ListenFundsDeposited(event.ContractAddress.Hex())
 			go lis.ListenFundsWithDrawn(event.ContractAddress.Hex())

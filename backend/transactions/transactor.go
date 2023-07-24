@@ -56,7 +56,7 @@ func TransactEndLottery(lotteryAddress string) {
 		log.Fatal(err)
 	}
 
-	lotteries, err := contracts.NewLotteries(contractAddress, client)
+	lotteries, err := contracts.NewLotteryAave(contractAddress, client)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +65,7 @@ func TransactEndLottery(lotteryAddress string) {
 	auth.GasLimit = uint64(300000)
 	auth.GasPrice = gasPrice
 
-	_, err = lotteries.EndLottery(auth)
+	_, err = lotteries.End(auth)
 	if err != nil {
 		log.Fatal(err)
 	}
