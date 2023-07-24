@@ -36,7 +36,7 @@ const Lottery = ({lottery, wallet}) => {
                     <div className="current-amount">{`TVL: ${tvl} ${tokenSymbol} (${tvlUSD?.toFixed(2)} $)`}</div>
                 </div>
                 <div className="oneLotteryLine">
-                    <div className="expected-yield">{`Current Yield: ${currentYield} ${tokenSymbol}`}</div>
+                    <div className="expected-yield">{`Current Yield: ${currentYield?.toFixed(2)} ${tokenSymbol}`}</div>
                 </div>
                 <div className="oneLotteryLine">
                     <div className="expected-yield">{`In USD ${currentYieldUSD?.toFixed(2)} $`}</div>
