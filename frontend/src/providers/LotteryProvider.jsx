@@ -76,8 +76,8 @@ export const getUserLotteries = async (wallet) => {
 export const getLotteryByAddress = async (contractAddress) => {
 
     try {
-
-        const res = await LotteryFactoryContract.methods.getLotteryByAddress(contractAddress).call({from: window.ethereum.address}).catch((error) => {
+        console.log(window.ethereum.selectedAddress)
+        const res = await LotteryFactoryContract.methods.getLotteryByAddress(contractAddress).call({from: window.ethereum.selectedAddress}).catch((error) => {
             console.log("error fetching lottery by address", error)
         })
 
