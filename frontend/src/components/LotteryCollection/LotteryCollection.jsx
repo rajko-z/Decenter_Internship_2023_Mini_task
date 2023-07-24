@@ -5,7 +5,7 @@ import ArchivedLottery from '../Lottery/ArchivedLottery';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.scss';
 
-const LotteryCollection = (props) => {
+const LotteryCollection = ({currPage, wallet}) => {
 
   const [lotteriesData, setLotteriesData] = useState([]);
 
@@ -14,9 +14,9 @@ const LotteryCollection = (props) => {
       let result;
 
       try {
-        switch(props.currPage) {
+        switch(currPage) {
           case 'all': result = await getAllLotteries(); break;
-          case 'my-lotteries': result = await getUserLotteries(props.wallet); break;
+          case 'my-lotteries': result = await getUserLotteries(wallet); break;
           case 'history': result = await getHistory(); break;
           default: result = null;
         }
@@ -30,12 +30,12 @@ const LotteryCollection = (props) => {
 
     setLotteriesData(null)
     fetchData();
-  }, [props.currPage]);
+  }, [currPage]);
   
   return (
     <>
       <div className="active-lotteries">
-      {props.currPage === 'history' ? (
+      {currPage === 'history' ? (
         // Render archived lotteries map if currPage is 'history'
         lotteriesData && lotteriesData.map((lott, index) => (
           <ArchivedLottery key={index} archivedLottery={lott} />
@@ -43,7 +43,7 @@ const LotteryCollection = (props) => {
       ) : (
         // Render regular lotteries map for other pages
         lotteriesData && lotteriesData.map((lott, index) => (
-          <Lottery key={index} lottery={lott} wallet={props.wallet} />
+          <Lottery key={index} lottery={lott} wallet={wallet} />
         ))
       )}
       </div>

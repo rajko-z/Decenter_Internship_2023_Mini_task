@@ -10,13 +10,14 @@ import './SelectedLottery.scss';
 
 const SelectedLottery = ({}) => {
   const location = useLocation();
-  const { lottery, wallet } = location.state || {}                    // Access the lottery prop from location.state
+  const { lottery } = location.state || {}                    // Access the lottery prop from location.state
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);          // State to control the deposit modal
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);        // State to control the withdraw modal
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);              // State to control the claim modal
   const [isUserParticipating, setIsUserParticipating] = useState(false);
   const [lotteryIsAcive, setLotteryIsActive] = useState(false);                 //active if winner has not been chosen yet
   const [isUserWinner, setIsUserWinner] = useState(false);
+  const [wallet, setWallet] = useState(null);
 
   // lottery data from the blockchain
   const [name, setName] = useState('');
@@ -27,8 +28,6 @@ const SelectedLottery = ({}) => {
   const [endDate, setEndDate] = useState(0);
   const [currentYield, setCurrentYield] = useState(0);
   const [currentYieldUSD, setCurrentYieldUSD] = useState(0);
-  const [myAmount, setMyAmount] = useState(0);
-  const [winner, setWinner] = useState('');
   const [expectedPrize, setExpectedPrize] = useState(0);
 
   const openDepositModal = () => {setIsDepositModalOpen(true)}
@@ -56,9 +55,7 @@ const SelectedLottery = ({}) => {
       setEndDate(result.endDate)
       setCurrentYield(result.currentYield)
       setCurrentYieldUSD(result.currentYieldUSD)
-      setMyAmount(result.myAmount)
-      setWinner(result.winner)
-  
+
       setLotteryIsActive(result.winner.startsWith('0x0000000000000000000000000000000000000000'));
       setIsUserParticipating(result.myAmount > 0.0)
   
@@ -70,7 +67,9 @@ const SelectedLottery = ({}) => {
       setExpectedPrize(expPrize)
     }
 
+    setWallet(window.ethereum.selectedAddress)
     fetchData()
+
   }, [])
 
   if (!lottery) {

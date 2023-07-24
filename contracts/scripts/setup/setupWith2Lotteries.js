@@ -20,7 +20,7 @@ async function sendDAITokens(toAddress) {
         "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
         DAI_MAINNET_ADDRESS,
         toAddress,
-        hre.ethers.parseEther("100")
+        hre.ethers.parseEther("10000000")
     );
 }
 
