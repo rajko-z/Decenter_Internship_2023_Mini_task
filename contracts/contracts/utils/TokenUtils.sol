@@ -16,9 +16,9 @@ contract TokenUtils is Ownable {
     address internal constant aUSDC_MAINNET_ADDRESS = 0x98C23E9d8f34FEFb1B7BD6a91B7FF122F4e16F5c;
     address internal constant aWETH_MAINNET_ADDRESS = 0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8;
 
-    uint internal constant DAI_MIN_VALUE_TO_DEPOSIT = 100;
-    uint internal constant USDC_MIN_VALUE_TO_DEPOSIT = 100;
-    uint internal constant WETH_MIN_VALUE_TO_DEPOSIT = 100;
+    uint internal constant DAI_MIN_VALUE_TO_DEPOSIT = 10 * (10 ** 18);
+    uint internal constant USDC_MIN_VALUE_TO_DEPOSIT = 10 * (10 ** 6);
+    uint internal constant WETH_MIN_VALUE_TO_DEPOSIT = 0.01 * (10 ** 18);
 
     constructor() {
         tokens[DAI_MAINNET_ADDRESS] = DAI_MIN_VALUE_TO_DEPOSIT;

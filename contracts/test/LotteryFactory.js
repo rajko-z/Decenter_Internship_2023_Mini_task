@@ -105,32 +105,20 @@ describe("LotteryFactory tests", function () {
         it("Should fetch all lotteries", async function () {
             const {lotteryFactory, owner, addr1, addr2} = await loadFixture(deployLotteryFactoryFixture);
 
-            await sendWethTokensToUser(owner, hre.ethers.parseEther("100"));
-            await sendERCTokensToUser(
-                "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
-                daiTokenAddress,
-                addr1,
-                hre.ethers.parseEther("0.0001")
-            );
-            await sendERCTokensToUser(
-                "0x7713974908Be4BEd47172370115e8b1219F4A5f0",
-                usdcTokenAddress,
-                addr2,
-                hre.ethers.parseEther("0.0001")
-            );
+            const minAmountToDepositWeth = hre.ethers.parseEther("0.01");    
+            const minAmountForDepositDai = hre.ethers.parseEther("10");
+            const minAmountForDepositUsdc = "10000000";
 
-            const minAmountForDeposit = hre.ethers.parseEther("0.00001");
-
-            const txLotteryWeth1 = await lotteryFactory.connect(owner).createLottery("test1", 1, wethTokenAddress, minAmountForDeposit, 15);
+            const txLotteryWeth1 = await lotteryFactory.connect(owner).createLottery("test1", 1, wethTokenAddress, minAmountToDepositWeth, 15);
             await txLotteryWeth1.wait();
 
-            const txLotteryWeth2 = await lotteryFactory.connect(owner).createLottery("test2", 1, wethTokenAddress, minAmountForDeposit, 15);
+            const txLotteryWeth2 = await lotteryFactory.connect(owner).createLottery("test2", 1, wethTokenAddress, minAmountToDepositWeth, 15);
             await txLotteryWeth2.wait();
 
-            const txLotteryDai = await lotteryFactory.connect(addr1).createLottery("test3", 1, daiTokenAddress, minAmountForDeposit, 20);
+            const txLotteryDai = await lotteryFactory.connect(addr1).createLottery("test3", 1, daiTokenAddress, minAmountForDepositDai, 20);
             await txLotteryDai.wait();
 
-            const txLotteryUsdc = await lotteryFactory.connect(addr2).createLottery("test4", 1, usdcTokenAddress, minAmountForDeposit, 30);
+            const txLotteryUsdc = await lotteryFactory.connect(addr2).createLottery("test4", 1, usdcTokenAddress, minAmountForDepositUsdc, 30);
             await txLotteryUsdc.wait();
 
             const lotteries = await lotteryFactory.getLotteries(false);
@@ -139,28 +127,28 @@ describe("LotteryFactory tests", function () {
             expect(lotteries[0][2]).to.equals(1);
             expect(lotteries[0][3]).to.equals(wethTokenAddress);
             expect(lotteries[0][6]).to.equals(0);
-            expect(lotteries[0][8]).to.equals(minAmountForDeposit);
+            expect(lotteries[0][8]).to.equals(minAmountToDepositWeth);
             expect(lotteries[0][9]).to.equals(0);
 
             expect(lotteries[1][1]).to.equal("test2");
             expect(lotteries[1][2]).to.equals(1);
             expect(lotteries[1][3]).to.equals(wethTokenAddress);
             expect(lotteries[1][6]).to.equals(0);
-            expect(lotteries[1][8]).to.equals(minAmountForDeposit);
+            expect(lotteries[1][8]).to.equals(minAmountToDepositWeth);
             expect(lotteries[1][9]).to.equals(0);
 
             expect(lotteries[2][1]).to.equal("test3");
             expect(lotteries[2][2]).to.equals(1);
             expect(lotteries[2][3]).to.equals(daiTokenAddress);
             expect(lotteries[2][6]).to.equals(0);
-            expect(lotteries[2][8]).to.equals(minAmountForDeposit);
+            expect(lotteries[2][8]).to.equals(minAmountForDepositDai);
             expect(lotteries[2][9]).to.equals(0);
 
             expect(lotteries[3][1]).to.equal("test4");
             expect(lotteries[3][2]).to.equals(1);
             expect(lotteries[3][3]).to.equals(usdcTokenAddress);
             expect(lotteries[3][6]).to.equals(0);
-            expect(lotteries[3][8]).to.equals(minAmountForDeposit);
+            expect(lotteries[3][8]).to.equals(minAmountForDepositUsdc);
             expect(lotteries[3][9]).to.equals(0);
         });
 
@@ -175,41 +163,43 @@ describe("LotteryFactory tests", function () {
                 "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
                 daiTokenAddress,
                 addr1,
-                hre.ethers.parseEther("0.0001")
+                hre.ethers.parseEther("100")
             );
             await sendERCTokensToUser(
                 "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
                 daiTokenAddress,
                 owner,
-                hre.ethers.parseEther("0.0001")
+                hre.ethers.parseEther("100")
             );
 
-            const minAmountToDeposit = hre.ethers.parseEther("0.00001");
-            const amountToDeposit = hre.ethers.parseEther("0.00001");
+            const minAmountForDepositWeth = hre.ethers.parseEther("0.01");    
+            const minAmountForDepositDai = hre.ethers.parseEther("10");
+            const amountToDepositWeth = hre.ethers.parseEther("0.01");
+            const amountToDepositDai = hre.ethers.parseEther("10");
 
-            const lottery1 = await lotteryFactory.connect(owner).createLottery("test1", 1, wethTokenAddress, minAmountToDeposit, 15);
+            const lottery1 = await lotteryFactory.connect(owner).createLottery("test1", 1, wethTokenAddress, minAmountForDepositWeth, 15);
             const receipt1 = await lottery1.wait();
             const event1 = new hre.ethers.Interface(lotteryFactoryABI).parseLog(receipt1.logs[0]);
             const lotteryAddress1 = event1.args[0];
             const lottery1Contract = await hre.ethers.getContractAt("LotteryAave", lotteryAddress1, owner);
 
             await approveToContract(owner, lotteryAddress1, wethTokenAddress, hre.ethers.parseEther("10"));
-            const deposit1 = await lottery1Contract.connect(owner).deposit(amountToDeposit);
+            const deposit1 = await lottery1Contract.connect(owner).deposit(amountToDepositWeth);
             await deposit1.wait();
 
 
-            const lottery2 = await lotteryFactory.connect(owner).createLottery("test2", 1, daiTokenAddress, minAmountToDeposit, 20);
+            const lottery2 = await lotteryFactory.connect(owner).createLottery("test2", 1, daiTokenAddress, minAmountForDepositDai, 20);
             const receipt2 = await lottery2.wait();
             const event2 = new hre.ethers.Interface(lotteryFactoryABI).parseLog(receipt2.logs[0]);
             const lotteryAddress2 = event2.args[0];
             const lottery2Contract = await hre.ethers.getContractAt("LotteryAave", lotteryAddress2);
 
             await approveToContract(owner, lotteryAddress2, daiTokenAddress, hre.ethers.parseEther("10"));
-            const deposit2 = await lottery2Contract.connect(owner).deposit(amountToDeposit);
+            const deposit2 = await lottery2Contract.connect(owner).deposit(amountToDepositDai);
             await deposit2.wait();
 
             await approveToContract(addr1, lotteryAddress2, daiTokenAddress, hre.ethers.parseEther("10"));
-            const deposit3 = await lottery2Contract.connect(addr1).deposit(amountToDeposit);
+            const deposit3 = await lottery2Contract.connect(addr1).deposit(amountToDepositDai);
             await deposit3.wait();
 
             const lotteriesOwner = await lotteryFactory.connect(owner).getLotteries(true);
@@ -219,20 +209,20 @@ describe("LotteryFactory tests", function () {
             expect(lotteriesOwner[0][1]).to.equal("test1");
             expect(lotteriesOwner[0][2]).to.equals(1);
             expect(lotteriesOwner[0][3]).to.equals(wethTokenAddress);
-            expect(lotteriesOwner[0][8]).to.equals(minAmountToDeposit);
+            expect(lotteriesOwner[0][8]).to.equals(minAmountForDepositWeth);
             expect(lotteriesOwner[0][9]).not.to.equals(0);
 
             expect(lotteriesOwner[1][1]).to.equal("test2");
             expect(lotteriesOwner[1][2]).to.equals(1);
             expect(lotteriesOwner[1][3]).to.equals(daiTokenAddress);
-            expect(lotteriesOwner[1][8]).to.equals(minAmountToDeposit);
+            expect(lotteriesOwner[1][8]).to.equals(minAmountForDepositDai);
             expect(lotteriesOwner[0][9]).not.to.equals(0);
 
             expect(lotteriesAddr1.length).to.equals(1);
             expect(lotteriesAddr1[0][1]).to.equal("test2");
             expect(lotteriesAddr1[0][2]).to.equals(1);
             expect(lotteriesAddr1[0][3]).to.equals(daiTokenAddress);
-            expect(lotteriesAddr1[0][8]).to.equals(minAmountToDeposit);
+            expect(lotteriesAddr1[0][8]).to.equals(minAmountForDepositDai);
             expect(lotteriesAddr1[0][9]).not.to.equals(0);
         });
 
@@ -266,8 +256,8 @@ describe("LotteryFactory tests", function () {
                 hre.ethers.parseEther("0.0001")
             );
 
-            const minAmountToDeposit = hre.ethers.parseEther("0.00001");
-            const amountToDeposit = hre.ethers.parseEther("0.00001");
+            const minAmountToDeposit = hre.ethers.parseEther("0.01");
+            const amountToDeposit = hre.ethers.parseEther("0.01");
 
             const lottery = await lotteryFactory.connect(owner).createLottery("pot", 1, wethTokenAddress, minAmountToDeposit, 15);
             const receipt = await lottery.wait();
