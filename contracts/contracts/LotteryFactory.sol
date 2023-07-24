@@ -84,4 +84,22 @@ contract LotteryFactory is ILotteryFactory, MinimalProxyFactory, ProtocolUtils {
 
         return finalResult;
     }
+
+    function getLotteryById(address addr) external view returns (LotteryData memory) {
+        ILottery lottery = ILottery(addr);
+        return LotteryData({
+            contractAddress : address(lottery),
+            name : lottery.getName(),
+            protocolId : lottery.getProtocolId(),
+            tokenAddress : lottery.getTokenAddress(),
+            tokenSymbol : IERC20(lottery.getTokenAddress()).symbol(),
+            tokenDecimals : IERC20(lottery.getTokenAddress()).decimals(),
+            tvl : lottery.getTvl(),
+            endDate : lottery.getEndDate(),
+            minAmountToDeposit : lottery.getMinAmountToDeposit(),
+            currentYield : lottery.getCurrentYield(),
+            winner : lottery.getWinner(),
+            myAmount : lottery.balanceOf(msg.sender)
+        });
+    }
 }

@@ -136,18 +136,18 @@ contract LotteryAave is ILottery, AaveV3Addresses, LotteryTree {
         emit EndedEvent(winner, totalYield);
     }
 
-     function withdrawAdmin() external {
-         require(winner != address(0), "Lottery not finished");
-         require(msg.sender == admin, "Only admin can call");
+    function withdrawAdmin() external {
+        require(winner != address(0), "Lottery not finished");
+        require(msg.sender == admin, "Only admin can call");
 
-         if (winnerGotYield) {
-             uint amount = aToken.balanceOf(address(this)) - tvl;
-             pool.withdraw(address(token), amount, admin);
-         } else {
-             uint amount = aToken.balanceOf(address(this)) - tvl - totalYield;
-             pool.withdraw(address(token), amount, admin);
-         }
-     }
+        if (winnerGotYield) {
+            uint amount = aToken.balanceOf(address(this)) - tvl;
+            pool.withdraw(address(token), amount, admin);
+        } else {
+            uint amount = aToken.balanceOf(address(this)) - tvl - totalYield;
+            pool.withdraw(address(token), amount, admin);
+        }
+    }
 
     function getName() external view returns (string memory) {return name;}
 
