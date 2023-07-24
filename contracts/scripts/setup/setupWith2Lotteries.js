@@ -11,7 +11,7 @@ async function sendUSDCTokens(toAddress) {
         "0x51eDF02152EBfb338e03E30d65C15fBf06cc9ECC",
         USDC_MAINNET_ADDRESS,
         toAddress,
-        "1000000000"
+        "1000000000000"
     );
 }
 async function sendDAITokens(toAddress) {
@@ -32,8 +32,8 @@ async function sendTokens(addr1, addr2) {
     await sendDAITokens(addr1);
     await sendDAITokens(addr2);
 
-    // await sendUSDCTokens(addr1);
-    // await sendUSDCTokens(addr2);
+    await sendUSDCTokens(addr1);
+    await sendUSDCTokens(addr2);
 }
 
 async function showBalances(addr1, addr2) {

@@ -2,6 +2,8 @@
 import { contractOracles } from '../constants/Oracles'
 import Decimal from 'decimal.js';
 
+/* global BigInt */
+
 /**
  * Retrieves the latest token price from the specified token's contract oracle.
  * @param {string} tokenName - The name of the token.
@@ -35,5 +37,5 @@ export const weiToToken = (wei, decimals) => {
 }
 
 export const tokenToWei = (token, decimals) => {
-    return toString(new Decimal(token.toString()).mul(10 ** decimals).toNumber());
+    return BigInt(token * (10 ** decimals));
 }

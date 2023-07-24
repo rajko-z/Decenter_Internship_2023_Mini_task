@@ -18,7 +18,7 @@ const DepositModal = ({ isOpen, closeModal, lottery, setIsUserParticipating }) =
   const checkIfDateIsInRange = () => {
     function dateDifference(date1, date2) {
       const oneDayInMilliseconds = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
-      const differenceInDays = (date2.getTime() - date1.getTime()) / oneDayInMilliseconds;
+      const differenceInDays = (date2 * 1000 - date1.getTime()) / oneDayInMilliseconds;
       return differenceInDays;
     }
 
