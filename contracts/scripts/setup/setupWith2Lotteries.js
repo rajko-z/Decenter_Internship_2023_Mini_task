@@ -11,18 +11,19 @@ async function sendUSDCTokens(toAddress) {
         "0x51eDF02152EBfb338e03E30d65C15fBf06cc9ECC",
         USDC_MAINNET_ADDRESS,
         toAddress,
-        "10000000000"
+        "1000000000"
     );
 }
-
 async function sendDAITokens(toAddress) {
     await sendERCTokensToUser(
         "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
         DAI_MAINNET_ADDRESS,
         toAddress,
-        hre.ethers.parseEther("10000000")
+        hre.ethers.parseEther("1000000")
     );
 }
+
+
 
 async function sendTokens(addr1, addr2) {
     await sendWethTokensToUser(addr1, hre.ethers.parseEther("100"));
@@ -31,8 +32,8 @@ async function sendTokens(addr1, addr2) {
     await sendDAITokens(addr1);
     await sendDAITokens(addr2);
 
-    await sendUSDCTokens(addr1);
-    await sendUSDCTokens(addr2);
+    // await sendUSDCTokens(addr1);
+    // await sendUSDCTokens(addr2);
 }
 
 async function showBalances(addr1, addr2) {
