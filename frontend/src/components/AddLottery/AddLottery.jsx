@@ -38,12 +38,9 @@ const AddLottery = ({wallet}) => {
 
         async function getExpectedPrice() {
             const valueInUsd = await getTokenPrice(token) * depositAmount;
-            console.log(dateDifference(new Date(), new Date(date)))
             const expectedPrize = valueInUsd * (1 + (apy * dateDifference(new Date(), new Date(date)) / 365) / 100);
-
-            // console.log("Debug", (apy * dateDifference(new Date(), new Date(date)) / 365));
             setExpectedPrize(expectedPrize);
-
+            
             const resultAPY = await fetchAPY(protocol, token) / 10**25;
             setAPY(resultAPY);
         }

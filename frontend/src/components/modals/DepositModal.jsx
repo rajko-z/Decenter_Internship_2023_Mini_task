@@ -47,6 +47,7 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
           <div className='modal-card'>
 
           <div className='modalState'>
+              <label className='modalLabel'> {`Min amount to deposit: ${minAmountToDeposit} ${tokenSymbol}`} </label>
               <label className='modalLabel'> Amount </label>
               <div className='flexRowDivDeposit'>
                 <input className='modalInput' type="number" step="any" placeholder="0.0"

@@ -1,12 +1,10 @@
 // calls to the SC
 import { getTokenPrice, weiToToken, tokenToWei } from './OracleProvider'
 import { protocolToId, idToProtocol, infoToToken, tokenToInfo, ERC20Info } from '../constants/Tokens'
-import { contractABI, contractAddress } from '../constants/LotteryContract'
-
-import Web3 from 'web3'
 import { lotteryFactoryContractAddress, LotteryFactoryContract } from "../ethereum/LotteryFactoryContract";
 import LotteryContract from "../ethereum/LotteryContract";
 
+import Web3 from 'web3'
 const web3 = new Web3(window.ethereum);
 
 export const tokenUSDPrices = {
