@@ -35,6 +35,28 @@ async function sendTokens(addr1, addr2) {
     await sendUSDCTokens(addr2);
 }
 
+async function showBalances(addr1, addr2) {
+    const iWeth = await hre.ethers.getContractAt("IWeth", WETH_MAINNET_ADDRESS);
+    const iUSDC = await hre.ethers.getContractAt("IERC20", USDC_MAINNET_ADDRESS);
+    const iDAI = await hre.ethers.getContractAt("IERC20", DAI_MAINNET_ADDRESS);
+
+    const balanceWethAddr1 = await iWeth.balanceOf(addr1);
+    const balanceUSDCAddr1 = await iUSDC.balanceOf(addr1);
+    const balanceDAIAddr1 = await iDAI.balanceOf(addr1)
+
+    const balanceWethAddr2 = await iWeth.balanceOf(addr2);
+    const balanceUSDCAddr2 = await iUSDC.balanceOf(addr2);
+    const balanceDAIAddr2 = await iDAI.balanceOf(addr2);
+
+    console.log("Balance weth addr1: " + balanceWethAddr1);
+    console.log("Balance usdc addr1: " + balanceUSDCAddr1);
+    console.log("Balance dai addr1: " + balanceDAIAddr1);
+    console.log("------------------")
+    console.log("Balance weth addr2: " + balanceWethAddr2);
+    console.log("Balance usdc addr2: " + balanceUSDCAddr2);
+    console.log("Balance dai addr2: " + balanceDAIAddr2);
+}
+
 
 async function main() {
     await hre.run("compile");
@@ -45,6 +67,8 @@ async function main() {
     const lotteryFactoryABI = LotteryFactoryArtifact.abi;
 
     await sendTokens(owner, addr1);
+
+    await showBalances(owner, addr1);
 
     const minAmountToDeposit = hre.ethers.parseEther("0.00001");
     const amountToDeposit = hre.ethers.parseEther("0.00001");
