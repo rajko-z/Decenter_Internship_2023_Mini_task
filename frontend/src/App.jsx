@@ -15,7 +15,7 @@ function App() {
   const [wallet, setWallet] = useState("0x0000000000000000000000000000000000000000")
   
   useEffect(() => {
-
+    console.log('refresh')
     const getProvider = async () => {
       const result = await detectEthereumProvider()
       setProvider(result)

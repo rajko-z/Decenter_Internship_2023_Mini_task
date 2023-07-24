@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { tokenToUSD } from '../../providers/OracleProvider'; 
 import { getLotteryReward, withdrawMoneyFromLottery } from '../../providers/LotteryProvider';
 
-const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
+const ClaimModal = ({ isOpen, closeModal, lottery }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [reward, setReward] = useState(0)
     const [rewardUSD, setRewardUSD] = useState(0)
@@ -12,7 +12,7 @@ const ClaimModal = ({ isOpen, closeModal, wallet, lottery }) => {
 
     const handleClaim = async () => {
         setIsLoading(true)
-        await withdrawMoneyFromLottery(wallet, contractAddress)
+        await withdrawMoneyFromLottery(window.ethereum.selectedAddress, contractAddress)
         setIsLoading(false)
         closeModal()
     }

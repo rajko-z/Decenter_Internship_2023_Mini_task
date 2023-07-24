@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import './Lottery.scss'
 
-const Lottery = ({lottery, wallet}) => {
+const Lottery = ({lottery}) => {
 
     const navigate = useNavigate();
     const { contractAddress, name, protocol, tokenSymbol, endDate, tvl, tvlUSD, currentYield, currentYieldUSD } = lottery

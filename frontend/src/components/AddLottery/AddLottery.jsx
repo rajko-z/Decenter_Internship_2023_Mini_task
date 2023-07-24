@@ -4,7 +4,7 @@ import { createLottery } from '../../providers/LotteryProvider';
 import { fetchAPY } from '../../providers/APYInfoProvider';
 import './AddLottery.scss';
 
-const AddLottery = ({wallet}) => {
+const AddLottery = ({}) => {
     const [name, setName] = useState('');
     const [depositAmount, setDepositAmount] = useState(0);
     const [minDepositAmount, setMinDepositAmount] = useState(0);
@@ -31,7 +31,7 @@ const AddLottery = ({wallet}) => {
             return;
         }
 
-        await createLottery(wallet, name, protocol, token, minDepositAmount, depositAmount, daysBetween);
+        await createLottery(window.ethereum.selectedAddress, name, protocol, token, minDepositAmount, depositAmount, daysBetween);
     }
 
     useEffect(() => {

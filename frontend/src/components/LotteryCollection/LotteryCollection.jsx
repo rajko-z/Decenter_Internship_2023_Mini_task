@@ -5,7 +5,7 @@ import ArchivedLottery from '../Lottery/ArchivedLottery';
 import Lottery from '../Lottery/Lottery';
 import './LotteryCollection.scss';
 
-const LotteryCollection = ({currPage, wallet}) => {
+const LotteryCollection = ({currPage}) => {
 
   const [lotteriesData, setLotteriesData] = useState([]);
 
@@ -16,7 +16,7 @@ const LotteryCollection = ({currPage, wallet}) => {
       try {
         switch(currPage) {
           case 'all': result = await getAllLotteries(); break;
-          case 'my-lotteries': result = await getUserLotteries(wallet); break;
+          case 'my-lotteries': result = await getUserLotteries(window.ethereum.selectedAddress); break;
           case 'history': result = await getHistory(); break;
           default: result = null;
         }
@@ -43,7 +43,7 @@ const LotteryCollection = ({currPage, wallet}) => {
       ) : (
         // Render regular lotteries map for other pages
         lotteriesData && lotteriesData.map((lott, index) => (
-          <Lottery key={index} lottery={lott} wallet={wallet} />
+          <Lottery key={index} lottery={lott} />
         ))
       )}
       </div>
