@@ -29,12 +29,12 @@ const WithdrawModal = ({ isOpen, closeModal, lottery, setIsUserParticipating}) =
   useEffect(() => {
     const fetchData = async () => {
       const lott = await getLotteryByAddress(contractAddress)
-      console.log('lott', lott)
+      //console.log('lott', lott)
       setAmount(lott.myAmount)
       // const result = await tokenToUSD(lott.myAmount, tokenSymbol);
       setAmountUSD(lott.myAmountUSD);
 
-      console.log('amount: ', lott.myAmountUSD)
+      //console.log('amount: ', lott.myAmountUSD)
     }
     fetchData();
   }, [])

@@ -27,7 +27,7 @@ function App() {
       if (accountsRes.length) {
         console.log(`You're connected to: ${accountsRes[0]}`);
         setWallet(accountsRes[0])
-        console.log(accountsRes[0])
+        // console.log(accountsRes[0])
       } else {
         setWallet('0x0000000000000000000000000000000000000000')
         console.log("Metamask is not connected");

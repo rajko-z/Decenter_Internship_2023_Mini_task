@@ -7,7 +7,7 @@ const Lottery = ({contractAddress, name, protocol, tokenSymbol, endDate, tvl, tv
     //const {  } = lottery
 
     const handleOnClick = () => {
-        console.log("ola", contractAddress)
+        // console.log("ola", contractAddress)
         return navigate(`/selected-lottery/${contractAddress}`, {state:{contractAddress}})
     }
 

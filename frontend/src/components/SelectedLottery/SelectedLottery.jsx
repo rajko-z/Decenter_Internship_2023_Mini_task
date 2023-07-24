@@ -46,7 +46,7 @@ const SelectedLottery = ({}) => {
 
     const fetchData = async () => {
       const result = await getLotteryByAddress(location.state.contractAddress)
-      console.log('result', result)
+      // console.log('result', result)
       setName(result.name)
       setProtocol(result.protocol)
       setTokenSymbol(result.tokenSymbol)
