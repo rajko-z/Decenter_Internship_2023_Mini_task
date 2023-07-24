@@ -43,5 +43,5 @@ interface ILotteryFactory {
 
     function getLotteries(bool filterByUser) external view returns (LotteryData[] memory);
 
-    function getLotteryById(address addr) external view returns (LotteryData memory);
+    function getLotteryByAddress(address addr) external view returns (LotteryData memory);
 }

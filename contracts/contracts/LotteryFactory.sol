@@ -85,7 +85,7 @@ contract LotteryFactory is ILotteryFactory, MinimalProxyFactory, ProtocolUtils {
         return finalResult;
     }
 
-    function getLotteryById(address addr) external view returns (LotteryData memory) {
+    function getLotteryByAddress(address addr) external view returns (LotteryData memory) {
         ILottery lottery = ILottery(addr);
         return LotteryData({
             contractAddress : address(lottery),
