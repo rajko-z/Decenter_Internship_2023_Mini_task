@@ -58,29 +58,26 @@ const AddLottery = ({wallet}) => {
                     <input className='addLotteryInput' type='text' id='name' name='name' placeholder='Insert Lottery Name' 
                         onChange={e => setName(e.target.value)} required/>
 
-                    <label className='label value'>Amount</label>
-
+                    <label className='label value'>Minimum value to deposit</label>
+                    <br></br>
+                    <h4 className='tokenandprotocol'>(In {token} for {protocol} protocol)</h4>
+                    
                     <div className='flexRowDiv'>
-                        <input className='addLotteryInput token' type="number" step="any" placeholder="0.0"
-                            onChange={e => setDepositAmount(e.target.value)} required/>
+                        <input className='addLotteryInput' type="number" step="any" placeholder="0.0"
+                            onChange={e => setMinDepositAmount(e.target.value)} required/>
                         <select className="select token" id="token" name="token" defaultValue={"DAI"} 
                             onChange={e => setToken(e.target.value)}>
                                 <option value="DAI">DAI</option>
                                 <option value="USDC">USDC</option>
                         </select>
                     </div>
+                    
 
                     <div className='protocol'>
                         <select className="select protocol" id="protocol" name="protocol" defaultValue="aave"
                             onChange={e => setProtocol(e.target.value)}>
                                 <option value="Aave V3">Aave V3</option>
                         </select>
-                    </div>
-
-                    <label className='label value'>Minimum value to deposit (in {token})</label>
-                    <div className='flexRowDiv'>
-                        <input className='addLotteryInput' type="number" step="any" placeholder="0.0"
-                            onChange={e => setMinDepositAmount(e.target.value)} required/>
                     </div>
 
                     <label className='label date'>End Date</label>

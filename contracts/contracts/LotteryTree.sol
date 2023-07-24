@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract LotteryTree {
     enum Origin { NONE, LEFT, RIGHT } 
-    int[][] private tree = [new int[](1)];
-    uint[] private holes = new uint[](0);
+    int[][] internal tree = [new int[](1)];
+    uint[] internal holes = new uint[](0);
 
     function treeUpdate(uint level, uint index, int value, Origin origin) private {
         if(level >= tree.length) {
@@ -38,7 +38,6 @@ contract LotteryTree {
     // adds the entry to the first hole in the tree, or expands it
     // returns index of the new entry
     function treeInsert(int value) public returns (uint) {
-        // console.log("Add", uint(value));
         require(value > 0);
 
         uint index;

@@ -21,7 +21,7 @@ module.exports = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 1000,
+        runs: 1
       },
     },
   },
@@ -29,8 +29,6 @@ module.exports = {
   networks: {
     sepolia: {
       chainId: 11155111,
-      //url: `https://sepolia.infura.io/v3/${INFURA_API_KEY}`,
-      //accounts: [SEPOLIA_SECRET_KEY],
       url: process.env.SEPOLIA_URL,
       accounts:
           process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : []
