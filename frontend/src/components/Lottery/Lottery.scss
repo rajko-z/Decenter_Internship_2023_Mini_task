@@ -49,7 +49,7 @@
     font-size: 30px;
     font-weight: bold;
     margin: 2px;
-
+    word-wrap: break-word;
     justify-content: space-around;
 
     justify-content: center;
@@ -96,4 +96,8 @@
     margin-left: 10px;
     width: 30px;
     height: auto;
+}
+
+.winner {
+    font-size: 12px;
 }
