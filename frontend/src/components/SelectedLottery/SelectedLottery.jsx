@@ -103,6 +103,7 @@ const SelectedLottery = ({}) => {
                 <DepositModal isOpen={isDepositModalOpen} 
                               closeModal={closeDepositModal} 
                               lottery={lottery} 
+                              setIsUserParticipating={setIsUserParticipating}
                               />
                 </>
               }

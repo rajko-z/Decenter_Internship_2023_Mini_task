@@ -5,7 +5,7 @@ import { tokenToUSD } from '../../providers/OracleProvider';
 
 import './LotteryModal.scss';
 
-const DepositModal = ({ isOpen, closeModal, lottery }) => {
+const DepositModal = ({ isOpen, closeModal, lottery, setIsUserParticipating }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [amount, setAmount] = useState(0)
@@ -20,8 +20,10 @@ const DepositModal = ({ isOpen, closeModal, lottery }) => {
     const depositResult = await depositMoneyInLottery(window.ethereum.selectedAddress, contractAddress, amount, tokenSymbol, minAmountToDeposit);
     setIsLoading(false)
 
-    if (depositResult)
+    if (depositResult) {
+      setIsUserParticipating(true)
       closeModal();
+    }
   };
 
   const tokenImage = (tokenSymbol) => {
