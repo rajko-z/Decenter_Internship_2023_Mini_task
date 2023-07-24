@@ -48,7 +48,6 @@ const SelectedLottery = ({}) => {
     const fetchData = async () => {
 
       const result = await getLotteryByAddress(lottery.contractAddress)
-      console.log("result", result)
       setName(result.name)
       setProtocol(result.protocol)
       setTokenSymbol(result.tokenSymbol)
@@ -68,7 +67,6 @@ const SelectedLottery = ({}) => {
       }
 
       const expPrize = await getExpectedPrice(result.protocol, result.tokenSymbol, result.tvlUSD, result.currentYieldUSD, result.endDate)
-      console.log("ZASTO?", expPrize)
       setExpectedPrize(expPrize)
     }
 

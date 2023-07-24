@@ -77,13 +77,11 @@ export const getLotteryByAddress = async (contractAddress) => {
 
     try {
 
-        console.log("OLAAA")
-        console.log(contractAddress)
         const res = await LotteryFactoryContract.methods.getLotteryByAddress(contractAddress).call().catch((error) => {
             console.log("error fetching lottery by address", error)
         })
 
-        console.log("res", res)
+        await updateTokenPrices()
         return expandLottery(res)
 
     } catch (error) {
