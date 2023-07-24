@@ -28,7 +28,7 @@ const WithdrawModal = ({ isOpen, closeModal, wallet, lottery, setIsWithdraw }) =
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Withdraw Modal">
       {isLoading ? 
-        <><div className='loading'>Loading...</div> <div className='loader'></div></> : (
+        <><div className='loading'>Loading...</div> <br></br> <div className='loader'></div></> : (
         <>
         <h1 className='modalName'>Withdraw Money</h1>
         <div className='modal-card'>

@@ -17,10 +17,11 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
   // deposit money and close modal
   const handleDeposit = async () => {
     setIsLoading(true)
-    await depositMoneyInLottery(wallet, contractAddress, amount, tokenSymbol, minAmountToDeposit);
+    const depositResult = await depositMoneyInLottery(wallet, contractAddress, amount, tokenSymbol, minAmountToDeposit);
     setIsLoading(false)
 
-    closeModal();
+    if (depositResult)
+      closeModal();
   };
 
   const tokenImage = (tokenSymbol) => {
@@ -41,13 +42,14 @@ const DepositModal = ({ isOpen, closeModal, lottery, wallet }) => {
   return (
     <Modal className='lotteryModal' isOpen={isOpen} onRequestClose={closeModal} contentLabel="Deposit Modal">
       {isLoading ? 
-        <><div className='loading'>Loading...</div> <div className='loader'></div></>: (
+        <><div className='loading'>Loading...</div> <br></br> <div className='loader'></div></>: (
         <>
           <h1>Deposit Money</h1>
           <div className='modal-card'>
 
           <div className='modalState'>
               <label className='modalLabel'> {`Min amount to deposit: ${minAmountToDeposit} ${tokenSymbol}`} </label>
+              <br></br>
               <label className='modalLabel'> Amount </label>
               <div className='flexRowDivDeposit'>
                 <input className='modalInput' type="number" step="any" placeholder="0.0"
