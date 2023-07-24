@@ -69,6 +69,7 @@ const AddLottery = ({wallet}) => {
                             onChange={e => setToken(e.target.value)}>
                                 <option value="DAI">DAI</option>
                                 <option value="USDC">USDC</option>
+                                <option value="wETH">wETH</option>
                         </select>
                     </div>
                     
