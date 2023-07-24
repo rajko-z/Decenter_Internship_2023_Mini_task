@@ -122,19 +122,11 @@ export const depositMoneyInLottery = async (wallet, contractAddress, amount, tok
     // amount is in token (USDC, DAI) -> convert to wei
     const amountWei = tokenToWei(amount, tokenToInfo[tokenSymbol].decimals)
 
-    try {
-        // Check User Balance
-        const myBalance = await web3.eth.getBalance(wallet)
-        if (myBalance < amount) {
-            alert("Insufficient funds")
-            return false
-        }
-        
-        handleApprove(contractAddress, wallet, tokenSymbol, amountWei)
+    try {      
 
+        await handleApprove(contractAddress, wallet, tokenSymbol, amountWei)
         const contract = LotteryContract(contractAddress);
         await contract.methods.deposit(amountWei.toString()).send({from: wallet})
-
         return true
             
     } catch (error) {
@@ -169,9 +161,9 @@ export const getLotteryReward = async (contractAddress, tokenSymbol) => {
 const handleApprove = async (contractAddress, wallet, tokenSymbol, amountWei) => {
 
     const ERC20Contract = new web3.eth.Contract(ERC20Info.ABI, ERC20Info.address)
-    const hasAllowance = await ERC20Contract.methods.allowance(contractAddress, wallet).call()
+    const allowedFor = await ERC20Contract.methods.allowance(contractAddress, wallet).call()
 
-    if (!hasAllowance){
+    if (allowedFor < amountWei){
         const tokenContract = new web3.eth.Contract(ERC20Info.ABI, tokenToInfo[tokenSymbol].address)
         await tokenContract.methods.approve(contractAddress, amountWei.toString()).send({from: wallet}).catch((error) => {   
             alert("Error approving contract to transfer money") 
