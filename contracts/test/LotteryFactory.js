@@ -1,9 +1,9 @@
-const {expect} = require("chai");
-const hre = require("hardhat");
-const {loadFixture} = require("@nomicfoundation/hardhat-toolbox/network-helpers");
-const {networkConfig} = require("../harhat-config-helper");
-const {anyUint} = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
-const {sendWethTokensToUser, getSymbolAndDecimalsOfERC20Token, sendERCTokensToUser, approveToContract, anyAddress} = require("../scripts/utils");
+const { expect } = require("chai");
+const { hre } = require("hardhat");
+const { time, loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers");
+const { networkConfig } = require("../harhat-config-helper");
+const { anyUint } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
+const { sendWethTokensToUser, getSymbolAndDecimalsOfERC20Token, sendERCTokensToUser, approveToContract, anyAddress} = require("../scripts/utils");
 
 describe("LotteryFactory tests", function () {
 
@@ -243,6 +243,49 @@ describe("LotteryFactory tests", function () {
 
             lotteries = await lotteryFactory.getLotteries(false);
             expect(lotteries.length).to.equal(0);
+        });
+
+        it("Should fetch specific lottery by address", async function() {
+            const {lotteryFactory, owner, addr1} = await loadFixture(deployLotteryFactoryFixture);
+
+            const LotteryFactoryArtifact = await hre.artifacts.readArtifact("LotteryFactory");
+            const lotteryFactoryABI = LotteryFactoryArtifact.abi;
+
+            await sendWethTokensToUser(owner, hre.ethers.parseEther("100"));
+            await sendERCTokensToUser(
+                "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
+                daiTokenAddress,
+                addr1,
+                hre.ethers.parseEther("0.0001")
+            );
+            await sendERCTokensToUser(
+                "0x60FaAe176336dAb62e284Fe19B885B095d29fB7F",
+                daiTokenAddress,
+                owner,
+                hre.ethers.parseEther("0.0001")
+            );
+
+            const minAmountToDeposit = hre.ethers.parseEther("0.00001");
+            const amountToDeposit = hre.ethers.parseEther("0.00001");
+
+            const lottery = await lotteryFactory.connect(owner).createLottery("pot", 1, wethTokenAddress, minAmountToDeposit, 15);
+            const receipt = await lottery.wait();
+            const event = new hre.ethers.Interface(lotteryFactoryABI).parseLog(receipt.logs[0]);
+            const lotteryAddress = event.args[0];
+            const lotteryContract = await hre.ethers.getContractAt("LotteryAave", lotteryAddress, owner);
+
+            await approveToContract(owner, lotteryAddress, wethTokenAddress, hre.ethers.parseEther("10"));
+            const deposit1 = await lotteryContract.connect(owner).deposit(amountToDeposit);
+            await deposit1.wait();
+
+            await time.increase(3600 * 24);
+
+            const lotteryData = await lotteryFactory.connect(owner).getLotteryByAddress(lotteryAddress);
+            expect(lotteryData[1]).to.equal("pot");
+            expect(lotteryData[2]).to.equals(1);
+            expect(lotteryData[3]).to.equals(wethTokenAddress);
+            expect(lotteryData[8]).to.equals(minAmountToDeposit);
+            expect(lotteryData[9]).not.to.equals(0);
         });
     });
 
