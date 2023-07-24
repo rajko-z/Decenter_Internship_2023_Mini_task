@@ -31,7 +31,7 @@ type UserLotteryGorm struct {
 }
 
 func (ulg UserLotteryGorm) Exists(userAddress string, lotteryAddress string) (bool, error) {
-	res := ulg.DB.First(&DBUserLottery{}, "user_address = ? AND lottery_address = ?", userAddress, lotteryAddress)
+	res := ulg.DB.Find(&DBUserLottery{}, "user_address = ? AND lottery_address = ?", userAddress, lotteryAddress)
 	return res.RowsAffected > 0, res.Error
 }
 

@@ -181,8 +181,6 @@ func (lis Listener) ListenLotteryCreated() {
 				uint(event.EndDate.Uint64()),
 				uint(event.MinAmountToDeposit.Uint64()))
 
-			log.Println("Lottery created: ", event.ContractAddress.Hex())
-
 			go lis.ListenFundsDeposited(event.ContractAddress.Hex())
 			go lis.ListenFundsWithDrawn(event.ContractAddress.Hex())
 
