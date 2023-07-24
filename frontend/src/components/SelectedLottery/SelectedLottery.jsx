@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getLotteryByAddress } from '../../providers/LotteryProvider';
+import { getExpectedPrice } from '../../providers/APYInfoProvider';
 import DepositModal from '../modals/DepositModal';
 import WithdrawModal from '../modals/WithdrawModal';
 import ClaimModal from '../modals/ClaimModal';
@@ -28,6 +29,7 @@ const SelectedLottery = ({}) => {
   const [currentYieldUSD, setCurrentYieldUSD] = useState(0);
   const [myAmount, setMyAmount] = useState(0);
   const [winner, setWinner] = useState('');
+  const [expectedPrize, setExpectedPrize] = useState(0);
 
   const openDepositModal = () => {setIsDepositModalOpen(true)}
   const closeDepositModal = () => {setIsDepositModalOpen(false)}
@@ -64,6 +66,10 @@ const SelectedLottery = ({}) => {
       if (result.winner !== null && result.winner !== '0x0'){
         setIsUserWinner(wallet.toLowerCase() === result.winner.toLowerCase())
       }
+
+      const expPrize = await getExpectedPrice(result.protocol, result.tokenSymbol, result.tvlUSD, result.currentYieldUSD, result.endDate)
+      console.log("ZASTO?", expPrize)
+      setExpectedPrize(expPrize)
     }
 
     fetchData()
@@ -75,7 +81,7 @@ const SelectedLottery = ({}) => {
 
   return (
     <div className="selected-lottery">
-      <div className="selectedLotteryName"><h3>{name}</h3></div>
+      <div className="selectedLotteryName"><h3>{name}</h3><h4>Expected prize: {expectedPrize?.toFixed(2)}$</h4></div>
         <div className="selectedLotteryLine">
             <div className="protocol">Protocol: {protocol}</div>
             <div className="token-name">Token: {tokenSymbol}</div>
