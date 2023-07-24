@@ -13,9 +13,29 @@ const DepositModal = ({ isOpen, closeModal, lottery, setIsUserParticipating }) =
   const tokenSymbol = lottery.tokenSymbol
   const contractAddress = lottery.contractAddress
   const minAmountToDeposit = lottery.minAmountToDeposit
+  const endDate = lottery.endDate
+
+  const checkIfDateIsInRange = () => {
+    function dateDifference(date1, date2) {
+      const oneDayInMilliseconds = 24 * 60 * 60 * 1000; // hours * minutes * seconds * milliseconds
+      const differenceInDays = (date2.getTime() - date1.getTime()) / oneDayInMilliseconds;
+      return differenceInDays;
+    }
+
+    const currentDate = new Date();
+    if (dateDifference(currentDate, endDate) <= 3) {
+      return false
+    }
+    return true
+  }
 
   // deposit money and close modal
   const handleDeposit = async () => {
+    if (!checkIfDateIsInRange()) {
+      alert('You cannot deposit money in the last 3 days of the lottery')
+      return
+    }
+    
     setIsLoading(true)
     const depositResult = await depositMoneyInLottery(window.ethereum.selectedAddress, contractAddress, amount, tokenSymbol, minAmountToDeposit);
     setIsLoading(false)

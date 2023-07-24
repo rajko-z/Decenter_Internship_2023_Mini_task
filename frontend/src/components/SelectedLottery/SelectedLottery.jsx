@@ -46,7 +46,7 @@ const SelectedLottery = ({}) => {
 
     const fetchData = async () => {
       const result = await getLotteryByAddress(location.state.contractAddress)
-      // console.log('result', result)
+      console.log('result', result)
       setName(result.name)
       setProtocol(result.protocol)
       setTokenSymbol(result.tokenSymbol)
@@ -85,10 +85,10 @@ const SelectedLottery = ({}) => {
             <div className="token-name">Token: {tokenSymbol}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="selectedLottery current-amount">{`In lottery: ${tvl} ${tokenSymbol} (${tvlUSD?.toFixed(2)}$)`}</div>
+            <div className="selectedLottery current-amount">{`In lottery: ${tvl?.toFixed(2)} ${tokenSymbol} (${tvlUSD?.toFixed(2)}$)`}</div>
         </div>
         <div className="selectedLotteryLine">
-            <div className="expected-yield">{`Current Yield: ${currentYield} (${currentYieldUSD?.toFixed(2)}$)`}</div>
+            <div className="expected-yield">{`Current Yield: ${currentYield?.toFixed(2)} (${currentYieldUSD?.toFixed(2)}$)`}</div>
         </div>
         <div>
             <div className="end-date">End Date: {convertUnixTimestampToDate()}</div>

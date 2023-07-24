@@ -27,7 +27,7 @@ export const getExpectedPrice = async (protocol, tokenSymbol, tvlUSD, currentYie
         const differenceInDays = (date2.getTime() - date1.getTime()) / oneDayInMilliseconds;
         return differenceInDays;
     }
-    const expectedPrize = currentYieldUSD + tvlUSD * (1 + (resultAPY * dateDifference(new Date(), new Date(endDate * 1000)) / 365) / 100);
+    const expectedPrize = currentYieldUSD + (tvlUSD * (1 + (resultAPY * dateDifference(new Date(), new Date(endDate * 1000)) / 365) / 100) - tvlUSD);
     //console.log('exp', (resultAPY * dateDifference(new Date(), new Date(endDate * 1000)) / 365))
     return expectedPrize;
 }
